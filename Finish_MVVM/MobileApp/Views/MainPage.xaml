@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MobileApp.Views.MainPage"
+             xmlns:viewModel="clr-namespace:MobileApp.ViewModels"
+             xmlns:model="clr-namespace:MobileApp.Models"
+             x:DataType="viewModel:MainPageViewModel"
+             Title="{Binding Title}">
+
+    <StackLayout Padding="10">
+        <Label Text="Welcome to .NET MAUI and CommunityToolkit MVVM!" />
+        <StackLayout Orientation="Horizontal">
+            <Label VerticalTextAlignment="Center" Text="Can Click" />
+            <Switch IsToggled="{Binding CanClick}" />
+        </StackLayout>
+        <Button Command="{Binding GetWeathersCommand}" Text="Get Weathers" />
+
+        <RefreshView Command="{Binding GetWeathersCommand}" IsRefreshing="{Binding IsRefreshing}">
+            <CollectionView ItemsLayout="VerticalGrid, 2"
+                            ItemsSource="{Binding Weathers}"
+                            SelectedItem="{Binding SelectedWeather}"
+                            SelectionChangedCommand="{Binding SelectWeatherCommand}"
+                            SelectionMode="Single">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:Weather">
+                        <Grid Padding="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Image Grid.Row="0"
+                                   Grid.RowSpan="3"
+                                   WidthRequest="120"
+                                   HeightRequest="120"
+                                   Source="{Binding Summary, StringFormat='{0}.svg'}" />
+                            <Label Grid.Row="0"
+                                   HorizontalTextAlignment="Center"
+                                   Text="{Binding Date, StringFormat='{}{0:yyyy/MM/dd}'}" />
+                            <Label Grid.Row="1"
+                                   HorizontalTextAlignment="Center"
+                                   Text="{Binding Temperature, StringFormat='{0}℃'}" />
+                            <Label Grid.Row="2"
+                                   HorizontalTextAlignment="Center"
+                                   Text="{Binding Summary}" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+    </StackLayout>
+
+
+</ContentPage>

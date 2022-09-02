@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModel="clr-namespace:MobileApp.ViewModels"
+             x:Class="MobileApp.Views.DetailsPage"
+             x:DataType="viewModel:DetailsViewModel"
+             Title="{Binding Weather.Date, StringFormat='{}{0:yyyy/MM/dd}'}">
+    <ScrollView VerticalOptions="Center">
+        <VerticalStackLayout>
+            <Image Grid.Row="1"
+                WidthRequest="120"
+                HeightRequest="120"
+                Source="{Binding Weather.Summary, StringFormat='{0}.svg'}" />
+            <Label Grid.Row="2"
+                HorizontalTextAlignment="Center"
+                Text="{Binding Weather.Temperature, StringFormat='{0}℃'}" />
+            <Label Grid.Row="3"
+                HorizontalTextAlignment="Center"
+                Text="{Binding Weather.Summary}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
