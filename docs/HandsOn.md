@@ -1,48 +1,48 @@
 # Prism hands on lab
 
-このドキュメントでは Prism for Xamarin.Forms を利用した MVVM によるモバイルアプリ開発をハンズオンで学習します。
+このドキュメントでは .NET MAUI と Microsoft.Toolkit.Mvvm を利用した MVVM によるモバイルアプリ開発をハンズオンで学習します。
 
 開発するのは Web API に接続し、データを表示するモバイルアプリです。
 
 ## システム要件
 
 - 最新の Windows または macOS
-- 最新の Visual Studio 2019 または Visual Studio for Mac
-    - Prism 拡張機能
+- 最新の Visual Studio 2022 または Visual Studio 2022 for Mac
+    - Microsoft.Toolkit.Mvvm パッケージ
+    - ※ Mac では .NET MAUI はPreviewです（2022.9.3 現在）
 - Android SDK
     - Android Emulator
 
-### Prism 拡張機能のインストール
+## ワークロードのインストール
 
-Visual Studio のメニューから「拡張機能＞拡張機能の管理」で表示されるダイアログの「オンライン」タブが選択されている状態で右上の検索窓に `prism` と入力して「Prism Template Pack」をインストールします。(Visual Studioを再起動します。)
-
-<img src="./images/prism-01.png" width="600" />
+Visual Studio Installer を起動して「.NET マルチプラットフォーム アプリの UI 開発」をインストールします。
 
 
-
-
-
-
-
+<img src="./images/installer-01.png" width="600" />
 
 
 ## Xamarin.Forms アプリの作成と動作確認
 
 Visual Studio を起動して「新しいプロジェクト」をクリックします。
 
-<img src="./images/prism-02.png" width="600" />
+<img src="./images/maui-01.png" width="600" />
 
-ダイアログで検索窓に `xamarin` と入力し、「モバイルアプリ (Xamarin.Forms)」をクリックして Xamarin.Forms プロジェクトを作成します。
+ダイアログで検索窓に `maui` と入力し、「.NET MAUI アプリ」をクリックして .NET MAUI プロジェクトを作成します。
 
-<img src="./images/xf-01.png" width="600" />
+<img src="./images/maui-02.png" width="600" />
 
-「空白」を選んで「作成」ボタンをクリックします。
+任意の名前とフォルダにプロジェクトを構成します。（本ドキュメントでは `MauiApp` という名前空間ですので合わせても良いでしょう。）
 
-<img src="./images/xf-02.png" width="600" />
+<img src="./images/maui-03.png" width="600" />
 
-任意の名前でプロジェクトを作成します。（本ドキュメントでは `MobileApp` という名前空間ですので合わせても良いでしょう。）
+フレームワークは「.NET 6.0（長期的なサポート）」を選択してプロジェクトを作成します。
 
-<img src="./images/xf-03.png" width="600" />
+<img src="./images/maui-04.png" width="600" />
+
+
+
+
+
 
 
 
