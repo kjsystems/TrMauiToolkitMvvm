@@ -21,7 +21,7 @@ Visual Studio Installer を起動して「.NET マルチプラットフォーム
 <img src="./images/installer-01.png" width="600" />
 
 
-## Xamarin.Forms アプリの作成と動作確認
+## .NET MAUI アプリの作成と動作確認
 
 Visual Studio を起動して「新しいプロジェクト」をクリックします。
 
@@ -60,29 +60,29 @@ Android エミュレーターをドロップダウンから選択してデバッ
 
 ドロップダウンから「Android デバイスマネージャー」をクリックします。
 
-表示されるダイアログで「新規」ボタンをクリックします。表示されない場合は、「ツール」→「Android」→「Android デバイスマネージャー」をクリックします。
+表示されるダイアログで「新規」ボタンをクリックします。表示されない場合は、「ツール＞Android＞Android デバイスマネージャー」をクリックします。
 
 「新規」ボタンをクリックします。
 
 <img src="./images/maui-06.png" width="600" />
 
 
-- 基本デバイス：デバイスのテンプレートでデバイスに応じた画面サイズやメモリ量が決まります。`Pixel 3` や `Pixel 3a` などを選んでおくと良いでしょう。
+- 基本デバイス：デバイスのテンプレートでデバイスに応じた画面サイズやメモリ量が決まります。`Pixel 5` などを選んでおくと良いでしょう。
 - プロセッサ：`x86` か `x86_64` を選択します。（Intel CPU の仮想化に Hyper-V または Intel HAXM が必要です。）
 - OS：エミュレーターの OS を指定します。
 - Google APIs／Google Play Store：Google Play Store にチェックを付けると Emulator でマップやストアが利用できます。
 
-<img src="./images/prism-12.png" width="600" />
+<img src="./images/maui-07.png" width="600" />
 
 各種選択した状態で「新しいデバイスイメージがダウンロードされます。」という注意書きがある場合は、Android SDK のダウンロードサイトから条件に見合った OS イメージを自動でダウンロードしてエミュレーターを作成します。
 
 OS イメージは Visual Studio のメニューから「ツール＞Android＞Android SDK マネージャー」をクリックし、
 
-<img src="./images/prism-13.png" width="600" />
+<img src="./images/maui-09.png" width="600" />
 
 表示されるダイアログで `Google APIs Intel x86 Atom System Image` や `Google Play Intel x86 Atom System Image` が該当します。少し大きいサイズなので、PC の空き容量が少ない場合は選択してインストールしてください。
 
-<img src="./images/prism-14.png" width="600" />
+<img src="./images/maui-08.png" width="600" />
 
 
 #### デバッグ実行
