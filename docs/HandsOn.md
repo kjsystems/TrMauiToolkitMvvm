@@ -91,7 +91,7 @@ OS イメージは Visual Studio のメニューから「ツール＞Android＞A
 
 Android エミュレーターが起動して、次のような画面が表示されれば OK です。
 
-<img src="./images/prism-15.png" width="300" />
+<img src="./images/maui-10.png" width="300" />
 
 
 
@@ -99,24 +99,90 @@ Android エミュレーターが起動して、次のような画面が表示さ
 ### デフォルトプロジェクトの構成
 
 <pre>
-+ MobileApp
++ MauiApp1
   - App.xaml / App.xaml.cs
+  - AppShell.xaml.cs / AppShell.xaml
   - AssemblyInfo.cs
+  - MauiProgram.cs
   - MainPage.xaml / MainPage.xaml.cs
 </pre>
 
-#### `App.xaml.cs`
+#### `MauiProgram.cs`
 
-エントリーポイントです。`App` メソッド内で、初期ページのプロパティ `MainPage` に `MainPage` クラスのインスタンスを指定しています。
+アプリケーションのエントリーポイントです。
 
-```csharp
-public App()
+プラットフォームごとにアプリエントリポイントがあります。 
+
+```cs
+public static class MauiProgram
 {
-    InitializeComponent();
+	public static MauiApp CreateMauiApp()
+	{
+		var builder = MauiApp.CreateBuilder();
+		builder
+			.UseMauiApp<App>()
+			.ConfigureFonts(fonts =>
+			{
+				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+			});
 
-    MainPage = new MainPage();
+		return builder.Build();
+	}
 }
 ```
+
+
+#### `App.xaml.cs`
+
+`App` クラスは `Application` クラスから派生しています。
+
+`App` メソッド内で、初期ページのプロパティ `MainPage` に `AppShell` クラスのインスタンスを指定しています。
+
+```cs
+public class App : Application
+{
+    public App()
+    {
+        InitializeComponent();
+
+        MainPage = new AppShell();
+    }
+}
+```
+
+.NET MAUI Shell アプリでは、アプリのビジュアル階層は、クラスをサブクラスを Shell 化するクラスで記述されます。
+
+このクラスは、次の 3 つの主要な階層オブジェクトのいずれかで構成されます。
+
+1. FlyoutItem または TabBar。
+1. Tab。
+1. ShellContent 
+
+#### `AppShell.xaml`
+
+MaupApp1 では `ShellContent` で構成されていることが確認できます。
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="MauiApp1.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:MauiApp1"
+    Shell.FlyoutBehavior="Disabled">
+
+    <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="MainPage" />
+
+</Shell>
+```
+
+#### `AppShell.xaml.cs`
+
+AppShell のパーシャルクラスで、コードビハインドと呼ばれます。
 
 #### `MainPage.xaml`
 
@@ -124,27 +190,44 @@ View のクラスです。XML ベースのクラスを表す言語 XAML で記�
 
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MobileApp.MainPage">
+             x:Class="MauiApp1.MainPage">
 
-    <StackLayout>
-        <Frame BackgroundColor="#2196F3" Padding="24" CornerRadius="0">
-            <Label Text="Welcome to Xamarin.Forms!" HorizontalTextAlignment="Center" TextColor="White" FontSize="36"/>
-        </Frame>
-        <Label Text="Start developing now" FontSize="Title" Padding="30,10,30,10"/>
-        <Label Text="Make changes to your XAML file and save to see your UI update in the running app with XAML Hot Reload. Give it a try!" FontSize="16" Padding="30,0,30,0"/>
-        <Label FontSize="16" Padding="30,24,30,0">
-            <Label.FormattedText>
-                <FormattedString>
-                    <FormattedString.Spans>
-                        <Span Text="Learn more at "/>
-                        <Span Text="https://aka.ms/xamarin-quickstart" FontAttributes="Bold"/>
-                    </FormattedString.Spans>
-                </FormattedString>
-            </Label.FormattedText>
-        </Label>
-    </StackLayout>
+    <ScrollView>
+        <VerticalStackLayout
+            Spacing="25"
+            Padding="30,0"
+            VerticalOptions="Center">
+
+            <Image
+                Source="dotnet_bot.png"
+                SemanticProperties.Description="Cute dot net bot waving hi to you!"
+                HeightRequest="200"
+                HorizontalOptions="Center" />
+
+            <Label
+                Text="Hello, World!"
+                SemanticProperties.HeadingLevel="Level1"
+                FontSize="32"
+                HorizontalOptions="Center" />
+
+            <Label
+                Text="Welcome to .NET Multi-platform App UI"
+                SemanticProperties.HeadingLevel="Level2"
+                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
+                FontSize="18"
+                HorizontalOptions="Center" />
+
+            <Button
+                x:Name="CounterBtn"
+                Text="Click me"
+                SemanticProperties.Hint="Counts the number of times you click"
+                Clicked="OnCounterClicked"
+                HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
+    </ScrollView>
 
 </ContentPage>
 ```
@@ -153,9 +236,8 @@ View のクラスです。XML ベースのクラスを表す言語 XAML で記�
 
 MainPage のパーシャルクラスで、コードビハインドと呼ばれます。
 
+
 起動確認は以上です。
-
-
 
 
 
