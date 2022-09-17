@@ -31,7 +31,7 @@ Visual Studio を起動して「新しいプロジェクト」をクリックし
 
 <img src="./images/maui-02.png" width="600" />
 
-任意の名前とフォルダにプロジェクトを構成します。（本ドキュメントでは `MauiApp1` という名前空間ですので合わせても良いでしょう。）
+任意の名前とフォルダにプロジェクトを構成します。（本ドキュメントでは `MobileApp` という名前空間ですので合わせても良いでしょう。）
 
 <img src="./images/maui-03.png" width="600" />
 
@@ -99,7 +99,7 @@ Android エミュレーターが起動して、次のような画面が表示さ
 ### デフォルトプロジェクトの構成
 
 <pre>
-+ MauiApp1
++ MobileApp
   - App.xaml / App.xaml.cs
   - AppShell.xaml.cs / AppShell.xaml
   - AssemblyInfo.cs
@@ -166,10 +166,10 @@ MaupApp1 では `ShellContent` で構成されていることが確認できま�
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
 <Shell
-    x:Class="MauiApp1.AppShell"
+    x:Class="MobileApp.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:MauiApp1"
+    xmlns:local="clr-namespace:MobileApp"
     Shell.FlyoutBehavior="Disabled">
 
     <ShellContent
@@ -192,7 +192,7 @@ View のクラスです。XML ベースのクラスを表す言語 XAML で記�
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MauiApp1.MainPage">
+             x:Class="MobileApp.MainPage">
 
     <ScrollView>
         <VerticalStackLayout
@@ -268,54 +268,26 @@ public partial class MainPage : ContentPage
 
 起動確認は以上です。
 
-
-
 ## Web API への接続
 
 起動を確認したら、Web API への接続を追加していきます。
-
 
 
 ### モデルクラスの作成
 
 まずは Model クラスを作成します。
 
-**Xamarin.Forms プロジェクト**での作業です
-
-プロジェクトを右クリックして「追加＞クラス」から `Weather` クラスを作成します。
-
-後で Web API への接続で JSON 形式のデータを扱うため、`Newtonsoft.Json` を使用したモデルクラスを用意します。次のようになります。
+プロジェクトを右クリックして「追加＞クラス」から `Weather` クラスを作成します。次のようになります。
 
 ```csharp
+namespace MobileApp;
 public class Weather
 {
-    [JsonProperty("date")]
     public DateTime Date { get; set; }
-    [JsonProperty("temperature")]
     public int Temperature { get; set; }
-    [JsonProperty("summary")]
     public string Summary { get; set; }
 }
 ```
-
-`Newtonsoft.Json` は、IntelliSnese から自動インストールすることも可能ですし、
-
-<img src="./images/prism-21.png" width="600" />
-
-Xamarin.Forms プロジェクトを右クリックから「NuGet パッケージの管理」を選択して、手動で `Newtonsoft.Json` をインストールすることも可能です。
-
-<img src="./images/prism-22.png" width="600" />
-
-> TIPS: JSON ライブラリについて
-> 
-> 一般的な .NET 5 のアプリケーションでは標準で含まれる `System.Text.Json` を使うのが良いでしょう。
-> 
-> 今まで `Newtonsoft.Json` を利用していた場合は、公式ドキュメント [Newtonsoft\.Json から System\.Text\.Json に移行する \- \.NET \| Microsoft Docs](https://docs.microsoft.com/ja-jp/dotnet/standard/serialization/system-text-json-migrate-from-newtonsoft-how-to) などを参考に移行できます。
-> 
-> Xamarin での利用については [System\.Text\.Json Serializer does not appear to work on Xamarin iOS · Issue \#31326 · dotnet/runtime · GitHub](https://github.com/dotnet/runtime/issues/31326) にあるように 2020/9/9 の時点でもまだ `System.Numerics.Vectors` でコンフリクトが発生しているというワーニングが発生するようなので、安全のために `Newtonsoft.Json` を使用しています。
-
-
-
 
 ### View の作成
 
@@ -325,7 +297,7 @@ Xamarin.Forms プロジェクトを右クリックから「NuGet パッケージ
 
 ```xml
 <StackLayout Padding="10">
-    <Label Text="Welcome to Xamarin Forms!" />
+    <Label Text="Welcome to .NET MAUI!" />
     <StackLayout Orientation="Horizontal">
         <Label VerticalTextAlignment="Center" Text="Can Click" />
         <Switch x:Name="canClickSwitch"
@@ -338,7 +310,6 @@ Xamarin.Forms プロジェクトを右クリックから「NuGet パッケージ
 
     <RefreshView x:Name="refreshView" Refreshing="PullToRefreshing">
         <CollectionView x:Name="collectionView"
-                        ItemsLayout="VerticalList"
                         ItemsSource="{Binding}"
                         SelectionChanged="OnCollectionViewSelectionChanged"
                         SelectionMode="Single">
@@ -353,7 +324,6 @@ Xamarin.Forms プロジェクトを右クリックから「NuGet パッケージ
             </CollectionView.ItemTemplate>
         </CollectionView>
     </RefreshView>
-        
 </StackLayout>
 ```
 
@@ -367,7 +337,7 @@ Xamarin.Forms プロジェクトを右クリックから「NuGet パッケージ
 クラス変数として以下を追加します。
 
 ```csharp
-public ObservableCollection<Weather> Weathers = new ObservableCollection<Weather>();
+public ObservableCollection<Weather> Weathers = new();
 bool _firstAppearing = true;
 ```
 
@@ -384,30 +354,12 @@ protected override void OnAppearing()
     _firstAppearing = false;
 }
 
-async void OnCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
-{
-    if (e.CurrentSelection.Count == 0)
-        return;
-
-    var current = e.CurrentSelection.FirstOrDefault() as Weather;
-    collectionView.SelectedItem = null;
-
-    var message = $"{current?.Date:yyyy/MM/dd} は {current?.Temperature}℃ で {current?.Summary} です。";
-    await DisplayAlert ("weather", message, "OK");
-}
-
-void SwitchOnToggled(object sender, ToggledEventArgs e)
-{
-    button.IsEnabled = e.Value;
-    refreshView.IsEnabled = e.Value;
-}
-
-void GetWeathersButtonOnClicked(object sender, EventArgs e)
+private void GetWeathersButtonOnClicked(object sender, EventArgs e)
 {
     GetWeathersAsync();
 }
 
-void PullToRefreshing(object sender, EventArgs e)
+private void PullToRefreshing(object sender, EventArgs e)
 {
     button.IsEnabled = false;
 
@@ -417,31 +369,49 @@ void PullToRefreshing(object sender, EventArgs e)
     button.IsEnabled = true;
 }
 
+private void SwitchOnToggled(object sender, ToggledEventArgs e)
+{
+    button.IsEnabled = e.Value;
+    refreshView.IsEnabled = e.Value;
+}
+
+private async void OnCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
+{
+    if (e.CurrentSelection.Count == 0)
+        return;
+
+    var current = e.CurrentSelection.FirstOrDefault() as Weather;
+    collectionView.SelectedItem = null;
+
+    var message = $"{current?.Date:yyyy/MM/dd} は {current?.Temperature}℃ で {current?.Summary} です。";
+    await Shell.Current.DisplayAlert("weather", message, "OK");
+}
+
 void GetWeathersAsync()
 {
     Weathers.Clear();
 
     Weathers = new ObservableCollection<Weather>
-    {
-        new Weather
         {
-            Date = new DateTime(2021,11,1),
-            Summary = "Rainy",
-            Temperature = 20
-        },
-        new Weather
-        {
-            Date = new DateTime(2021,11,2),
-            Summary = "Cloudy",
-            Temperature = 25
-        },
-        new Weather
-        {
-            Date = new DateTime(2021,11,3),
-            Summary = "Sunny",
-            Temperature = 30
-        }
-    };
+            new Weather
+            {
+                Date = new DateTime(2020,11,1),
+                Summary = "Rainy",
+                Temperature = 20
+            },
+            new Weather
+            {
+                Date = new DateTime(2020,11,2),
+                Summary = "Cloudy",
+                Temperature = 25
+            },
+            new Weather
+            {
+                Date = new DateTime(2020,11,3),
+                Summary = "Sunny",
+                Temperature = 30
+            }
+        };
 
     BindingContext = Weathers;
 }
