@@ -442,6 +442,9 @@ void GetWeathersAsync()
 
 
 ```csharp
+using System.Diagnostics;
+using System.Net.Http.Json;
+
 static HttpClient _httpClient = new HttpClient();
 async Task GetWeathersAsync()
 {
@@ -455,9 +458,7 @@ async Task GetWeathersAsync()
         response.EnsureSuccessStatusCode();
 
         // レスポンスからコンテンツ（JSON）を取得
-        var json = await response.Content.ReadAsStringAsync();
-        // Newtonsoft.Json で JSON をデシリアライズ
-        Weathers = JsonConvert.DeserializeObject<ObservableCollection<Weather>>(json);
+        Weathers = await response.Content.ReadFromJsonAsync<ObservableCollection<Weather>>();
     }
     catch (Exception ex)
     {
@@ -472,10 +473,10 @@ Web からのデータ取得やファイル IO など時間の掛かる処理を
 
 再度デバッグ実行して、次のような画面が表示されれば OK です。
 
-<img src="./images/xf-05.png" width="300" />
+<img src="./images/maui-12.png" width="300" />
 
 
-標準の Xamarin.Forms の内容は以上です。
+標準の .NET MAUI の内容は以上です。
 
 
 
