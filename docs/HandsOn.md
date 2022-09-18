@@ -293,7 +293,7 @@ public class Weather
 
 次に View を作成していきましょう。`MainPage.xaml` を開きます。
 
-`StackLayout` 内をすべて削除し、次の XAML で置き換えます。次のようになります。
+`ScrollView` 内をすべて削除し、次の XAML で置き換えます。次のようになります。
 
 ```xml
 <StackLayout Padding="10">
@@ -432,7 +432,7 @@ void GetWeathersAsync()
 
 ここでデバッグ実行してみましょう。次のような画面が表示されれば OK です。
 
-<img src="./images/xf-04.png" width="300" />
+<img src="./images/maui-11.png" width="300" />
 
 
 
