@@ -659,106 +659,78 @@ MainPage のパーシャルクラスです。`InitializeComponent` メソッド�
 
 ```json
 [
-    {
-        date: "2021-11-07T06:52:22.3435607+00:00",
-        temperature: 24,
-        summary: "Sunny",
-    },
-    {
-        date: "2021-11-08T06:52:22.343578+00:00",
-        temperature: -17,
-        summary: "Rainy",
-    },
-    {
-        date: "2021-11-09T06:52:22.3435786+00:00",
-        temperature: 1,
-        summary: "Snowy",
-    },
-    {
-        date: "2021-11-10T06:52:22.343579+00:00",
-        temperature: -3,
-        summary: "Sunny",
-    },
-    {
-        date: "2021-11-11T06:52:22.3435793+00:00",
-        temperature: 17,
-        summary: "Rainy",
-    },
+  {
+    "date": "2022-09-20T09:20:29.1731766+00:00",
+    "temperature": -16,
+    "summary": "Snowy"
+  },
+  {
+    "date": "2022-09-21T09:20:29.1733714+00:00",
+    "temperature": -3,
+    "summary": "Snowy"
+  },
+  {
+    "date": "2022-09-22T09:20:29.1733728+00:00",
+    "temperature": 35,
+    "summary": "Cloudy"
+  },
+  {
+    "date": "2022-09-23T09:20:29.1733826+00:00",
+    "temperature": 29,
+    "summary": "PartlyCloudy"
+  },
+  {
+    "date": "2022-09-24T09:20:29.1733829+00:00",
+    "temperature": -17,
+    "summary": "Snowy"
+  }
 ]
 ```
 
 
-### モデルクラスの作成
+### モデル（Weather）クラスの作成
 
 まずはこの JSON をオブジェクトとして操作するための Model クラスを作成します。
 
 事前に Web API から表示されている JSON をクリップボードにコピーしておきます。
 
-JSON からモデルを作成してくれる [https://app.quicktype.io/](https://app.quicktype.io/) にアクセスします。
-
-左側のペインに JSON を貼り付け、Name を `Weather` に変更します。
-
-右側のウィンドウで
-
-- Language から `C#`
-- Generated namespace に `MobileApp.Models`
-- Output features から `Attribute Only`
-
-を選択、入力すると以下のコードが得られます。
-
-```csharp
-namespace MobileApp.Models
-{
-    using System;
-    using System.Collections.Generic;
-
-    using System.Globalization;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
-
-    public partial class Weather
-    {
-        [JsonProperty("date")]
-        public DateTimeOffset Date { get; set; }
-
-        [JsonProperty("temperature")]
-        public long Temperature { get; set; }
-
-        [JsonProperty("summary")]
-        public string Summary { get; set; }
-    }
-}
-```
-
-
-**Xamarin.Forms プロジェクト**での作業です
-
 `Models` フォルダを作成します。
 
 `Models` フォルダを右クリックして「追加＞クラス」から `Weather` クラスを作成します。
 
-作成されたクラスを先ほどのコードで置き換えます。
+MobileApp プロジェクトを右クリックして、追加＞クラス、Weather と入力します。
 
-`Newtonsoft.Json` は、IntelliSnese から自動インストールすることも可能ですし、
+Weather クラス全体を選択した状態にしておいて、編集＞形式を選択して貼り付け＞JSONをクラスとして貼り付けるをクリックします。
 
-<img src="./images/prism-21.png" width="600" />
-
-Xamarin.Forms プロジェクトを右クリックから「NuGet パッケージの管理」を選択して、手動で `Newtonsoft.Json` をインストールすることも可能です。
-
-<img src="./images/prism-22.png" width="600" />
-
-> TIPS: JSON ライブラリについて
-> 
-> 一般的な .NET Core 3.1 のアプリケーションでは標準で含まれる `System.Text.Json` を使うのが良いでしょう。
-> 
-> 今まで `Newtonsoft.Json` を利用していた場合は、公式ドキュメント [Newtonsoft\.Json から System\.Text\.Json に移行する \- \.NET \| Microsoft Docs](https://docs.microsoft.com/ja-jp/dotnet/standard/serialization/system-text-json-migrate-from-newtonsoft-how-to) などを参考に移行できます。
-> 
-> Xamarin での利用については [System\.Text\.Json Serializer does not appear to work on Xamarin iOS · Issue \#31326 · dotnet/runtime · GitHub](https://github.com/dotnet/runtime/issues/31326) にあるように 2020/9/9 の時点でもまだ `System.Numerics.Vectors` でコンフリクトが発生しているというワーニングが発生するようなので、安全のために `Newtonsoft.Json` を使用しています。
+<img src="./images/maui-mvvm-03.png" />
 
 
+以下のコードが得られます。
 
+```csharp
+public class Rootobject
+{
+    public Class1[] Property1 { get; set; }
+}
 
+public class Class1
+{
+    public DateTime date { get; set; }
+    public int temperature { get; set; }
+    public string summary { get; set; }
+}
+```
 
+Rootobject クラスは余計なので削除、Class1 を Weather に修正、各プロパティの先頭を大文字にします。
+
+```csharp
+public class Weather
+{
+    public DateTime Date { get; set; }
+    public int Temperature { get; set; }
+    public string Summary { get; set; }
+}
+```
 
 ### サービスのインターフェイスと実装クラスの作成
 
