@@ -700,7 +700,7 @@ MobileApp プロジェクトを右クリックして「新しいフォルダー�
 
 作成された Weather クラス全体を選択して、「編集＞形式を選択して貼り付け＞JSONをクラスとして貼り付ける」をクリックします。
 
-<img src="./images/maui-mvvm-03.png" />
+<img src="./images/mvvm-03.png" width="600" />
 
 以下のコードが得られます。
 
@@ -718,7 +718,7 @@ public class Class1
 }
 ```
 
-Rootobject クラスは余計なので削除、Class1 を Weather に修正、各プロパティの先頭を大文字にします。
+Rootobject クラスは削除、Class1 を Weather に修正、各プロパティの先頭を大文字にします。
 
 ```csharp
 public class Weather
@@ -737,20 +737,16 @@ public class Weather
 
 `Services` フォルダを右クリックして「追加＞新しい項目」から「インターフェイス」を選択し、`IWeaterService` を作成します。
 
-<img src="./images/prism-23.png" width="600" />
+<img src="./images/mvvm-04.png" width="600" />
 
 `IWeatherService.cs` で、インターフェイスを `public` 属性にして、`Weather` のコレクションを戻り値に持つ `GetWeathersAsync` メソッドを追加します。次のようになります。
 
 ```csharp
 public interface IWeatherService
 {
-    Task<ObservableCollection<Weather>> GetWeathersAsync();
+    Task<List<Weather>> GetWeathersAsync();
 }
 ```
-
-不足する using は IntelliSnese で追加できます。
-
-<img src="./images/prism-24.png" width="600" />
 
 インターフェイスはこれで完了です。続いてインターフェイスの実装を作成します。
 
@@ -765,21 +761,20 @@ public interface IWeatherService
 ```csharp
 class WeatherService : IWeatherService
 {
-    static HttpClient _httpClient = new HttpClient();
+    static readonly HttpClient _httpClient = new();
 
-    public async Task<ObservableCollection<Weather>> GetWeathersAsync()
+    public async Task<List<Weather>> GetWeathersAsync()
     {
         try
         {
             // サイトからデータを取得
             var response = await _httpClient.GetAsync("https://weatherforecastsampleforprism.azurewebsites.net/weatherforecast");
+
             // レスポンスコード（200 など）を確認
             response.EnsureSuccessStatusCode();
-                
+
             // レスポンスからコンテンツ（JSON）を取得
-            var json = await response.Content.ReadAsStringAsync();
-            // Newtonsoft.Json で JSON をデシリアライズ
-            return JsonConvert.DeserializeObject<ObservableCollection<Weather>>(json);
+            return await response.Content.ReadFromJsonAsync<List<Weather>>();
         }
         catch (Exception ex)
         {
