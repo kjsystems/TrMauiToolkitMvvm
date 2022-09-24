@@ -31,7 +31,7 @@ Visual Studio を起動して「新しいプロジェクト」をクリックし
 
 <img src="./images/maui-02.png" width="600" />
 
-任意の名前とフォルダにプロジェクトを構成します。（本ドキュメントでは `MauiApp1` という名前空間ですので合わせても良いでしょう。）
+任意の名前とフォルダにプロジェクトを構成します。（本ドキュメントでは `MobileApp` という名前空間ですので合わせても良いでしょう。）
 
 <img src="./images/maui-03.png" width="600" />
 
@@ -91,7 +91,7 @@ OS イメージは Visual Studio のメニューから「ツール＞Android＞A
 
 Android エミュレーターが起動して、次のような画面が表示されれば OK です。
 
-<img src="./images/prism-15.png" width="300" />
+<img src="./images/maui-10.png" width="300" />
 
 
 
@@ -101,22 +101,88 @@ Android エミュレーターが起動して、次のような画面が表示さ
 <pre>
 + MobileApp
   - App.xaml / App.xaml.cs
+  - AppShell.xaml.cs / AppShell.xaml
   - AssemblyInfo.cs
+  - MauiProgram.cs
   - MainPage.xaml / MainPage.xaml.cs
 </pre>
 
-#### `App.xaml.cs`
+#### `MauiProgram.cs`
 
-エントリーポイントです。`App` メソッド内で、初期ページのプロパティ `MainPage` に `MainPage` クラスのインスタンスを指定しています。
+アプリケーションのエントリーポイントです。
 
-```csharp
-public App()
+プラットフォーム（Android, iOS, Mac, Win）ごとにアプリエントリポイント（`MainApplication` クラス）があり、そこから `CreateMauiApp` メソッドが呼び出されます。 
+
+```cs
+public static class MauiProgram
 {
-    InitializeComponent();
+	public static MauiApp CreateMauiApp()
+	{
+		var builder = MauiApp.CreateBuilder();
+		builder
+			.UseMauiApp<App>()
+			.ConfigureFonts(fonts =>
+			{
+				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+			});
 
-    MainPage = new MainPage();
+		return builder.Build();
+	}
 }
 ```
+
+
+#### `App.xaml.cs`
+
+`App` クラスは `Application` クラスから派生しています。
+
+`App` メソッド内で、初期ページのプロパティ `MainPage` に `AppShell` クラスのインスタンスを指定しています。
+
+```cs
+public class App : Application
+{
+    public App()
+    {
+        InitializeComponent();
+
+        MainPage = new AppShell();
+    }
+}
+```
+
+.NET MAUI Shell アプリでは、アプリのビジュアル階層は、クラスをサブクラスを Shell 化するクラスで記述されます。
+
+このクラスは、次の 3 つの主要な階層オブジェクトのいずれかで構成されます。
+
+1. FlyoutItem または TabBar。
+1. Tab。
+1. ShellContent 
+
+#### `AppShell.xaml`
+
+MaupApp1 では `ShellContent` で構成されていることが確認できます。
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="MobileApp.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:MobileApp"
+    Shell.FlyoutBehavior="Disabled">
+
+    <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="MainPage" />
+
+</Shell>
+```
+
+#### `AppShell.xaml.cs`
+
+AppShell のパーシャルクラスで、コードビハインドと呼ばれます。
 
 #### `MainPage.xaml`
 
@@ -124,27 +190,44 @@ View のクラスです。XML ベースのクラスを表す言語 XAML で記�
 
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MobileApp.MainPage">
 
-    <StackLayout>
-        <Frame BackgroundColor="#2196F3" Padding="24" CornerRadius="0">
-            <Label Text="Welcome to Xamarin.Forms!" HorizontalTextAlignment="Center" TextColor="White" FontSize="36"/>
-        </Frame>
-        <Label Text="Start developing now" FontSize="Title" Padding="30,10,30,10"/>
-        <Label Text="Make changes to your XAML file and save to see your UI update in the running app with XAML Hot Reload. Give it a try!" FontSize="16" Padding="30,0,30,0"/>
-        <Label FontSize="16" Padding="30,24,30,0">
-            <Label.FormattedText>
-                <FormattedString>
-                    <FormattedString.Spans>
-                        <Span Text="Learn more at "/>
-                        <Span Text="https://aka.ms/xamarin-quickstart" FontAttributes="Bold"/>
-                    </FormattedString.Spans>
-                </FormattedString>
-            </Label.FormattedText>
-        </Label>
-    </StackLayout>
+    <ScrollView>
+        <VerticalStackLayout
+            Spacing="25"
+            Padding="30,0"
+            VerticalOptions="Center">
+
+            <Image
+                Source="dotnet_bot.png"
+                SemanticProperties.Description="Cute dot net bot waving hi to you!"
+                HeightRequest="200"
+                HorizontalOptions="Center" />
+
+            <Label
+                Text="Hello, World!"
+                SemanticProperties.HeadingLevel="Level1"
+                FontSize="32"
+                HorizontalOptions="Center" />
+
+            <Label
+                Text="Welcome to .NET Multi-platform App UI"
+                SemanticProperties.HeadingLevel="Level2"
+                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
+                FontSize="18"
+                HorizontalOptions="Center" />
+
+            <Button
+                x:Name="CounterBtn"
+                Text="Click me"
+                SemanticProperties.Hint="Counts the number of times you click"
+                Clicked="OnCounterClicked"
+                HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
+    </ScrollView>
 
 </ContentPage>
 ```
@@ -153,68 +236,68 @@ View のクラスです。XML ベースのクラスを表す言語 XAML で記�
 
 MainPage のパーシャルクラスで、コードビハインドと呼ばれます。
 
+`OnCounterClicked` は `CounterBtn` の `Clicked` にバウンディングされています。
+
+ボタンをクリックすると数字が1つ増えていきます。
+
+
+```cs
+public partial class MainPage : ContentPage
+{
+	int count = 0;
+
+	public MainPage()
+	{
+		InitializeComponent();
+	}
+
+	private void OnCounterClicked(object sender, EventArgs e)
+	{
+		count++;
+
+		if (count == 1)
+			CounterBtn.Text = $"Clicked {count} time";
+		else
+			CounterBtn.Text = $"Clicked {count} times";
+
+		SemanticScreenReader.Announce(CounterBtn.Text);
+	}
+}
+```
+
+
 起動確認は以上です。
-
-
-
-
 
 ## Web API への接続
 
 起動を確認したら、Web API への接続を追加していきます。
 
 
-
 ### モデルクラスの作成
 
 まずは Model クラスを作成します。
 
-**Xamarin.Forms プロジェクト**での作業です
-
-プロジェクトを右クリックして「追加＞クラス」から `Weather` クラスを作成します。
-
-後で Web API への接続で JSON 形式のデータを扱うため、`Newtonsoft.Json` を使用したモデルクラスを用意します。次のようになります。
+プロジェクトを右クリックして「追加＞クラス」から `Weather` クラスを作成します。次のようになります。
 
 ```csharp
+namespace MobileApp;
 public class Weather
 {
-    [JsonProperty("date")]
     public DateTime Date { get; set; }
-    [JsonProperty("temperature")]
     public int Temperature { get; set; }
-    [JsonProperty("summary")]
     public string Summary { get; set; }
 }
 ```
-
-`Newtonsoft.Json` は、IntelliSnese から自動インストールすることも可能ですし、
-
-<img src="./images/prism-21.png" width="600" />
-
-Xamarin.Forms プロジェクトを右クリックから「NuGet パッケージの管理」を選択して、手動で `Newtonsoft.Json` をインストールすることも可能です。
-
-<img src="./images/prism-22.png" width="600" />
-
-> TIPS: JSON ライブラリについて
-> 
-> 一般的な .NET 5 のアプリケーションでは標準で含まれる `System.Text.Json` を使うのが良いでしょう。
-> 
-> 今まで `Newtonsoft.Json` を利用していた場合は、公式ドキュメント [Newtonsoft\.Json から System\.Text\.Json に移行する \- \.NET \| Microsoft Docs](https://docs.microsoft.com/ja-jp/dotnet/standard/serialization/system-text-json-migrate-from-newtonsoft-how-to) などを参考に移行できます。
-> 
-> Xamarin での利用については [System\.Text\.Json Serializer does not appear to work on Xamarin iOS · Issue \#31326 · dotnet/runtime · GitHub](https://github.com/dotnet/runtime/issues/31326) にあるように 2020/9/9 の時点でもまだ `System.Numerics.Vectors` でコンフリクトが発生しているというワーニングが発生するようなので、安全のために `Newtonsoft.Json` を使用しています。
-
-
-
 
 ### View の作成
 
 次に View を作成していきましょう。`MainPage.xaml` を開きます。
 
-`StackLayout` 内をすべて削除し、次の XAML で置き換えます。次のようになります。
+`ScrollView` 内をすべて削除し、次の XAML で置き換えます。次のようになります。
 
 ```xml
 <StackLayout Padding="10">
-    <Label Text="Welcome to Xamarin Forms!" />
+    <Label Text="Welcome to .NET MAUI!" />
     <StackLayout Orientation="Horizontal">
         <Label VerticalTextAlignment="Center" Text="Can Click" />
         <Switch x:Name="canClickSwitch"
@@ -227,7 +310,6 @@ Xamarin.Forms プロジェクトを右クリックから「NuGet パッケージ
 
     <RefreshView x:Name="refreshView" Refreshing="PullToRefreshing">
         <CollectionView x:Name="collectionView"
-                        ItemsLayout="VerticalList"
                         ItemsSource="{Binding}"
                         SelectionChanged="OnCollectionViewSelectionChanged"
                         SelectionMode="Single">
@@ -242,7 +324,6 @@ Xamarin.Forms プロジェクトを右クリックから「NuGet パッケージ
             </CollectionView.ItemTemplate>
         </CollectionView>
     </RefreshView>
-        
 </StackLayout>
 ```
 
@@ -256,7 +337,7 @@ Xamarin.Forms プロジェクトを右クリックから「NuGet パッケージ
 クラス変数として以下を追加します。
 
 ```csharp
-public ObservableCollection<Weather> Weathers = new ObservableCollection<Weather>();
+public ObservableCollection<Weather> Weathers = new();
 bool _firstAppearing = true;
 ```
 
@@ -273,30 +354,12 @@ protected override void OnAppearing()
     _firstAppearing = false;
 }
 
-async void OnCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
-{
-    if (e.CurrentSelection.Count == 0)
-        return;
-
-    var current = e.CurrentSelection.FirstOrDefault() as Weather;
-    collectionView.SelectedItem = null;
-
-    var message = $"{current?.Date:yyyy/MM/dd} は {current?.Temperature}℃ で {current?.Summary} です。";
-    await DisplayAlert ("weather", message, "OK");
-}
-
-void SwitchOnToggled(object sender, ToggledEventArgs e)
-{
-    button.IsEnabled = e.Value;
-    refreshView.IsEnabled = e.Value;
-}
-
-void GetWeathersButtonOnClicked(object sender, EventArgs e)
+private void GetWeathersButtonOnClicked(object sender, EventArgs e)
 {
     GetWeathersAsync();
 }
 
-void PullToRefreshing(object sender, EventArgs e)
+private void PullToRefreshing(object sender, EventArgs e)
 {
     button.IsEnabled = false;
 
@@ -306,31 +369,49 @@ void PullToRefreshing(object sender, EventArgs e)
     button.IsEnabled = true;
 }
 
+private void SwitchOnToggled(object sender, ToggledEventArgs e)
+{
+    button.IsEnabled = e.Value;
+    refreshView.IsEnabled = e.Value;
+}
+
+private async void OnCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
+{
+    if (e.CurrentSelection.Count == 0)
+        return;
+
+    var current = e.CurrentSelection.FirstOrDefault() as Weather;
+    collectionView.SelectedItem = null;
+
+    var message = $"{current?.Date:yyyy/MM/dd} は {current?.Temperature}℃ で {current?.Summary} です。";
+    await Shell.Current.DisplayAlert("weather", message, "OK");
+}
+
 void GetWeathersAsync()
 {
     Weathers.Clear();
 
     Weathers = new ObservableCollection<Weather>
-    {
-        new Weather
         {
-            Date = new DateTime(2021,11,1),
-            Summary = "Rainy",
-            Temperature = 20
-        },
-        new Weather
-        {
-            Date = new DateTime(2021,11,2),
-            Summary = "Cloudy",
-            Temperature = 25
-        },
-        new Weather
-        {
-            Date = new DateTime(2021,11,3),
-            Summary = "Sunny",
-            Temperature = 30
-        }
-    };
+            new Weather
+            {
+                Date = new DateTime(2020,11,1),
+                Summary = "Rainy",
+                Temperature = 20
+            },
+            new Weather
+            {
+                Date = new DateTime(2020,11,2),
+                Summary = "Cloudy",
+                Temperature = 25
+            },
+            new Weather
+            {
+                Date = new DateTime(2020,11,3),
+                Summary = "Sunny",
+                Temperature = 30
+            }
+        };
 
     BindingContext = Weathers;
 }
@@ -351,7 +432,7 @@ void GetWeathersAsync()
 
 ここでデバッグ実行してみましょう。次のような画面が表示されれば OK です。
 
-<img src="./images/xf-04.png" width="300" />
+<img src="./images/maui-11.png" width="300" />
 
 
 
@@ -361,6 +442,9 @@ void GetWeathersAsync()
 
 
 ```csharp
+using System.Diagnostics;
+using System.Net.Http.Json;
+
 static HttpClient _httpClient = new HttpClient();
 async Task GetWeathersAsync()
 {
@@ -374,9 +458,7 @@ async Task GetWeathersAsync()
         response.EnsureSuccessStatusCode();
 
         // レスポンスからコンテンツ（JSON）を取得
-        var json = await response.Content.ReadAsStringAsync();
-        // Newtonsoft.Json で JSON をデシリアライズ
-        Weathers = JsonConvert.DeserializeObject<ObservableCollection<Weather>>(json);
+        Weathers = await response.Content.ReadFromJsonAsync<ObservableCollection<Weather>>();
     }
     catch (Exception ex)
     {
@@ -391,10 +473,10 @@ Web からのデータ取得やファイル IO など時間の掛かる処理を
 
 再度デバッグ実行して、次のような画面が表示されれば OK です。
 
-<img src="./images/xf-05.png" width="300" />
+<img src="./images/maui-12.png" width="300" />
 
 
-標準の Xamarin.Forms の内容は以上です。
+標準の .NET MAUI の内容は以上です。
 
 
 
@@ -577,106 +659,75 @@ MainPage のパーシャルクラスです。`InitializeComponent` メソッド�
 
 ```json
 [
-    {
-        date: "2021-11-07T06:52:22.3435607+00:00",
-        temperature: 24,
-        summary: "Sunny",
-    },
-    {
-        date: "2021-11-08T06:52:22.343578+00:00",
-        temperature: -17,
-        summary: "Rainy",
-    },
-    {
-        date: "2021-11-09T06:52:22.3435786+00:00",
-        temperature: 1,
-        summary: "Snowy",
-    },
-    {
-        date: "2021-11-10T06:52:22.343579+00:00",
-        temperature: -3,
-        summary: "Sunny",
-    },
-    {
-        date: "2021-11-11T06:52:22.3435793+00:00",
-        temperature: 17,
-        summary: "Rainy",
-    },
+  {
+    "date": "2022-09-20T09:20:29.1731766+00:00",
+    "temperature": -16,
+    "summary": "Snowy"
+  },
+  {
+    "date": "2022-09-21T09:20:29.1733714+00:00",
+    "temperature": -3,
+    "summary": "Snowy"
+  },
+  {
+    "date": "2022-09-22T09:20:29.1733728+00:00",
+    "temperature": 35,
+    "summary": "Cloudy"
+  },
+  {
+    "date": "2022-09-23T09:20:29.1733826+00:00",
+    "temperature": 29,
+    "summary": "PartlyCloudy"
+  },
+  {
+    "date": "2022-09-24T09:20:29.1733829+00:00",
+    "temperature": -17,
+    "summary": "Snowy"
+  }
 ]
 ```
 
 
-### モデルクラスの作成
+### モデル（Weather）クラスの作成
 
 まずはこの JSON をオブジェクトとして操作するための Model クラスを作成します。
 
 事前に Web API から表示されている JSON をクリップボードにコピーしておきます。
 
-JSON からモデルを作成してくれる [https://app.quicktype.io/](https://app.quicktype.io/) にアクセスします。
-
-左側のペインに JSON を貼り付け、Name を `Weather` に変更します。
-
-右側のウィンドウで
-
-- Language から `C#`
-- Generated namespace に `MobileApp.Models`
-- Output features から `Attribute Only`
-
-を選択、入力すると以下のコードが得られます。
-
-```csharp
-namespace MobileApp.Models
-{
-    using System;
-    using System.Collections.Generic;
-
-    using System.Globalization;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
-
-    public partial class Weather
-    {
-        [JsonProperty("date")]
-        public DateTimeOffset Date { get; set; }
-
-        [JsonProperty("temperature")]
-        public long Temperature { get; set; }
-
-        [JsonProperty("summary")]
-        public string Summary { get; set; }
-    }
-}
-```
-
-
-**Xamarin.Forms プロジェクト**での作業です
-
-`Models` フォルダを作成します。
+MobileApp プロジェクトを右クリックして「新しいフォルダー」から `Models` フォルダを作成します。
 
 `Models` フォルダを右クリックして「追加＞クラス」から `Weather` クラスを作成します。
 
-作成されたクラスを先ほどのコードで置き換えます。
+作成された Weather クラス全体を選択して、「編集＞形式を選択して貼り付け＞JSONをクラスとして貼り付ける」をクリックします。
 
-`Newtonsoft.Json` は、IntelliSnese から自動インストールすることも可能ですし、
+<img src="./images/mvvm-03.png" width="600" />
 
-<img src="./images/prism-21.png" width="600" />
+以下のコードが得られます。
 
-Xamarin.Forms プロジェクトを右クリックから「NuGet パッケージの管理」を選択して、手動で `Newtonsoft.Json` をインストールすることも可能です。
+```csharp
+public class Rootobject
+{
+    public Class1[] Property1 { get; set; }
+}
 
-<img src="./images/prism-22.png" width="600" />
+public class Class1
+{
+    public DateTime date { get; set; }
+    public int temperature { get; set; }
+    public string summary { get; set; }
+}
+```
 
-> TIPS: JSON ライブラリについて
-> 
-> 一般的な .NET Core 3.1 のアプリケーションでは標準で含まれる `System.Text.Json` を使うのが良いでしょう。
-> 
-> 今まで `Newtonsoft.Json` を利用していた場合は、公式ドキュメント [Newtonsoft\.Json から System\.Text\.Json に移行する \- \.NET \| Microsoft Docs](https://docs.microsoft.com/ja-jp/dotnet/standard/serialization/system-text-json-migrate-from-newtonsoft-how-to) などを参考に移行できます。
-> 
-> Xamarin での利用については [System\.Text\.Json Serializer does not appear to work on Xamarin iOS · Issue \#31326 · dotnet/runtime · GitHub](https://github.com/dotnet/runtime/issues/31326) にあるように 2020/9/9 の時点でもまだ `System.Numerics.Vectors` でコンフリクトが発生しているというワーニングが発生するようなので、安全のために `Newtonsoft.Json` を使用しています。
+Rootobject クラスは削除、Class1 を Weather に修正、各プロパティの先頭を大文字にします。
 
-
-
-
-
+```csharp
+public class Weather
+{
+    public DateTime Date { get; set; }
+    public int Temperature { get; set; }
+    public string Summary { get; set; }
+}
+```
 
 ### サービスのインターフェイスと実装クラスの作成
 
@@ -686,20 +737,16 @@ Xamarin.Forms プロジェクトを右クリックから「NuGet パッケージ
 
 `Services` フォルダを右クリックして「追加＞新しい項目」から「インターフェイス」を選択し、`IWeaterService` を作成します。
 
-<img src="./images/prism-23.png" width="600" />
+<img src="./images/mvvm-04.png" width="600" />
 
 `IWeatherService.cs` で、インターフェイスを `public` 属性にして、`Weather` のコレクションを戻り値に持つ `GetWeathersAsync` メソッドを追加します。次のようになります。
 
 ```csharp
 public interface IWeatherService
 {
-    Task<ObservableCollection<Weather>> GetWeathersAsync();
+    Task<List<Weather>> GetWeathersAsync();
 }
 ```
-
-不足する using は IntelliSnese で追加できます。
-
-<img src="./images/prism-24.png" width="600" />
 
 インターフェイスはこれで完了です。続いてインターフェイスの実装を作成します。
 
@@ -714,21 +761,20 @@ public interface IWeatherService
 ```csharp
 class WeatherService : IWeatherService
 {
-    static HttpClient _httpClient = new HttpClient();
+    static readonly HttpClient _httpClient = new();
 
-    public async Task<ObservableCollection<Weather>> GetWeathersAsync()
+    public async Task<List<Weather>> GetWeathersAsync()
     {
         try
         {
             // サイトからデータを取得
             var response = await _httpClient.GetAsync("https://weatherforecastsampleforprism.azurewebsites.net/weatherforecast");
+
             // レスポンスコード（200 など）を確認
             response.EnsureSuccessStatusCode();
-                
+
             // レスポンスからコンテンツ（JSON）を取得
-            var json = await response.Content.ReadAsStringAsync();
-            // Newtonsoft.Json で JSON をデシリアライズ
-            return JsonConvert.DeserializeObject<ObservableCollection<Weather>>(json);
+            return await response.Content.ReadFromJsonAsync<List<Weather>>();
         }
         catch (Exception ex)
         {
@@ -748,12 +794,12 @@ class WeatherService : IWeatherService
 
 ### コンテナーへの登録
 
-インターフェイスと実装クラスを追加したので、Prism に教える必要があります。
+インターフェイスと実装クラスを追加したので、`MauiAppBuilder` に教える必要があります。
 
-`App.xaml.cs` を開き、`RegisterTypes` メソッド内に次のコードを追加します。
+`MauiProgram.cs` を開き、`CreateMauiApp` メソッド内に次のコードを追加します。
 
 ```csharp
-containerRegistry.RegisterSingleton<IWeatherService, WeatherService>();
+builder.Services.AddSingleton<IWeatherService, WeatherService>();
 ```
 
 コンテナーへの登録はこれで完了です。
@@ -771,9 +817,7 @@ containerRegistry.RegisterSingleton<IWeatherService, WeatherService>();
 ```csharp
 private readonly IWeatherService _weatherService;
 
-public MainPageViewModel(INavigationService navigationService,
-                         IWeatherService weatherService)
-    : base(navigationService)
+public MainPageViewModel(IWeatherService weatherService)
 {
     Title = "Main Page";
     _weatherService = weatherService;
@@ -783,21 +827,12 @@ public MainPageViewModel(INavigationService navigationService,
 次に View から参照するプロパティをコンストラクターの上に 2つ追加します。
 
 ```csharp
+public ObservableCollection<Weather> Weathers { get; private set; } = new();
 
-public ObservableCollection<Weather> Weathers { get; set; } = new ObservableCollection<Weather>();
-
-private bool canClick = true;
-public bool CanClick
-{
-    get { return canClick; }
-    set { SetProperty(ref canClick, value); }
-}
+[ObservableProperty]
+[NotifyCanExecuteChangedFor(nameof(GetWeathersCommand))]
+private bool _canClick = true;
 ```
-
-> TIPS: コードスニペット
-> 
-> Prism ではバッキングフィールドと連動した公開プロパティを使用します。Visual Studio にインストールした「Prism Template」に、この 2つのプロパティを作成する `propp` のコードスニペットが含まれていますので適宜利用してください。
-
 
 次にコンストラクターの上に `DelegateCommand` を追加し、コマンドから呼び出されるメソッドをコンストラクターの下に追加します。
 
