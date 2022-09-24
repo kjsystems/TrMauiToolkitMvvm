@@ -794,12 +794,12 @@ class WeatherService : IWeatherService
 
 ### コンテナーへの登録
 
-インターフェイスと実装クラスを追加したので、Prism に教える必要があります。
+インターフェイスと実装クラスを追加したので、`MauiAppBuilder` に教える必要があります。
 
-`App.xaml.cs` を開き、`RegisterTypes` メソッド内に次のコードを追加します。
+`MauiProgram.cs` を開き、`CreateMauiApp` メソッド内に次のコードを追加します。
 
 ```csharp
-containerRegistry.RegisterSingleton<IWeatherService, WeatherService>();
+builder.Services.AddSingleton<IWeatherService, WeatherService>();
 ```
 
 コンテナーへの登録はこれで完了です。
@@ -817,9 +817,7 @@ containerRegistry.RegisterSingleton<IWeatherService, WeatherService>();
 ```csharp
 private readonly IWeatherService _weatherService;
 
-public MainPageViewModel(INavigationService navigationService,
-                         IWeatherService weatherService)
-    : base(navigationService)
+public MainPageViewModel(IWeatherService weatherService)
 {
     Title = "Main Page";
     _weatherService = weatherService;
@@ -829,21 +827,12 @@ public MainPageViewModel(INavigationService navigationService,
 次に View から参照するプロパティをコンストラクターの上に 2つ追加します。
 
 ```csharp
+public ObservableCollection<Weather> Weathers { get; private set; } = new();
 
-public ObservableCollection<Weather> Weathers { get; set; } = new ObservableCollection<Weather>();
-
-private bool canClick = true;
-public bool CanClick
-{
-    get { return canClick; }
-    set { SetProperty(ref canClick, value); }
-}
+[ObservableProperty]
+[NotifyCanExecuteChangedFor(nameof(GetWeathersCommand))]
+private bool _canClick = true;
 ```
-
-> TIPS: コードスニペット
-> 
-> Prism ではバッキングフィールドと連動した公開プロパティを使用します。Visual Studio にインストールした「Prism Template」に、この 2つのプロパティを作成する `propp` のコードスニペットが含まれていますので適宜利用してください。
-
 
 次にコンストラクターの上に `DelegateCommand` を追加し、コマンドから呼び出されるメソッドをコンストラクターの下に追加します。
 
