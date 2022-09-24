@@ -111,7 +111,7 @@ Android エミュレーターが起動して、次のような画面が表示さ
 
 アプリケーションのエントリーポイントです。
 
-プラットフォームごとにアプリエントリポイントがあります。 
+プラットフォーム（Android, iOS, Mac, Win）ごとにアプリエントリポイント（`MainApplication` クラス）があり、そこから `CreateMauiApp` メソッドが呼び出されます。 
 
 ```cs
 public static class MauiProgram
