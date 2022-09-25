@@ -973,7 +973,7 @@ public partial class MainPageViewModel : ViewModelBase
 `MainPageViewModel` や `WeatherService` にブレークポイントを貼ると処理の内容を確認できます。
 
 > TIPS:  
-> 以下のエラーが出た場合は `MauiProgram` クラスで `WeatherService` メソッドをインジェクションされていないことが原因です。 コンテナーへの登録 を参照
+> 以下のエラーが出た場合は `MauiProgram` クラスで `WeatherService` クラスをインジェクションしていないことが原因です。 コンテナーへの登録 を参照
 > 
 > `System.InvalidOperationException: 'Unable to resolve service for type 'MobileApp.Services.IWeatherService' while attempting to activate 'MobileApp.ViewModels.MainPageViewModel'.'
 `
@@ -988,7 +988,7 @@ public partial class MainPageViewModel : ViewModelBase
 ```xml
 <CollectionView ItemsLayout="VerticalList" ItemsSource="{Binding Weathers}">
     <CollectionView.ItemTemplate>
-        <DataTemplate>
+        <DataTemplate x:DataType="model:Weather">
                     
         </DataTemplate>
     </CollectionView.ItemTemplate>
@@ -1004,7 +1004,7 @@ public partial class MainPageViewModel : ViewModelBase
 - 縦方向のグリッド
 - 横方向のグリッド
 
-Layout の詳細は [Xamarin\.Forms CollectionView レイアウト \- Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/xamarin/xamarin-forms/user-interface/collectionview/layout) を参照してください。
+Layout の詳細は [.NET MAUI CollectionView 概要](https://learn.microsoft.com/ja-jp/dotnet/maui/user-interface/controls/collectionview/) を参照してください。
 
 `CollectionView` の `DataTemplate` 内には自由にレイアウトを作成できます。次の XAML を追加してください。
 
@@ -1024,9 +1024,9 @@ Layout の詳細は [Xamarin\.Forms CollectionView レイアウト \- Xamarin \|
 
 次のような画面が表示されれば OK です。
 
-<img src="./images/prism-33.png" width="300">
+<img src="./images/mvvm-06.png" width="300">
 
-日付や温度の表示方法を変更するために、`StringFormat` を使用しています。`StringFormat` の詳細は [Xamarin\.Forms の文字列の書式設定 \- Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/xamarin/xamarin-forms/app-fundamentals/data-binding/string-formatting) を参照してください。
+日付や温度の表示方法を変更するために、`StringFormat` を使用しています。`StringFormat` の詳細は [.NET MAUI 文字列の書式設定](https://learn.microsoft.com/ja-jp/dotnet/maui/fundamentals/data-binding/string-formatting) を参照してください。
 
 
 
@@ -1034,7 +1034,7 @@ Layout の詳細は [Xamarin\.Forms CollectionView レイアウト \- Xamarin \|
 
 文字だけだと寂しいので、天気をアイコンで表示してみましょう。画像を表示するには `Image` クラスを利用します。
 
-`Image` クラスの重要なプロパティに [Image\.Source プロパティ \(Xamarin\.Forms\) \| Microsoft Docs](https://docs.microsoft.com/ja-jp/dotnet/api/xamarin.forms.image.source?view=xamarin-forms#Xamarin_Forms_Image_Source) があります。
+`Image` クラスの重要なプロパティに [Image | データの表示 | Views | コントロール | ユーザーインターフェイス | .NET MAUI](https://docs.microsoft.com/ja-jp/dotnet/api/xamarin.forms.image.source?view=xamarin-forms#Xamarin_Forms_Image_Source) があります。
 
 ImageSource インスタンスは、イメージソースの種類ごとに静的メソッドを使用して取得できます。
 
@@ -1043,29 +1043,18 @@ ImageSource インスタンスは、イメージソースの種類ごとに静�
 - FromResource - ビルドアクション EmbeddedResource を使用して、アプリケーションまたは .NET Standard ライブラリプロジェクトに埋め込まれているイメージファイルのリソース識別子が必要です。
 - FromStream - イメージデータを提供するストリームが必要です。
 
-詳細は [Image in Xamarin\.Forms \- Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/xamarin/xamarin-forms/user-interface/images?tabs=windows) を参照してください。
-
-`FromResource` は .NET Standard プロジェクトに 1つだけ画像ファイルを用意すれば良いため、アプリケーションで固定のアイコンなどを利用する場合に便利です。
-
-今回はファイル名をバインドするため、各 OS プロジェクトに画像を配置します。
+今回はファイル名をバインドするため、プロジェクトに画像を配置します。
 
 
-##### Android プロジェクトに画像を追加
+##### プロジェクトに画像を追加
 
+「Resources/Images」にダウンロードした「Resources」フォルダ内の 5つの png ファイルをドラッグ＆ドロップして追加します。
 
-Android プロジェクトを開き、「Resources/drawable」にダウンロードした「Resources」フォルダ内の 5つの png ファイルをドラッグ＆ドロップして追加します。
+<img src="./images/mvvm-07.png" width="300">
 
-<img src="./images/prism-34.png" width="300">
+画像を選択し、プロパティウィンドウでビルドアクションが「MauiImage」になっていることを確認してください。
 
-画像を選択し、プロパティウィンドウでビルドアクションが「AndroidResource」になっていることを確認してください。
-
-<img src="./images/prism-35.png" width="300">
-
-
-##### iOS プロジェクトに画像を追加
-
-イメージアセットに追加しますが、今回は割愛します。
-
+<img src="./images/mvvm-08.png" width="300">
 
 ##### XAML のアップデート
 
@@ -1076,7 +1065,7 @@ Xamarin.Forms プロジェクトに移動し、`MainPage.xaml` を開きます�
 ```xml 
 <CollectionView ItemsLayout="VerticalGrid, 2" ItemsSource="{Binding Weathers}">
     <CollectionView.ItemTemplate>
-        <DataTemplate>
+        <DataTemplate x:DataType="model:Weather">
             <Grid Padding="10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -1084,19 +1073,19 @@ Xamarin.Forms プロジェクトに移動し、`MainPage.xaml` を開きます�
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Image Grid.Row="0"
-                       Grid.RowSpan="3"
-                       WidthRequest="120"
-                       HeightRequest="120"
-                       Source="{Binding Summary, StringFormat='{0}.png'}" />
+                        Grid.RowSpan="3"
+                        WidthRequest="120"
+                        HeightRequest="120"
+                        Source="{Binding Summary, StringFormat='{0}.svg'}" />
                 <Label Grid.Row="0"
-                       HorizontalTextAlignment="Center"
-                       Text="{Binding Date, StringFormat='{}{0:yyyy/MM/dd}'}" />
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding Date, StringFormat='{}{0:yyyy/MM/dd}'}" />
                 <Label Grid.Row="1"
-                       HorizontalTextAlignment="Center"
-                       Text="{Binding Temperature, StringFormat='{0}℃'}" />
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding Temperature, StringFormat='{0}℃'}" />
                 <Label Grid.Row="2"
-                       HorizontalTextAlignment="Center"
-                       Text="{Binding Summary}" />
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding Summary}" />
             </Grid>
         </DataTemplate>
     </CollectionView.ItemTemplate>
@@ -1105,16 +1094,16 @@ Xamarin.Forms プロジェクトに移動し、`MainPage.xaml` を開きます�
 
 再度ビルドしてデバッグ実行してみましょう。次のようになれば OK です。
 
-<img src="./images/prism-36.png" width="300">
+<img src="./images/mvvm-09.png" width="300">
 
 
 
 #### PullToRefresh の追加
 
-スクロール可能なコントロールを下に引っ張って内容をリロードする Pull-to-Refresh の機能を追加します。Xamarin.Forms では `RefreshView` が用意されています。`RefreshView` の詳細は [Xamarin\.Forms RefreshView \- Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/xamarin/xamarin-forms/user-interface/refreshview) を参照してください。
+スクロール可能なコントロールを下に引っ張って内容をリロードする Pull-to-Refresh の機能を追加します。Xamarin.Forms では `RefreshView` が用意されています。`RefreshView` の詳細は [RefreshView | コマンドの開始 | Views | コントロール | ユーザーインターフェイス | .NET MAUI](https://learn.microsoft.com/ja-jp/dotnet/maui/user-interface/controls/refreshview) を参照してください。
 
 
-`MainPage.xaml` を開き、`CollectionView` の上に `RefreshView` を追加します。次のようになります。
+`MainPage.xaml` を開き `CollectionView` の上に `RefreshView` を追加します。次のようになります。
 
 ```xml
 <RefreshView Command="{Binding GetWeathersCommand}" IsRefreshing="{Binding IsRefreshing}">
@@ -1126,7 +1115,7 @@ Xamarin.Forms プロジェクトに移動し、`MainPage.xaml` を開きます�
 
 リフレッシュする時のコマンドはボタンと同じ `GetWeathersCommand` を割り当てます。リフレッシュ中にグルグルの表示やリフレッシュ終了を検知するために `IsRefreshing` プロパティに bool 値を割り当てます。
 
-`MainPageViewModel.cs` を開き、`CanClick` プロパティの下に `IsRefreshing` プロパティを追加します。
+`MainPageViewModel.cs` を開き `CanClick` プロパティの下に `IsRefreshing` プロパティを追加します。
 
 ```csharp
 public bool IsRefreshing => !CanClick;
@@ -1134,6 +1123,7 @@ public bool IsRefreshing => !CanClick;
 
 再度デバッグ実行し、引っ張って更新できれば OK です。
 
+<img src="./images/mvvm-10.png" width="300">
 
 
 #### ダイアログの表示
