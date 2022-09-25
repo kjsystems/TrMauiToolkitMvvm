@@ -834,17 +834,10 @@ public ObservableCollection<Weather> Weathers { get; private set; } = new();
 private bool _canClick = true;
 ```
 
-次にコンストラクターの上に `DelegateCommand` を追加し、コマンドから呼び出されるメソッドをコンストラクターの下に追加します。
-
-コマンド：
-
-```csharp
-public DelegateCommand GetWeathersCommand { get; private set; }
-```
-
 メソッド：
 
 ```csharp
+[RelayCommand(CanExecute = nameof(CanClick))]
 private async Task GetWeathersAsync()
 {
     CanClick = false;
@@ -862,26 +855,11 @@ private async Task GetWeathersAsync()
     }
 
     CanClick = true;
+    IsRefreshing = false;
 }
 ```
 
-次にコンストラクター内でコマンドにメソッドを割り当てます。コンストラクター全体は次のようになります。
-
-```csharp
-public MainPageViewModel(INavigationService navigationService,
-                         IWeatherService weatherService)
-    : base(navigationService)
-{
-    Title = "Main Page";
-    _weatherService = weatherService;
-
-    GetWeathersCommand = new DelegateCommand(
-        async () => await GetWeathersAsync(),
-        () => CanClick)
-        .ObservesCanExecute(() => CanClick);
-}
-```
-
+**TBD** RelayCommand の説明に書き換え  
 `DelegateCommand` の引数は `Action executeMethod, Func<bool> canExecuteMethod` のため、`GetWeathersAsync` 呼び出し、`CanClick` 参照を行っています。最後の `ObservesCanExecute(Expression<Func<bool>> canExecuteExpression)` は Prism 独自の機能で、影響を受けるプロパティを指定できるため、プロパティをプレーンに保つことができます。
 
 `ObservesCanExecure` を使用しない場合は、プロパティのセッターにどのコマンドに実行可能の変更を伝えるか？を記述します。次のようになります。
@@ -898,54 +876,34 @@ public bool CanClick
     }
 }
 ```
-
-最後にこの View を表示した際にメソッドを実行できるように `OnNavigatedTo` の `override` を追加します。
-
-```csharp
-public override async void OnNavigatedTo(INavigationParameters parameters)
-{
-    base.OnNavigatedTo(parameters);
-    await GetWeathersAsync();
-}
-```
+**TBD** ここまで
 
 ViewModel は全体では次のようになっています。
 
 ```csharp
-public class MainPageViewModel : ViewModelBase
+public partial class MainPageViewModel : ViewModelBase
 {
     private readonly IWeatherService _weatherService;
 
-    public ObservableCollection<Weather> Weathers { get; set; } = new ObservableCollection<Weather>();
+    public ObservableCollection<Weather> Weathers { get; private set; } = new();
 
-    private bool canClick = true;
-    public bool CanClick
-    {
-        get { return canClick; }
-        set { SetProperty(ref canClick, value); }
-    }
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(GetWeathersCommand))]
+    private bool _canClick = true;
 
-    public DelegateCommand GetWeathersCommand { get; private set; }
+    [ObservableProperty]
+    private bool _isRefreshing;
 
-    public MainPageViewModel(INavigationService navigationService,
-                                IWeatherService weatherService)
-        : base(navigationService)
+    [ObservableProperty]
+    private Weather _selectedWeather;
+
+    public MainPageViewModel(IWeatherService weatherService)
     {
         Title = "Main Page";
         _weatherService = weatherService;
-
-        GetWeathersCommand = new DelegateCommand(
-            async () => await GetWeathersAsync(),
-            () => CanClick)
-            .ObservesCanExecute(() => CanClick);
     }
 
-    public override async void OnNavigatedTo(INavigationParameters parameters)
-    {
-        base.OnNavigatedTo(parameters);
-        await GetWeathersAsync();
-    }
-
+    [RelayCommand(CanExecute = nameof(CanClick))]
     private async Task GetWeathersAsync()
     {
         CanClick = false;
@@ -963,6 +921,20 @@ public class MainPageViewModel : ViewModelBase
         }
 
         CanClick = true;
+        IsRefreshing = false;
+    }
+
+    [RelayCommand]
+    private async void SelectWeather()
+    {
+        if (SelectedWeather == null)
+            return;
+
+        // 詳細画面に遷移するパターン
+        await Shell.Current.GoToAsync(nameof(DetailsPage), true, new Dictionary<string, object>
+        {
+            {"Weather", SelectedWeather}
+        });
     }
 }
 ```
@@ -991,19 +963,20 @@ public class MainPageViewModel : ViewModelBase
 
 エディタ下部の「<<」ボタンをクリックすると XAML プレビューアーが表示されますが、「XAML ホットリロード」の機能を使用した方が早いかもしれません。
 
-<img src="./images/prism-31.png" width="600">
 
-プレビューアーについての詳細は [XAML プレビューアー Xamarin\.Forms \- Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/xamarin/xamarin-forms/xaml/xaml-previewer/?pivots=windows) を参照してください。
-
-XAML ホットリロードについての詳細は [XAML ホットリロード Xamarin\.Forms \- Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/xamarin/xamarin-forms/xaml/hot-reload)
-
+**TBD** XAML ホットリロードの説明を追加する
 
 この時点でデバッグ実行してみましょう。View を表示した際とボタンをクリックした際にスイッチとボタンが連動して動作するのが分かるはずです。
 
-<img src="./images/prism-32.png" width="300">
+<img src="./images/mvvm-05.png" width="300">
 
 `MainPageViewModel` や `WeatherService` にブレークポイントを貼ると処理の内容を確認できます。
 
+> TIPS:  
+> 以下のエラーが出た場合は `MauiProgram` クラスで `WeatherService` メソッドをインジェクションされていないことが原因です。 コンテナーへの登録 を参照
+> 
+> `System.InvalidOperationException: 'Unable to resolve service for type 'MobileApp.Services.IWeatherService' while attempting to activate 'MobileApp.ViewModels.MainPageViewModel'.'
+`
 
 
 #### CollectionView の利用
@@ -1100,7 +1073,7 @@ Xamarin.Forms プロジェクトに移動し、`MainPage.xaml` を開きます�
 
 `CollectionView` の `ItemsLayout` を `VerticalGrid, 2` に書き換え、`Grid` に置き換えます。全体では次のようになります。
 
-```xml
+```xml 
 <CollectionView ItemsLayout="VerticalGrid, 2" ItemsSource="{Binding Weathers}">
     <CollectionView.ItemTemplate>
         <DataTemplate>
