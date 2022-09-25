@@ -1,4 +1,56 @@
-# Prism hands on lab
+# 目次
+
+- [目次](#目次)
+- [.NET MAUI hands on lab](#net-maui-hands-on-lab)
+  - [システム要件](#システム要件)
+  - [Visual Studio 2022 のインストール](#visual-studio-2022-のインストール)
+  - [ワークロードのインストール](#ワークロードのインストール)
+  - [.NET MAUI アプリの作成と動作確認](#net-maui-アプリの作成と動作確認)
+    - [最初の起動](#最初の起動)
+      - [Android エミュレーターの作成](#android-エミュレーターの作成)
+      - [デバッグ実行](#デバッグ実行)
+    - [デフォルトプロジェクトの構成](#デフォルトプロジェクトの構成)
+      - [`MauiProgram.cs`](#mauiprogramcs)
+      - [`App.xaml.cs`](#appxamlcs)
+      - [`AppShell.xaml`](#appshellxaml)
+      - [`AppShell.xaml.cs`](#appshellxamlcs)
+      - [`MainPage.xaml`](#mainpagexaml)
+      - [`MainPage.xaml.cs`](#mainpagexamlcs)
+  - [Web API への接続](#web-api-への接続)
+    - [モデルクラスの作成](#モデルクラスの作成)
+    - [View の作成](#view-の作成)
+    - [コードビハインドにコードを追加](#コードビハインドにコードを追加)
+    - [デバッグ実行](#デバッグ実行-1)
+    - [Web API への接続に書き換え](#web-api-への接続に書き換え)
+  - [Xamarin.Forms Prism アプリの作成と動作確認](#xamarinforms-prism-アプリの作成と動作確認)
+    - [最初の起動](#最初の起動-1)
+      - [Android エミュレーターの作成](#android-エミュレーターの作成-1)
+      - [デバッグ実行](#デバッグ実行-2)
+    - [デフォルトプロジェクトの構成](#デフォルトプロジェクトの構成-1)
+      - [`App.xaml.cs`](#appxamlcs-1)
+      - [`ViewModelBase.cs`](#viewmodelbasecs)
+      - [`MainPageViewModel.cs`](#mainpageviewmodelcs)
+      - [`MainPage.xaml`](#mainpagexaml-1)
+      - [`MainPage.xaml.cs`](#mainpagexamlcs-1)
+  - [Web API への接続](#web-api-への接続-1)
+    - [モデル（Weather）クラスの作成](#モデルweatherクラスの作成)
+    - [サービスのインターフェイスと実装クラスの作成](#サービスのインターフェイスと実装クラスの作成)
+    - [コンテナーへの登録](#コンテナーへの登録)
+    - [ViewModel の作成](#viewmodel-の作成)
+    - [View の作成](#view-の作成-1)
+      - [CollectionView の利用](#collectionview-の利用)
+      - [天気アイコンの表示](#天気アイコンの表示)
+        - [プロジェクトに画像を追加](#プロジェクトに画像を追加)
+        - [XAML のアップデート](#xaml-のアップデート)
+      - [PullToRefresh の追加](#pulltorefresh-の追加)
+      - [ダイアログの表示](#ダイアログの表示)
+  - [Mock の追加](#mock-の追加)
+  - [お疲れ様でした](#お疲れ様でした)
+  - [Appendix](#appendix)
+    - [Web API を作成](#web-api-を作成)
+    - [.NET MAUI について](#net-maui-について)
+
+# .NET MAUI hands on lab
 
 このドキュメントでは .NET MAUI と Microsoft.Toolkit.Mvvm を利用した MVVM によるモバイルアプリ開発をハンズオンで学習します。
 
@@ -12,6 +64,12 @@
     - ※ Mac では .NET MAUI はPreviewです（2022.9.3 現在）
 - Android SDK
     - Android Emulator
+
+## Visual Studio 2022 のインストール
+
+Visual Studio 2022 の[ダウンロードページ](https://visualstudio.microsoft.com/ja/downloads/)からダウンロードします。
+
+ダウンロードされた `VisualStudioSetup.exe` を実行すると、Visual Studio Installer が起動します。
 
 ## ワークロードのインストール
 
@@ -76,13 +134,13 @@ Android エミュレーターをドロップダウンから選択してデバッ
 
 各種選択した状態で「新しいデバイスイメージがダウンロードされます。」という注意書きがある場合は、Android SDK のダウンロードサイトから条件に見合った OS イメージを自動でダウンロードしてエミュレーターを作成します。
 
-OS イメージは Visual Studio のメニューから「ツール＞Android＞Android SDK マネージャー」をクリックし、
+<!-- OS イメージは Visual Studio のメニューから「ツール＞Android＞Android SDK マネージャー」をクリックして、
 
 <img src="./images/maui-09.png" width="600" />
 
 表示されるダイアログで `Google APIs Intel x86 Atom System Image` や `Google Play Intel x86 Atom System Image` が該当します。少し大きいサイズなので、PC の空き容量が少ない場合は選択してインストールしてください。
 
-<img src="./images/maui-08.png" width="600" />
+<img src="./images/maui-08.png" width="600" /> -->
 
 
 #### デバッグ実行
