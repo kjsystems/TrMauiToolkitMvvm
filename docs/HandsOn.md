@@ -1128,76 +1128,31 @@ public bool IsRefreshing => !CanClick;
 
 #### ダイアログの表示
 
-Xamarin.Forms では標準で `DisplayAlert`、`DisplayActionSheet`、`DisplayPromptAsync` の 3つの `Page` クラスのメソッドが用意されています。これらのメソッドは ViewModel では直接は呼び出せないため、Prism ではこれをラップした `IPageDialogService` と、独自のビューを利用できる `IDialogService` を用意しています。Prism のダイアログについての詳細は [Application Dialogs \| Prism](https://prismlibrary.com/docs/xamarin-forms/dialogs/index.html) をご覧ください。
+.NET MAUI では標準で `DisplayAlert`、`DisplayActionSheet`、`DisplayPromptAsync` の 3つの `Page` クラスのメソッドが用意されています。
 
-これらを使用して、CollectionView のタップした項目をダイアログに表示してみましょう。
+ここでは `DisplayAlert` を使用して、CollectionView のタップした項目をダイアログに表示してみましょう。
 
 `MainPageViewModel.cs` を開き、バインド対象のプロパティとコマンドを追加します。
 
-`IsRefreshing` プロパティの下に次を追加します。
+`_isRefreshing` プロパティの下に次を追加します。
 
 ```csharp
-private Weather selectedWeather;
-public Weather SelectedWeather
+[ObservableProperty]
+private Weather _selectedWeather;
+```
+
+`SelectWeather` メソッドを追加します。
+
+```csharp
+private async void SelectWeather()
 {
-    get { return selectedWeather; }
-    set { SetProperty(ref selectedWeather, value); }
+    if (SelectedWeather == null)
+        return;
+
+    // ダイアログを表示するパターン
+    await Shell.Current.DisplayAlert("Dialog Title", $"{SelectedWeather.Date:yyyy/MM/dd} は {SelectedWeather.Temperature}℃ で {SelectedWeather.Summary} です。", "OK");
 }
 ```
-
-そのまま `GetWeathersCommand` の下に次を追加します。
-
-```csharp
-public DelegateCommand SelectWeatherCommand { get; private set; }
-```
-
-コンストラクター内にコマンドの実装を追加します。
-
-```csharp
-SelectWeatherCommand = new DelegateCommand(
-    async () => await _pageDialogService.DisplayAlertAsync(
-        "Dialog Title",
-        $"{SelectedWeather.Date:yyyy/MM/dd} は {SelectedWeather.Temperature}℃ で {SelectedWeather.Summary} です。",
-        "OK")
-    );
-```
-
-ここで利用している Prism の `IPageDialogService` を使用するには、依存を追加します。
-
-クラスの先頭に次を追加します。
-
-```csharp
-private readonly IPageDialogService _pageDialogService;
-```
-
-コンストラクターの引数に `IPageDialogService pageDialogService` を追加し、コンストラクター内でフィールドに割り当てます。
-
-この時点でコンストラクターは次のようになります。
-
-```csharp
-public MainPageViewModel(INavigationService navigationService,
-                         IPageDialogService pageDialogService,
-                         IWeatherService weatherService)
-    : base(navigationService)
-{
-    Title = "Main Page";
-    _pageDialogService = pageDialogService;
-    _weatherService = weatherService;
-
-    GetWeathersCommand = new DelegateCommand(
-        async () => await GetWeathersAsync(),
-        () => CanClick)
-        .ObservesCanExecute(() => CanClick);
-
-    SelectWeatherCommand = new DelegateCommand(
-        async () => await _pageDialogService.DisplayAlertAsync(
-            "Dialog Title",
-            $"{SelectedWeather.Date:yyyy/MM/dd} は {SelectedWeather.Temperature}℃ で {SelectedWeather.Summary} です。",
-            "OK")
-        );
-}
-```
-
 
 最後に `MainPage.xaml` を開き、`CollectionView` に次の 3つの属性を追加し、1つをタップした際にコマンドを発行し、選択項目をバインドするようにします。
 
@@ -1209,45 +1164,59 @@ SelectionMode="Single"
 
 再度ビルドしてデバッグ実行してみましょう。次のようになれば OK です。
 
-<img src="./images/prism-37.png" width="300">
+<img src="./images/mvvm-11.png" width="300">
 
 
-独自ダイアログは少し処理が多いので今回は割愛しますが、XAML でビューを定義します。
-
+次はタップした後に画面遷移をしてみます。別途 XAML でビューを定義します。
 
 ```xml
-<Grid x:Class="MobileApp.Dialogs.DemoDialog"
-      xmlns="http://xamarin.com/schemas/2014/forms"
-      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-      BackgroundColor="White">
-    <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
-    </Grid.RowDefinitions>
-
-    <BoxView Color="Black" />
-    <Label Margin="20,5"
-           Style="{DynamicResource TitleStyle}"
-           Text="{Binding Title}"
-           TextColor="White" />
-    <Label Grid.Row="1"
-           Margin="20,0,20,10"
-           Text="{Binding Message}" />
-    <Button Grid.Row="2"
-            Margin="0,0,0,10"
-            HorizontalOptions="Center"
-            Command="{Binding CloseCommand}"
-            Text="Ok" />
-</Grid>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModel="clr-namespace:MobileApp.ViewModels"
+             x:Class="MobileApp.Views.DetailsPage"
+             x:DataType="viewModel:DetailsViewModel"
+             Title="{Binding Weather.Date, StringFormat='{}{0:yyyy/MM/dd}'}">
+    <ScrollView VerticalOptions="Center">
+        <VerticalStackLayout>
+            <Image Grid.Row="1"
+                WidthRequest="120"
+                HeightRequest="120"
+                Source="{Binding Weather.Summary, StringFormat='{0}.svg'}" />
+            <Label Grid.Row="2"
+                HorizontalTextAlignment="Center"
+                Text="{Binding Weather.Temperature, StringFormat='{0}℃'}" />
+            <Label Grid.Row="3"
+                HorizontalTextAlignment="Center"
+                Text="{Binding Weather.Summary}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
 ```
+
+`SelectWater` メソッドにある `DisplayAlert` をコメントアウトして下記を追加します。
+
+```csharp
+await Shell.Current.GoToAsync(nameof(DetailsPage), true, new Dictionary<string, object>
+{
+    {"Weather", SelectedWeather}
+});
+```
+
+`DetailsViewModel` クラスを下記のように書き換えます。
+
+```csharp
+[QueryProperty(nameof(Weather), "Weather")]
+public partial class DetailsViewModel : ViewModelBase
+{
+    [ObservableProperty]
+    Weather _weather;
+}
+```
+
 
 次のように表示されます。
 
-<img src="./images/prism-38.png" width="300">
-
-
-
+<img src="./images/mvvm-12.png" width="300">
 
 
 
@@ -1304,9 +1273,9 @@ class MockWeatherService : IWeatherService
 
 ```csharp
 #if DEBUG
-            containerRegistry.RegisterSingleton<IWeatherService, MockWeatherService>();
+    builder.Services.AddSingleton<IWeatherService, MockWeatherService>();
 #else
-            containerRegistry.RegisterSingleton<IWeatherService, WeatherService>();
+    builder.Services.AddSingleton<IWeatherService, WeatherService>();
 #endif
 ```
 
@@ -1314,13 +1283,13 @@ class MockWeatherService : IWeatherService
 
 デバッグ実行して、次のように 2021/11/1 から 2021/11/3 までのデータが表示されていれば OK です。
 
-<img src="./images/prism-41.png" width="300">
+<img src="./images/mvvm-13.png" width="300">
 
 
 
 ## お疲れ様でした
 
-これで本日のトレーニングはすべて終了です。Xamarin.Forms、Prism にはもっと色々な機能があります。是非使いこなして皆様のモバイルアプリ開発が楽しくなることを願っています！
+これで本日のトレーニングはすべて終了です。.NET MAUI にはもっと色々な機能があります。是非使いこなして皆様のモバイルアプリ開発が楽しくなることを願っています！
 
 
 
