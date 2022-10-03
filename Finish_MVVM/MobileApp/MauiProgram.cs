@@ -23,6 +23,12 @@ public static class MauiProgram
         builder.Services.AddTransient<DetailsViewModel>();
         builder.Services.AddSingleton<IWeatherService, WeatherService>();
 
+#if DEBUG
+        builder.Services.AddSingleton<IWeatherService, MockWeatherService>();
+#else
+        builder.Services.AddSingleton<IWeatherService, WeatherService>();
+#endif
+
         return builder.Build();
     }
 }
