@@ -10,6 +10,7 @@
       - [Android エミュレーターの作成](#android-エミュレーターの作成)
       - [デバッグ実行](#デバッグ実行)
     - [デフォルトプロジェクトの構成](#デフォルトプロジェクトの構成)
+      - [`Platforms` フォルダ](#platforms-フォルダ)
       - [`MauiProgram.cs`](#mauiprogramcs)
       - [`App.xaml.cs`](#appxamlcs)
       - [`AppShell.xaml`](#appshellxaml)
@@ -73,7 +74,7 @@
 - 最新の Windows または macOS
 - 最新の Visual Studio 2022 または Visual Studio 2022 for Mac
     - Microsoft.Toolkit.Mvvm パッケージ
-    - ※ Mac では .NET MAUI はPreviewです（2022.9.3 現在）
+    - ※ Mac では .NET MAUI はPreviewです（2022.10.1 現在）
 - Android SDK
     - Android Emulator
 
@@ -81,7 +82,7 @@
 
 Visual Studio 2022 の[ダウンロードページ](https://visualstudio.microsoft.com/ja/downloads/)からダウンロードします。
 
-ダウンロードされた `VisualStudioSetup.exe` を実行すると、Visual Studio Installer が起動します。
+ダウンロードした `VisualStudioSetup.exe` を実行すると、Visual Studio Installer が起動します。
 
 ## ワークロードのインストール
 
@@ -121,7 +122,7 @@ Visual Studio を起動して「新しいプロジェクト」をクリックし
 
 Android エミュレーターをドロップダウンから選択してデバッグ実行ができます。
 
-「Android Emulator」としか表示されていない場合は、新規にエミュレーターを作成する必要があります。
+「Android Emulators」が表示されていない場合は、新規にエミュレーターを作成する必要があります。
 
 <img src="./images/maui-05.png" width="600" />
 
@@ -170,12 +171,21 @@ Android エミュレーターが起動して、次のような画面が表示さ
 
 <pre>
 + MobileApp
+  - Platforms フォルダ
+    - Android, iOS, MacCatalyst, Tizen, Windows フォルダ
+  - Resources フォルダ
   - App.xaml / App.xaml.cs
   - AppShell.xaml.cs / AppShell.xaml
   - AssemblyInfo.cs
   - MauiProgram.cs
   - MainPage.xaml / MainPage.xaml.cs
 </pre>
+
+#### `Platforms` フォルダ
+各ターゲット プラットフォームのフォルダーには、各プラットフォームでアプリを起動するプラットフォーム固有のコードと、追加するプラットフォーム コードが含まれています。
+
+各子フォルダーは、.NET MAUI がターゲットにできるプラットフォームを表します。
+
 
 #### `MauiProgram.cs`
 
@@ -221,17 +231,17 @@ public class App : Application
 }
 ```
 
-.NET MAUI Shell アプリでは、アプリのビジュアル階層は、クラスをサブクラスを Shell 化するクラスで記述されます。
+.NET MAUI Shell アプリでは、アプリのビジュアル階層は、クラスをサブクラス化する Shell クラスで記述されます。
 
 このクラスは、次の 3 つの主要な階層オブジェクトのいずれかで構成されます。
 
-1. FlyoutItem または TabBar。
-1. Tab。
+1. FlyoutItem または TabBar
+1. Tab
 1. ShellContent 
 
 #### `AppShell.xaml`
 
-MaupApp1 では `ShellContent` で構成されていることが確認できます。
+MobileApp では `ShellContent` で構成されていることが確認できます。
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -306,9 +316,9 @@ View のクラスです。XML ベースのクラスを表す言語 XAML で記�
 
 MainPage のパーシャルクラスで、コードビハインドと呼ばれます。
 
-`OnCounterClicked` は `CounterBtn` の `Clicked` にバウンディングされています。
+`OnCounterClicked` は `CounterBtn` の `Clicked` にバインディングされています。
 
-ボタンをクリックすると数字が1つ増えていきます。
+ボタンをクリックすると数字が１つずつ増えていきます。
 
 
 ```cs
@@ -350,6 +360,20 @@ public partial class MainPage : ContentPage
 プロジェクトを右クリックして「追加＞クラス」から `Weather` クラスを作成します。次のようになります。
 
 ```csharp
+namespace MobileApp
+{
+    public class Weather
+    {
+        public DateTime Date { get; set; }
+        public int Temperature { get; set; }
+        public string Summary { get; set; }
+    }
+}
+```
+
+C# 10.0 から {} なしの以下のような書き方で名前空間を指定できるようになりました。
+
+```csharp
 namespace MobileApp;
 public class Weather
 {
@@ -358,6 +382,8 @@ public class Weather
     public string Summary { get; set; }
 }
 ```
+
+
 
 ### View の作成
 
