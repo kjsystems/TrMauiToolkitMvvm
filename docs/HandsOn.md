@@ -1,6 +1,3 @@
-# 目次
-
-- [目次](#目次)
 - [.NET MAUI hands on lab](#net-maui-hands-on-lab)
   - [システム要件](#システム要件)
   - [Visual Studio 2022 のインストール](#visual-studio-2022-のインストール)
@@ -1166,6 +1163,19 @@ class WeatherService : IWeatherService
 
 不足する using は IntelliSnese で追加できます。
 
+`Debug` の上で Ctrl + .(ピリオド)を押す（または「考えられる修正内容を表示する」をクリックする）とクイックアクションという機能で候補が表示されます。
+
+ここでは `using System.Diagnostics;` を選択します。
+
+- マウスを当てたとき
+
+<img src="./images/mvvm-02.png" width="500">
+
+- Ctrl + .(ピリオド)を押した時
+
+<img src="./images/mvvm-01.png" width="500">
+
+
 `WeatherService` はこれで完了です。
 
 
@@ -1234,28 +1244,8 @@ private async Task GetWeathersAsync()
     }
 
     CanClick = true;
-    IsRefreshing = false;
 }
 ```
-
-**TBD** RelayCommand の説明に書き換え  
-`DelegateCommand` の引数は `Action executeMethod, Func<bool> canExecuteMethod` のため、`GetWeathersAsync` 呼び出し、`CanClick` 参照を行っています。最後の `ObservesCanExecute(Expression<Func<bool>> canExecuteExpression)` は Prism 独自の機能で、影響を受けるプロパティを指定できるため、プロパティをプレーンに保つことができます。
-
-`ObservesCanExecure` を使用しない場合は、プロパティのセッターにどのコマンドに実行可能の変更を伝えるか？を記述します。次のようになります。
-
-```csharp
-private bool canClick;
-public bool CanClick
-{
-    get { return canClick; }
-    set
-    {
-        SetProperty(ref canClick, value);
-        GetWeathersCommand.RaiseCanExecuteChanged();
-    }
-}
-```
-**TBD** ここまで
 
 ViewModel は全体では次のようになっています。
 
@@ -1269,12 +1259,6 @@ public partial class MainPageViewModel : ViewModelBase
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(GetWeathersCommand))]
     private bool _canClick = true;
-
-    [ObservableProperty]
-    private bool _isRefreshing;
-
-    [ObservableProperty]
-    private Weather _selectedWeather;
 
     public MainPageViewModel(IWeatherService weatherService)
     {
@@ -1300,20 +1284,6 @@ public partial class MainPageViewModel : ViewModelBase
         }
 
         CanClick = true;
-        IsRefreshing = false;
-    }
-
-    [RelayCommand]
-    private async void SelectWeather()
-    {
-        if (SelectedWeather == null)
-            return;
-
-        // 詳細画面に遷移するパターン
-        await Shell.Current.GoToAsync(nameof(DetailsPage), true, new Dictionary<string, object>
-        {
-            {"Weather", SelectedWeather}
-        });
     }
 }
 ```
@@ -1327,7 +1297,7 @@ public partial class MainPageViewModel : ViewModelBase
 
 最後に View を作成していきましょう。`MainPage.xaml` を開きます。
 
-`StackLayout` の `HorizontalOptions`／`VerticalOptions` を削除し、`Padding=10` に置き換えます。`Label` の下に `Switch` と ViewModel で用意したコマンドを呼び出す `Button` を追加します。次のようになります。
+`StackLayout` の下の `Label` の下に `Switch` と ViewModel で用意したコマンドを呼び出す `Button` を追加します。次のようになります。
 
 ```xml
 <StackLayout Padding="10">
@@ -1340,10 +1310,11 @@ public partial class MainPageViewModel : ViewModelBase
 </StackLayout>
 ```
 
-エディタ下部の「<<」ボタンをクリックすると XAML プレビューアーが表示されますが、「XAML ホットリロード」の機能を使用した方が早いかもしれません。
+このあとデバッグ実行した後に「XAML ホットリロード」の機能で View の体裁を確認できます。
 
-
-**TBD** XAML ホットリロードの説明を追加する
+> XAML ホットリロードとは
+> 
+> XAML ホット リロードは、実行中のアプリで XAML の変更の結果を表示できる Visual Studio 機能であり、プロジェクトをリビルドする必要はありません。 XAML ホット リロードを使用しない場合は、XAML の変更の結果を表示するたびにアプリをビルドしてデプロイする必要があります。
 
 この時点でデバッグ実行してみましょう。View を表示した際とボタンをクリックした際にスイッチとボタンが連動して動作するのが分かるはずです。
 

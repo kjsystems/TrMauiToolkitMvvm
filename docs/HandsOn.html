@@ -1,0 +1,1698 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>HandsOn.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<ul>
+<li><a href="#net-maui-hands-on-lab">.NET MAUI hands on lab</a>
+<ul>
+<li><a href="#%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E8%A6%81%E4%BB%B6">システム要件</a></li>
+<li><a href="#visual-studio-2022-%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">Visual Studio 2022 のインストール</a></li>
+<li><a href="#%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%AD%E3%83%BC%E3%83%89%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">ワークロードのインストール</a></li>
+<li><a href="#net-maui-%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E4%BD%9C%E6%88%90%E3%81%A8%E5%8B%95%E4%BD%9C%E7%A2%BA%E8%AA%8D">.NET MAUI アプリの作成と動作確認</a>
+<ul>
+<li><a href="#%E6%9C%80%E5%88%9D%E3%81%AE%E8%B5%B7%E5%8B%95">最初の起動</a>
+<ul>
+<li><a href="#android-%E3%82%A8%E3%83%9F%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%BF%E3%83%BC%E3%81%AE%E4%BD%9C%E6%88%90">Android エミュレーターの作成</a></li>
+<li><a href="#%E3%83%87%E3%83%90%E3%83%83%E3%82%B0%E5%AE%9F%E8%A1%8C">デバッグ実行</a></li>
+</ul>
+</li>
+<li><a href="#%E3%83%87%E3%83%95%E3%82%A9%E3%83%AB%E3%83%88%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AE%E6%A7%8B%E6%88%90">デフォルトプロジェクトの構成</a>
+<ul>
+<li><a href="#platforms-%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80"><code>Platforms</code> フォルダ</a></li>
+<li><a href="#mauiprogramcs"><code>MauiProgram.cs</code></a></li>
+<li><a href="#appxamlcs"><code>App.xaml.cs</code></a></li>
+<li><a href="#appshellxaml"><code>AppShell.xaml</code></a></li>
+<li><a href="#appshellxamlcs"><code>AppShell.xaml.cs</code></a></li>
+<li><a href="#mainpagexaml"><code>MainPage.xaml</code></a></li>
+<li><a href="#mainpagexamlcs"><code>MainPage.xaml.cs</code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#web-api-%E3%81%B8%E3%81%AE%E6%8E%A5%E7%B6%9A">Web API への接続</a>
+<ul>
+<li><a href="#%E3%83%A2%E3%83%87%E3%83%AB%E3%82%AF%E3%83%A9%E3%82%B9%E3%81%AE%E4%BD%9C%E6%88%90">モデルクラスの作成</a></li>
+<li><a href="#view-%E3%81%AE%E4%BD%9C%E6%88%90">View の作成</a></li>
+<li><a href="#%E3%82%B3%E3%83%BC%E3%83%89%E3%83%93%E3%83%8F%E3%82%A4%E3%83%B3%E3%83%89%E3%81%AB%E3%82%B3%E3%83%BC%E3%83%89%E3%82%92%E8%BF%BD%E5%8A%A0">コードビハインドにコードを追加</a></li>
+<li><a href="#%E3%83%87%E3%83%90%E3%83%83%E3%82%B0%E5%AE%9F%E8%A1%8C-1">デバッグ実行</a></li>
+<li><a href="#web-api-%E3%81%B8%E3%81%AE%E6%8E%A5%E7%B6%9A%E3%81%AB%E6%9B%B8%E3%81%8D%E6%8F%9B%E3%81%88">Web API への接続に書き換え</a></li>
+</ul>
+</li>
+<li><a href="#net-maui-%E3%82%A2%E3%83%97%E3%83%AA%E3%81%B8%E3%81%AEcomunitytoolkitmvvm%E3%81%AE%E9%81%A9%E7%94%A8%E3%81%A8%E5%8B%95%E4%BD%9C%E7%A2%BA%E8%AA%8D">.NET MAUI アプリへのComunityToolkit.Mvvmの適用と動作確認</a>
+<ul>
+<li><a href="#%E6%9C%80%E5%88%9D%E3%81%AE%E8%B5%B7%E5%8B%95-1">最初の起動</a>
+<ul>
+<li><a href="#android-%E3%82%A8%E3%83%9F%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%BF%E3%83%BC%E3%81%AE%E4%BD%9C%E6%88%90-1">Android エミュレーターの作成</a></li>
+<li><a href="#%E3%83%87%E3%83%90%E3%83%83%E3%82%B0%E5%AE%9F%E8%A1%8C-2">デバッグ実行</a></li>
+</ul>
+</li>
+<li><a href="#communitytoolkitmvvm-nuget%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">CommunityToolkit.Mvvm NuGetパッケージのインストール</a></li>
+<li><a href="#%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80%E6%A7%8B%E6%88%90%E3%81%AE%E5%A4%89%E6%9B%B4">フォルダ構成の変更</a>
+<ul>
+<li><a href="#%E3%83%87%E3%83%95%E3%82%A9%E3%83%AB%E3%83%88%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AE%E6%A7%8B%E6%88%90-1">デフォルトプロジェクトの構成</a></li>
+<li><a href="#mvvm%E3%81%AE%E5%90%84%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80%E3%82%92%E4%BD%9C%E6%88%90">MVVMの各フォルダを作成</a></li>
+<li><a href="#mainpage%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%81%AE%E7%A7%BB%E5%8B%95">MainPageファイルの移動</a></li>
+</ul>
+</li>
+<li><a href="#viewmodel%E3%81%AE%E8%BF%BD%E5%8A%A0">ViewModelの追加</a>
+<ul>
+<li><a href="#viewmodelbasecs%E3%81%AE%E8%BF%BD%E5%8A%A0">ViewModelBase.csの追加</a></li>
+<li><a href="#mainpageviewmodel%E3%81%AE%E8%BF%BD%E5%8A%A0">MainPageViewModelの追加</a></li>
+<li><a href="#detailsviewmodel%E3%81%AE%E8%BF%BD%E5%8A%A0">DetailsViewModelの追加</a></li>
+</ul>
+</li>
+<li><a href="#mainpage%E3%81%AE%E4%BF%AE%E6%AD%A3%E3%81%A8detailpage%E3%81%AE%E8%BF%BD%E5%8A%A0">MainPageの修正とDetailPageの追加</a>
+<ul>
+<li><a href="#mainpage%E3%81%AE%E4%BF%AE%E6%AD%A3">MainPageの修正</a></li>
+<li><a href="#detailpage%E3%81%AE%E8%BF%BD%E5%8A%A0">DetailPageの追加</a></li>
+<li><a href="#mauiprogramcs%E3%81%AB%E3%81%A6%E4%BD%9C%E6%88%90%E3%81%97%E3%81%9F%E3%82%AF%E3%83%A9%E3%82%B9%E3%81%9F%E3%81%A1%E3%82%92%E7%99%BB%E9%8C%B2">MauiProgram.csにて、作成したクラスたちを登録</a></li>
+</ul>
+</li>
+<li><a href="#%E8%B5%B7%E5%8B%95%E7%A2%BA%E8%AA%8D">起動確認</a></li>
+</ul>
+</li>
+<li><a href="#communitytoolkitmvvm%E3%82%92%E4%BD%BF%E7%94%A8%E3%81%97%E3%81%9Fmvvm%E3%81%A8%E3%83%87%E3%83%BC%E3%82%BF%E3%83%90%E3%82%A4%E3%83%B3%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E8%A7%A3%E8%AA%AC">CommunityToolkit.Mvvmを使用したMVVMとデータバインディングの解説</a>
+<ul>
+<li><a href="#mvvm%E3%81%A8%E3%81%AF">MVVMとは</a></li>
+<li><a href="#%E3%83%87%E3%83%BC%E3%82%BF%E3%83%90%E3%82%A4%E3%83%B3%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0">データバインディング</a></li>
+<li><a href="#%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%83%90%E3%82%A4%E3%83%B3%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0">コマンドバインディング</a></li>
+</ul>
+</li>
+<li><a href="#communitytoolkitmvvm%E3%82%92%E4%BD%BF%E7%94%A8%E3%81%97%E3%81%9F%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E4%BD%9C%E6%88%90">CommunityToolkit.Mvvmを使用したアプリの作成</a>
+<ul>
+<li><a href="#%E3%83%A2%E3%83%87%E3%83%ABweather%E3%82%AF%E3%83%A9%E3%82%B9%E3%81%AE%E4%BD%9C%E6%88%90">モデル（Weather）クラスの作成</a></li>
+<li><a href="#%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%BC%E3%83%95%E3%82%A7%E3%82%A4%E3%82%B9%E3%81%A8%E5%AE%9F%E8%A3%85%E3%82%AF%E3%83%A9%E3%82%B9%E3%81%AE%E4%BD%9C%E6%88%90">サービスのインターフェイスと実装クラスの作成</a></li>
+<li><a href="#%E3%82%B3%E3%83%B3%E3%83%86%E3%83%8A%E3%83%BC%E3%81%B8%E3%81%AE%E7%99%BB%E9%8C%B2">コンテナーへの登録</a></li>
+<li><a href="#viewmodel-%E3%81%AE%E4%BD%9C%E6%88%90">ViewModel の作成</a></li>
+<li><a href="#view-%E3%81%AE%E4%BD%9C%E6%88%90-1">View の作成</a>
+<ul>
+<li><a href="#collectionview-%E3%81%AE%E5%88%A9%E7%94%A8">CollectionView の利用</a></li>
+<li><a href="#%E5%A4%A9%E6%B0%97%E3%82%A2%E3%82%A4%E3%82%B3%E3%83%B3%E3%81%AE%E8%A1%A8%E7%A4%BA">天気アイコンの表示</a>
+<ul>
+<li><a href="#%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AB%E7%94%BB%E5%83%8F%E3%82%92%E8%BF%BD%E5%8A%A0">プロジェクトに画像を追加</a></li>
+<li><a href="#xaml-%E3%81%AE%E3%82%A2%E3%83%83%E3%83%97%E3%83%87%E3%83%BC%E3%83%88">XAML のアップデート</a></li>
+</ul>
+</li>
+<li><a href="#pulltorefresh-%E3%81%AE%E8%BF%BD%E5%8A%A0">PullToRefresh の追加</a></li>
+<li><a href="#%E3%83%80%E3%82%A4%E3%82%A2%E3%83%AD%E3%82%B0%E3%81%AE%E8%A1%A8%E7%A4%BA">ダイアログの表示</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#mock-%E3%81%AE%E8%BF%BD%E5%8A%A0">Mock の追加</a></li>
+<li><a href="#%E3%81%8A%E7%96%B2%E3%82%8C%E6%A7%98%E3%81%A7%E3%81%97%E3%81%9F">お疲れ様でした</a></li>
+<li><a href="#appendix">Appendix</a>
+<ul>
+<li><a href="#web-api-%E3%82%92%E4%BD%9C%E6%88%90">Web API を作成</a></li>
+<li><a href="#net-maui-%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6">.NET MAUI について</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="net-maui-hands-on-lab">.NET MAUI hands on lab</h1>
+<p>このドキュメントでは .NET MAUI と Microsoft.Toolkit.Mvvm を利用した MVVM によるモバイルアプリ開発をハンズオンで学習します。</p>
+<p>開発するのは Web API に接続し、データを表示するモバイルアプリです。</p>
+<h2 id="%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E8%A6%81%E4%BB%B6">システム要件</h2>
+<ul>
+<li>最新の Windows または macOS</li>
+<li>最新の Visual Studio 2022 または Visual Studio 2022 for Mac
+<ul>
+<li>Microsoft.Toolkit.Mvvm パッケージ</li>
+<li>※ Mac では .NET MAUI はPreviewです（2022.10.1 現在）</li>
+</ul>
+</li>
+<li>Android SDK
+<ul>
+<li>Android Emulator</li>
+</ul>
+</li>
+</ul>
+<h2 id="visual-studio-2022-%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">Visual Studio 2022 のインストール</h2>
+<p>Visual Studio 2022 の<a href="https://visualstudio.microsoft.com/ja/downloads/">ダウンロードページ</a>からダウンロードします。</p>
+<p>ダウンロードした <code>VisualStudioSetup.exe</code> を実行すると、Visual Studio Installer が起動します。</p>
+<h2 id="%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%AD%E3%83%BC%E3%83%89%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">ワークロードのインストール</h2>
+<p>Visual Studio Installer を起動して「.NET マルチプラットフォーム アプリの UI 開発」をインストールします。</p>
+<img src="./images/installer-01.png" width="600" />
+<h2 id="net-maui-%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E4%BD%9C%E6%88%90%E3%81%A8%E5%8B%95%E4%BD%9C%E7%A2%BA%E8%AA%8D">.NET MAUI アプリの作成と動作確認</h2>
+<p>Visual Studio を起動して「新しいプロジェクト」をクリックします。</p>
+<img src="./images/maui-01.png" width="600" />
+<p>ダイアログで検索窓に <code>maui</code> と入力し、「.NET MAUI アプリ」をクリックして .NET MAUI プロジェクトを作成します。</p>
+<img src="./images/maui-02.png" width="600" />
+<p>任意の名前とフォルダにプロジェクトを構成します。（本ドキュメントでは <code>MobileApp</code> という名前空間ですので合わせても良いでしょう。）</p>
+<img src="./images/maui-03.png" width="600" />
+<p>フレームワークは「.NET 6.0（長期的なサポート）」を選択してプロジェクトを作成します。</p>
+<img src="./images/maui-04.png" width="600" />
+<h3 id="%E6%9C%80%E5%88%9D%E3%81%AE%E8%B5%B7%E5%8B%95">最初の起動</h3>
+<p>Android エミュレーターをドロップダウンから選択してデバッグ実行ができます。</p>
+<p>「Android Emulators」が表示されていない場合は、新規にエミュレーターを作成する必要があります。</p>
+<img src="./images/maui-05.png" width="600" />
+<h4 id="android-%E3%82%A8%E3%83%9F%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%BF%E3%83%BC%E3%81%AE%E4%BD%9C%E6%88%90">Android エミュレーターの作成</h4>
+<p>ドロップダウンから「Android デバイスマネージャー」をクリックします。</p>
+<p>表示されるダイアログで「新規」ボタンをクリックします。表示されない場合は、「ツール＞Android＞Android デバイスマネージャー」をクリックします。</p>
+<p>「新規」ボタンをクリックします。</p>
+<img src="./images/maui-06.png" width="600" />
+<ul>
+<li>基本デバイス：デバイスのテンプレートでデバイスに応じた画面サイズやメモリ量が決まります。<code>Pixel 5</code> などを選んでおくと良いでしょう。</li>
+<li>プロセッサ：<code>x86</code> か <code>x86_64</code> を選択します。（Intel CPU の仮想化に Hyper-V または Intel HAXM が必要です。）</li>
+<li>OS：エミュレーターの OS を指定します。</li>
+<li>Google APIs／Google Play Store：Google Play Store にチェックを付けると Emulator でマップやストアが利用できます。</li>
+</ul>
+<img src="./images/maui-07.png" width="600" />
+<p>各種選択した状態で「新しいデバイスイメージがダウンロードされます。」という注意書きがある場合は、Android SDK のダウンロードサイトから条件に見合った OS イメージを自動でダウンロードしてエミュレーターを作成します。</p>
+<!-- OS イメージは Visual Studio のメニューから「ツール＞Android＞Android SDK マネージャー」をクリックして、
+
+<img src="./images/maui-09.png" width="600" />
+
+表示されるダイアログで `Google APIs Intel x86 Atom System Image` や `Google Play Intel x86 Atom System Image` が該当します。少し大きいサイズなので、PC の空き容量が少ない場合は選択してインストールしてください。
+
+<img src="./images/maui-08.png" width="600" /> -->
+<h4 id="%E3%83%87%E3%83%90%E3%83%83%E3%82%B0%E5%AE%9F%E8%A1%8C">デバッグ実行</h4>
+<p>準備が整ったところで最初のデバッグ実行をしてみましょう。</p>
+<p>Android エミュレーターが起動して、次のような画面が表示されれば OK です。</p>
+<img src="./images/maui-10.png" width="300" />
+<h3 id="%E3%83%87%E3%83%95%E3%82%A9%E3%83%AB%E3%83%88%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AE%E6%A7%8B%E6%88%90">デフォルトプロジェクトの構成</h3>
+<pre>
++ MobileApp
+  - Platforms フォルダ
+    - Android, iOS, MacCatalyst, Tizen, Windows フォルダ
+  - Resources フォルダ
+  - App.xaml / App.xaml.cs
+  - AppShell.xaml.cs / AppShell.xaml
+  - AssemblyInfo.cs
+  - MauiProgram.cs
+  - MainPage.xaml / MainPage.xaml.cs
+</pre>
+<h4 id="platforms-%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80"><code>Platforms</code> フォルダ</h4>
+<p>各ターゲット プラットフォームのフォルダーには、各プラットフォームでアプリを起動するプラットフォーム固有のコードと、追加するプラットフォーム コードが含まれています。</p>
+<p>各子フォルダーは、.NET MAUI がターゲットにできるプラットフォームを表します。</p>
+<h4 id="mauiprogramcs"><code>MauiProgram.cs</code></h4>
+<p>アプリケーションのエントリーポイントです。</p>
+<p>プラットフォーム（Android, iOS, Mac, Win）ごとにアプリエントリポイント（<code>MainApplication</code> クラス）があり、そこから <code>CreateMauiApp</code> メソッドが呼び出されます。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title">MauiProgram</span>
+{
+	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> MauiApp <span class="hljs-title">CreateMauiApp</span>(<span class="hljs-params"></span>)</span>
+	{
+		<span class="hljs-keyword">var</span> builder = MauiApp.CreateBuilder();
+		builder
+			.UseMauiApp&lt;App&gt;()
+			.ConfigureFonts(fonts =&gt;
+			{
+				fonts.AddFont(<span class="hljs-string">"OpenSans-Regular.ttf"</span>, <span class="hljs-string">"OpenSansRegular"</span>);
+				fonts.AddFont(<span class="hljs-string">"OpenSans-Semibold.ttf"</span>, <span class="hljs-string">"OpenSansSemibold"</span>);
+			});
+
+		<span class="hljs-keyword">return</span> builder.Build();
+	}
+}
+</div></code></pre>
+<h4 id="appxamlcs"><code>App.xaml.cs</code></h4>
+<p><code>App</code> クラスは <code>Application</code> クラスから派生しています。</p>
+<p><code>App</code> メソッド内で、初期ページのプロパティ <code>MainPage</code> に <code>AppShell</code> クラスのインスタンスを指定しています。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">App</span> : <span class="hljs-title">Application</span>
+{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">App</span>(<span class="hljs-params"></span>)</span>
+    {
+        InitializeComponent();
+
+        MainPage = <span class="hljs-keyword">new</span> AppShell();
+    }
+}
+</div></code></pre>
+<p>.NET MAUI Shell アプリでは、アプリのビジュアル階層は、クラスをサブクラス化する Shell クラスで記述されます。</p>
+<p>このクラスは、次の 3 つの主要な階層オブジェクトのいずれかで構成されます。</p>
+<ol>
+<li>FlyoutItem または TabBar</li>
+<li>Tab</li>
+<li>ShellContent</li>
+</ol>
+<h4 id="appshellxaml"><code>AppShell.xaml</code></h4>
+<p>MobileApp では <code>ShellContent</code> で構成されていることが確認できます。</p>
+<pre class="hljs"><code><div><span class="hljs-meta">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">Shell</span>
+    <span class="hljs-attr">x:Class</span>=<span class="hljs-string">"MobileApp.AppShell"</span>
+    <span class="hljs-attr">xmlns</span>=<span class="hljs-string">"http://schemas.microsoft.com/dotnet/2021/maui"</span>
+    <span class="hljs-attr">xmlns:x</span>=<span class="hljs-string">"http://schemas.microsoft.com/winfx/2009/xaml"</span>
+    <span class="hljs-attr">xmlns:local</span>=<span class="hljs-string">"clr-namespace:MobileApp"</span>
+    <span class="hljs-attr">Shell.FlyoutBehavior</span>=<span class="hljs-string">"Disabled"</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">ShellContent</span>
+        <span class="hljs-attr">Title</span>=<span class="hljs-string">"Home"</span>
+        <span class="hljs-attr">ContentTemplate</span>=<span class="hljs-string">"{DataTemplate local:MainPage}"</span>
+        <span class="hljs-attr">Route</span>=<span class="hljs-string">"MainPage"</span> /&gt;</span>
+
+<span class="hljs-tag">&lt;/<span class="hljs-name">Shell</span>&gt;</span>
+</div></code></pre>
+<h4 id="appshellxamlcs"><code>AppShell.xaml.cs</code></h4>
+<p>AppShell のパーシャルクラスで、コードビハインドと呼ばれます。</p>
+<h4 id="mainpagexaml"><code>MainPage.xaml</code></h4>
+<p>View のクラスです。XML ベースのクラスを表す言語 XAML で記述します。要素（Element）がインスタンスを表し、属性（Attribute）がプロパティなどを表します。</p>
+<pre class="hljs"><code><div><span class="hljs-meta">&lt;?xml version="1.0" encoding="utf-8" ?&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">ContentPage</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">"http://schemas.microsoft.com/dotnet/2021/maui"</span>
+             <span class="hljs-attr">xmlns:x</span>=<span class="hljs-string">"http://schemas.microsoft.com/winfx/2009/xaml"</span>
+             <span class="hljs-attr">x:Class</span>=<span class="hljs-string">"MobileApp.MainPage"</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">ScrollView</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">VerticalStackLayout</span>
+            <span class="hljs-attr">Spacing</span>=<span class="hljs-string">"25"</span>
+            <span class="hljs-attr">Padding</span>=<span class="hljs-string">"30,0"</span>
+            <span class="hljs-attr">VerticalOptions</span>=<span class="hljs-string">"Center"</span>&gt;</span>
+
+            <span class="hljs-tag">&lt;<span class="hljs-name">Image</span>
+                <span class="hljs-attr">Source</span>=<span class="hljs-string">"dotnet_bot.png"</span>
+                <span class="hljs-attr">SemanticProperties.Description</span>=<span class="hljs-string">"Cute dot net bot waving hi to you!"</span>
+                <span class="hljs-attr">HeightRequest</span>=<span class="hljs-string">"200"</span>
+                <span class="hljs-attr">HorizontalOptions</span>=<span class="hljs-string">"Center"</span> /&gt;</span>
+
+            <span class="hljs-tag">&lt;<span class="hljs-name">Label</span>
+                <span class="hljs-attr">Text</span>=<span class="hljs-string">"Hello, World!"</span>
+                <span class="hljs-attr">SemanticProperties.HeadingLevel</span>=<span class="hljs-string">"Level1"</span>
+                <span class="hljs-attr">FontSize</span>=<span class="hljs-string">"32"</span>
+                <span class="hljs-attr">HorizontalOptions</span>=<span class="hljs-string">"Center"</span> /&gt;</span>
+
+            <span class="hljs-tag">&lt;<span class="hljs-name">Label</span>
+                <span class="hljs-attr">Text</span>=<span class="hljs-string">"Welcome to .NET Multi-platform App UI"</span>
+                <span class="hljs-attr">SemanticProperties.HeadingLevel</span>=<span class="hljs-string">"Level2"</span>
+                <span class="hljs-attr">SemanticProperties.Description</span>=<span class="hljs-string">"Welcome to dot net Multi platform App U I"</span>
+                <span class="hljs-attr">FontSize</span>=<span class="hljs-string">"18"</span>
+                <span class="hljs-attr">HorizontalOptions</span>=<span class="hljs-string">"Center"</span> /&gt;</span>
+
+            <span class="hljs-tag">&lt;<span class="hljs-name">Button</span>
+                <span class="hljs-attr">x:Name</span>=<span class="hljs-string">"CounterBtn"</span>
+                <span class="hljs-attr">Text</span>=<span class="hljs-string">"Click me"</span>
+                <span class="hljs-attr">SemanticProperties.Hint</span>=<span class="hljs-string">"Counts the number of times you click"</span>
+                <span class="hljs-attr">Clicked</span>=<span class="hljs-string">"OnCounterClicked"</span>
+                <span class="hljs-attr">HorizontalOptions</span>=<span class="hljs-string">"Center"</span> /&gt;</span>
+
+        <span class="hljs-tag">&lt;/<span class="hljs-name">VerticalStackLayout</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">ScrollView</span>&gt;</span>
+
+<span class="hljs-tag">&lt;/<span class="hljs-name">ContentPage</span>&gt;</span>
+</div></code></pre>
+<h4 id="mainpagexamlcs"><code>MainPage.xaml.cs</code></h4>
+<p>MainPage のパーシャルクラスで、コードビハインドと呼ばれます。</p>
+<p><code>OnCounterClicked</code> は <code>CounterBtn</code> の <code>Clicked</code> にバインディングされています。</p>
+<p>ボタンをクリックすると数字が１つずつ増えていきます。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">public</span> <span class="hljs-keyword">partial</span> <span class="hljs-keyword">class</span> <span class="hljs-title">MainPage</span> : <span class="hljs-title">ContentPage</span>
+{
+	<span class="hljs-keyword">int</span> count = <span class="hljs-number">0</span>;
+
+	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">MainPage</span>(<span class="hljs-params"></span>)</span>
+	{
+		InitializeComponent();
+	}
+
+	<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnCounterClicked</span>(<span class="hljs-params"><span class="hljs-keyword">object</span> sender, EventArgs e</span>)</span>
+	{
+		count++;
+
+		<span class="hljs-keyword">if</span> (count == <span class="hljs-number">1</span>)
+			CounterBtn.Text = <span class="hljs-string">$"Clicked <span class="hljs-subst">{count}</span> time"</span>;
+		<span class="hljs-keyword">else</span>
+			CounterBtn.Text = <span class="hljs-string">$"Clicked <span class="hljs-subst">{count}</span> times"</span>;
+
+		SemanticScreenReader.Announce(CounterBtn.Text);
+	}
+}
+</div></code></pre>
+<p>起動確認は以上です。</p>
+<h2 id="web-api-%E3%81%B8%E3%81%AE%E6%8E%A5%E7%B6%9A">Web API への接続</h2>
+<p>起動を確認したら、Web API への接続を追加していきます。</p>
+<h3 id="%E3%83%A2%E3%83%87%E3%83%AB%E3%82%AF%E3%83%A9%E3%82%B9%E3%81%AE%E4%BD%9C%E6%88%90">モデルクラスの作成</h3>
+<p>まずは Model クラスを作成します。</p>
+<p>プロジェクトを右クリックして「追加＞クラス」から <code>Weather</code> クラスを作成します。次のようになります。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">namespace</span> <span class="hljs-title">MobileApp</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Weather</span>
+    {
+        <span class="hljs-keyword">public</span> DateTime Date { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+        <span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> Temperature { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+        <span class="hljs-keyword">public</span> <span class="hljs-keyword">string</span> Summary { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    }
+}
+</div></code></pre>
+<p>C# 10.0 から {} なしの以下のような書き方で名前空間を指定できるようになりました。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">namespace</span> <span class="hljs-title">MobileApp</span>;
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Weather</span>
+{
+    <span class="hljs-keyword">public</span> DateTime Date { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> Temperature { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">string</span> Summary { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+}
+</div></code></pre>
+<h3 id="view-%E3%81%AE%E4%BD%9C%E6%88%90">View の作成</h3>
+<p>次に View を作成していきましょう。<code>MainPage.xaml</code> を開きます。</p>
+<p><code>ScrollView</code> 内をすべて削除し、次の XAML で置き換えます。次のようになります。</p>
+<pre class="hljs"><code><div><span class="hljs-tag">&lt;<span class="hljs-name">StackLayout</span> <span class="hljs-attr">Padding</span>=<span class="hljs-string">"10"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Label</span> <span class="hljs-attr">Text</span>=<span class="hljs-string">"Welcome to .NET MAUI!"</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">StackLayout</span> <span class="hljs-attr">Orientation</span>=<span class="hljs-string">"Horizontal"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Label</span> <span class="hljs-attr">VerticalTextAlignment</span>=<span class="hljs-string">"Center"</span> <span class="hljs-attr">Text</span>=<span class="hljs-string">"Can Click"</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Switch</span> <span class="hljs-attr">x:Name</span>=<span class="hljs-string">"canClickSwitch"</span>
+                <span class="hljs-attr">IsToggled</span>=<span class="hljs-string">"True"</span>
+                <span class="hljs-attr">Toggled</span>=<span class="hljs-string">"SwitchOnToggled"</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">StackLayout</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">x:Name</span>=<span class="hljs-string">"button"</span>
+            <span class="hljs-attr">Clicked</span>=<span class="hljs-string">"GetWeathersButtonOnClicked"</span>
+            <span class="hljs-attr">Text</span>=<span class="hljs-string">"Get Weathers"</span> /&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">RefreshView</span> <span class="hljs-attr">x:Name</span>=<span class="hljs-string">"refreshView"</span> <span class="hljs-attr">Refreshing</span>=<span class="hljs-string">"PullToRefreshing"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">CollectionView</span> <span class="hljs-attr">x:Name</span>=<span class="hljs-string">"collectionView"</span>
+                        <span class="hljs-attr">ItemsSource</span>=<span class="hljs-string">"{Binding}"</span>
+                        <span class="hljs-attr">SelectionChanged</span>=<span class="hljs-string">"OnCollectionViewSelectionChanged"</span>
+                        <span class="hljs-attr">SelectionMode</span>=<span class="hljs-string">"Single"</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">CollectionView.ItemTemplate</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">DataTemplate</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">StackLayout</span> <span class="hljs-attr">Orientation</span>=<span class="hljs-string">"Horizontal"</span>&gt;</span>
+                        <span class="hljs-tag">&lt;<span class="hljs-name">Label</span> <span class="hljs-attr">Text</span>=<span class="hljs-string">"{Binding Date, StringFormat='{}{0:yyyy/MM/dd}'}"</span> /&gt;</span>
+                        <span class="hljs-tag">&lt;<span class="hljs-name">Label</span> <span class="hljs-attr">Text</span>=<span class="hljs-string">"{Binding Temperature, StringFormat='{0}℃'}"</span> /&gt;</span>
+                        <span class="hljs-tag">&lt;<span class="hljs-name">Label</span> <span class="hljs-attr">Text</span>=<span class="hljs-string">"{Binding Summary}"</span> /&gt;</span>
+                    <span class="hljs-tag">&lt;/<span class="hljs-name">StackLayout</span>&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-name">DataTemplate</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">CollectionView.ItemTemplate</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">CollectionView</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">RefreshView</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">StackLayout</span>&gt;</span>
+</div></code></pre>
+<p>後ほど、同じような View を順を追って少しずつ作成しますので、ここでの詳しい説明は割愛します。</p>
+<h3 id="%E3%82%B3%E3%83%BC%E3%83%89%E3%83%93%E3%83%8F%E3%82%A4%E3%83%B3%E3%83%89%E3%81%AB%E3%82%B3%E3%83%BC%E3%83%89%E3%82%92%E8%BF%BD%E5%8A%A0">コードビハインドにコードを追加</h3>
+<p><code>MainPage.xaml.cs</code> を開きます。</p>
+<p>クラス変数として以下を追加します。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">public</span> ObservableCollection&lt;Weather&gt; Weathers = <span class="hljs-keyword">new</span>();
+<span class="hljs-keyword">bool</span> _firstAppearing = <span class="hljs-literal">true</span>;
+</div></code></pre>
+<p>次にコンストラクターの下にいくつかのメソッドを追加します。</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">override</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnAppearing</span>(<span class="hljs-params"></span>)</span>
+{
+    <span class="hljs-keyword">base</span>.OnAppearing();
+
+    <span class="hljs-keyword">if</span> (_firstAppearing)
+        GetWeathersAsync();
+
+    _firstAppearing = <span class="hljs-literal">false</span>;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">GetWeathersButtonOnClicked</span>(<span class="hljs-params"><span class="hljs-keyword">object</span> sender, EventArgs e</span>)</span>
+{
+    GetWeathersAsync();
+}
+
+<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">PullToRefreshing</span>(<span class="hljs-params"><span class="hljs-keyword">object</span> sender, EventArgs e</span>)</span>
+{
+    button.IsEnabled = <span class="hljs-literal">false</span>;
+
+    GetWeathersAsync();
+    refreshView.IsRefreshing = <span class="hljs-literal">false</span>;
+
+    button.IsEnabled = <span class="hljs-literal">true</span>;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">SwitchOnToggled</span>(<span class="hljs-params"><span class="hljs-keyword">object</span> sender, ToggledEventArgs e</span>)</span>
+{
+    button.IsEnabled = e.Value;
+    refreshView.IsEnabled = e.Value;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnCollectionViewSelectionChanged</span>(<span class="hljs-params"><span class="hljs-keyword">object</span> sender, SelectionChangedEventArgs e</span>)</span>
+{
+    <span class="hljs-keyword">if</span> (e.CurrentSelection.Count == <span class="hljs-number">0</span>)
+        <span class="hljs-keyword">return</span>;
+
+    <span class="hljs-keyword">var</span> current = e.CurrentSelection.FirstOrDefault() <span class="hljs-keyword">as</span> Weather;
+    collectionView.SelectedItem = <span class="hljs-literal">null</span>;
+
+    <span class="hljs-keyword">var</span> message = <span class="hljs-string">$"<span class="hljs-subst">{current?.Date:yyyy/MM/dd}</span> は <span class="hljs-subst">{current?.Temperature}</span>℃ で <span class="hljs-subst">{current?.Summary}</span> です。"</span>;
+    <span class="hljs-keyword">await</span> Shell.Current.DisplayAlert(<span class="hljs-string">"weather"</span>, message, <span class="hljs-string">"OK"</span>);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">GetWeathersAsync</span>(<span class="hljs-params"></span>)</span>
+{
+    Weathers.Clear();
+
+    Weathers = <span class="hljs-keyword">new</span> ObservableCollection&lt;Weather&gt;
+        {
+            <span class="hljs-keyword">new</span> Weather
+            {
+                Date = <span class="hljs-keyword">new</span> DateTime(<span class="hljs-number">2020</span>,<span class="hljs-number">11</span>,<span class="hljs-number">1</span>),
+                Summary = <span class="hljs-string">"Rainy"</span>,
+                Temperature = <span class="hljs-number">20</span>
+            },
+            <span class="hljs-keyword">new</span> Weather
+            {
+                Date = <span class="hljs-keyword">new</span> DateTime(<span class="hljs-number">2020</span>,<span class="hljs-number">11</span>,<span class="hljs-number">2</span>),
+                Summary = <span class="hljs-string">"Cloudy"</span>,
+                Temperature = <span class="hljs-number">25</span>
+            },
+            <span class="hljs-keyword">new</span> Weather
+            {
+                Date = <span class="hljs-keyword">new</span> DateTime(<span class="hljs-number">2020</span>,<span class="hljs-number">11</span>,<span class="hljs-number">3</span>),
+                Summary = <span class="hljs-string">"Sunny"</span>,
+                Temperature = <span class="hljs-number">30</span>
+            }
+        };
+
+    BindingContext = Weathers;
+}
+</div></code></pre>
+<p>いくつかのポイントを説明します。</p>
+<ul>
+<li><code>OnAppearing</code> はページ表示時のイベントです。</li>
+<li><code>OnCollectionViewSelectionChanged</code> は <code>CollectionView</code> の <code>SelectionChanged</code> イベントのイベントハンドラーです。
+<ul>
+<li><code>SelectionChangedEventArgs</code> の引数で現在の選択項目などを取得できます。</li>
+</ul>
+</li>
+<li><code>SwitchOnToggled</code> は <code>Switch</code> の <code>Toggled</code> イベントのイベントハンドラーです。</li>
+<li><code>GetWeathersButtonOnClicked</code> は <code>Button</code> の <code>Clicked</code> イベントのイベントハンドラーです。</li>
+<li><code>PullToRefreshing</code> は <code>RefreshView</code> の <code>Refreshing</code> イベントのイベントハンドラーです。</li>
+<li><code>GetWeathersAsync</code> メソッドはダミーデータを作成し、<code>CollectionView</code> の <code>BindingContext</code> に <code>ObservableCollection</code> を指定しています。</li>
+</ul>
+<h3 id="%E3%83%87%E3%83%90%E3%83%83%E3%82%B0%E5%AE%9F%E8%A1%8C">デバッグ実行</h3>
+<p>ここでデバッグ実行してみましょう。次のような画面が表示されれば OK です。</p>
+<img src="./images/maui-11.png" width="300" />
+<h3 id="web-api-%E3%81%B8%E3%81%AE%E6%8E%A5%E7%B6%9A%E3%81%AB%E6%9B%B8%E3%81%8D%E6%8F%9B%E3%81%88">Web API への接続に書き換え</h3>
+<p><code>GetWeathersAsync</code> メソッドを実際の Web API <a href="https://weatherforecastsampleforprism.azurewebsites.net/weatherforecast">https://weatherforecastsampleforprism.azurewebsites.net/weatherforecast</a> からデータを取得する以下のコードで置き換えます。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">using</span> System.Diagnostics;
+<span class="hljs-keyword">using</span> System.Net.Http.Json;
+
+<span class="hljs-keyword">static</span> HttpClient _httpClient = <span class="hljs-keyword">new</span> HttpClient();
+<span class="hljs-function"><span class="hljs-keyword">async</span> Task <span class="hljs-title">GetWeathersAsync</span>(<span class="hljs-params"></span>)</span>
+{
+    Weathers.Clear();
+
+    <span class="hljs-keyword">try</span>
+    {
+        <span class="hljs-comment">// サイトからデータを取得</span>
+        <span class="hljs-keyword">var</span> response = <span class="hljs-keyword">await</span> _httpClient.GetAsync(<span class="hljs-string">"https://weatherforecastsampleforprism.azurewebsites.net/weatherforecast"</span>);
+        <span class="hljs-comment">// レスポンスコード（200 など）を確認</span>
+        response.EnsureSuccessStatusCode();
+
+        <span class="hljs-comment">// レスポンスからコンテンツ（JSON）を取得</span>
+        Weathers = <span class="hljs-keyword">await</span> response.Content.ReadFromJsonAsync&lt;ObservableCollection&lt;Weather&gt;&gt;();
+    }
+    <span class="hljs-keyword">catch</span> (Exception ex)
+    {
+        Debug.WriteLine(ex.Message);
+    }
+
+    BindingContext = Weathers;
+}
+</div></code></pre>
+<p>Web からのデータ取得やファイル IO など時間の掛かる処理を行うため、非同期処理のメソッドを利用します。メソッドに <code>async</code> を付け、呼び出す際に <code>await</code> を付けます。Visual Studio で赤波線が表示される箇所を修正してください。</p>
+<p>再度デバッグ実行して、次のような画面が表示されれば OK です。</p>
+<img src="./images/maui-12.png" width="300" />
+<p>標準の .NET MAUI の内容は以上です。</p>
+<h2 id="net-maui-%E3%82%A2%E3%83%97%E3%83%AA%E3%81%B8%E3%81%AEcomunitytoolkitmvvm%E3%81%AE%E9%81%A9%E7%94%A8%E3%81%A8%E5%8B%95%E4%BD%9C%E7%A2%BA%E8%AA%8D">.NET MAUI アプリへのComunityToolkit.Mvvmの適用と動作確認</h2>
+<p>今回のハンズオンでは手順簡略化のため、あらかじめCommunityToolkit.MvvmのNuGetパッケージを適用しフォルダ構成やソースファイルをある程度準備した「Start_MVVM」プロジェクトを用意してありますので、そこからスタートして実装していきます。
+この章ではさらに知見を深めたい方向けに、最初のMAUIプロジェクト作成からCommunityToolkit.Mvvmを適用し、「Start_MVVM」プロジェクトの状態にするまでを記します。</p>
+<p>Visual Studio を起動して「新しいプロジェクト」をクリックします。</p>
+<img src="./images/maui-01.png" width="600" />
+<p>ダイアログで検索窓に <code>maui</code> と入力し、「.NET MAUI アプリ」をクリックして .NET MAUI プロジェクトを作成します。</p>
+<img src="./images/maui-02.png" width="600" />
+<p>任意の名前とフォルダにプロジェクトを構成します。（本ドキュメントでは<code>MobileApp2</code>という名前で作成します。）</p>
+<img src="./images/toolkit-17.png" width="600" />
+<p>フレームワークは「.NET 6.0（長期的なサポート）」を選択してプロジェクトを作成します。</p>
+<img src="./images/maui-04.png" width="600" />
+<h3 id="%E6%9C%80%E5%88%9D%E3%81%AE%E8%B5%B7%E5%8B%95">最初の起動</h3>
+<p><code>MobileApp.Android</code> を右クリックして「スタートアッププロジェクトに設定」をクリックするか、「スタートアッププロジェクト」のドロップダウンから <code>MobileApp.Android</code> を選択します。</p>
+<p>すると、接続している Android デバイスや利用できる Android エミュレーターをドロップダウンから選択してデバッグ実行ができます。</p>
+<p>「Android Emulator」としか表示されていない場合は、新規にエミュレーターを作成する必要があります。</p>
+<img src="./images/prism-11.png" width="600" />
+<h4 id="android-%E3%82%A8%E3%83%9F%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%BF%E3%83%BC%E3%81%AE%E4%BD%9C%E6%88%90">Android エミュレーターの作成</h4>
+<p>ドロップダウンから「Android デバイスマネージャー」をクリックします。</p>
+<p>表示されるダイアログで「新規」ボタンをクリックします。表示されない場合は、「ツール＞Android＞Android デバイスマネージャー」をクリックします。</p>
+<p>「新規」ボタンをクリックします。</p>
+<img src="./images/maui-06.png" width="600" />
+<ul>
+<li>基本デバイス：デバイスのテンプレートでデバイスに応じた画面サイズやメモリ量が決まります。<code>Pixel 5</code> などを選んでおくと良いでしょう。</li>
+<li>プロセッサ：<code>x86</code> か <code>x86_64</code> を選択します。（Intel CPU の仮想化に Hyper-V または Intel HAXM が必要です。）</li>
+<li>OS：エミュレーターの OS を指定します。</li>
+<li>Google APIs／Google Play Store：Google Play Store にチェックを付けると Emulator でマップやストアが利用できます。</li>
+</ul>
+<img src="./images/maui-07.png" width="600" />
+<p>各種選択した状態で「新しいデバイスイメージがダウンロードされます。」という注意書きがある場合は、Android SDK のダウンロードサイトから条件に見合った OS イメージを自動でダウンロードしてエミュレーターを作成します。</p>
+<!-- OS イメージは Visual Studio のメニューから「ツール＞Android＞Android SDK マネージャー」をクリックして、
+
+<img src="./images/maui-09.png" width="600" />
+
+表示されるダイアログで `Google APIs Intel x86 Atom System Image` や `Google Play Intel x86 Atom System Image` が該当します。少し大きいサイズなので、PC の空き容量が少ない場合は選択してインストールしてください。
+
+<img src="./images/maui-08.png" width="600" /> -->
+<h4 id="%E3%83%87%E3%83%90%E3%83%83%E3%82%B0%E5%AE%9F%E8%A1%8C">デバッグ実行</h4>
+<p>準備が整ったところで最初のデバッグ実行をしてみましょう。</p>
+<p>Android エミュレーターが起動して、次のような画面が表示されれば OK です。</p>
+<img src="./images/maui-10.png" width="300" />
+<h3 id="communitytoolkitmvvm-nuget%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">CommunityToolkit.Mvvm NuGetパッケージのインストール</h3>
+<p>プロジェクトが作成されたら、ソリューションエクスプローラーのプロジェクト名を右クリックし、「NuGetパッケージの管理」をクリックします。</p>
+<img src="./images/toolkit-01.png" width="250">
+<img src="./images/toolkit-02.png" width="250">
+<p>NuGetパッケージマネージャーの「参照」をクリックし、検索ボックスに「CommunityToolkit.Mvvm」と入力します。検索結果のCommunityToolkit.Mvvmをクリック選択し「インストール」をクリックします。<br>
+※似た名前のパッケージがあるので間違えないように注意してください。<br>
+ライセンス規約同意などのダイアログが表示されるので、同意して進めていきます。</p>
+<img src="./images/toolkit-03.png" width="600">
+<img src="./images/toolkit-04.png" width="300">
+<img src="./images/toolkit-05.png" width="300">
+<h3 id="%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80%E6%A7%8B%E6%88%90%E3%81%AE%E5%A4%89%E6%9B%B4">フォルダ構成の変更</h3>
+<h4 id="%E3%83%87%E3%83%95%E3%82%A9%E3%83%AB%E3%83%88%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AE%E6%A7%8B%E6%88%90">デフォルトプロジェクトの構成</h4>
+<p><a href="#%E3%83%87%E3%83%95%E3%82%A9%E3%83%AB%E3%83%88%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AE%E6%A7%8B%E6%88%90">デフォルトプロジェクトの構成</a>の章でも説明した通り、デフォルトでは下記の状態となっています。(各ファイルの内容も同様のため説明は省略します)</p>
+<img src="./images/toolkit-08.png" width="250">
+<h4 id="mvvm%E3%81%AE%E5%90%84%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80%E3%82%92%E4%BD%9C%E6%88%90">MVVMの各フォルダを作成</h4>
+<p>MobileApp プロジェクトを右クリックして「追加＞新しいフォルダー」から <code>Models</code>、<code>ViewModels</code>、<code>Views</code>の3つのフォルダを作成します。</p>
+<img src="./images/toolkit-06.png" width="250">
+<p>この時点ではまだ3つのフォルダは空の状態です。</p>
+<img src="./images/toolkit-07.png" width="250">
+<h4 id="mainpage%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%81%AE%E7%A7%BB%E5%8B%95">MainPageファイルの移動</h4>
+<p>MainPage.xamlファイルを、<code>Views</code>フォルダにドラッグします。
+実際には<code>Views</code>フォルダに移動しなくても、後述のViewとViewModelの紐づけを正しく行えば動作はしますが、プロジェクトの構成を見通しやすくするために移動してまとめておいたほうが良いでしょう。</p>
+<img src="./images/toolkit-09.png" width="250">
+<img src="./images/toolkit-10.png" width="250">
+<img src="./images/toolkit-11.png" width="250">
+<p>namespaceも適宜フォルダ構成に合わせて変更しておくとよりわかりやすいでしょう。変更点は下記3か所です。(赤線部分を追加)</p>
+<ul>
+<li>MainPage.xaml</li>
+</ul>
+<img src="./images/toolkit-12.png" width="500">
+<ul>
+<li>MainPage.xaml.cs</li>
+</ul>
+<img src="./images/toolkit-13.png" width="500">
+<ul>
+<li>AppShell.xaml</li>
+</ul>
+<img src="./images/toolkit-14.png" width="500">
+<h3 id="viewmodel%E3%81%AE%E8%BF%BD%E5%8A%A0">ViewModelの追加</h3>
+<h4 id="viewmodelbasecs%E3%81%AE%E8%BF%BD%E5%8A%A0">ViewModelBase.csの追加</h4>
+<p>先ほど作成した<code>ViewModels</code>フォルダを右クリックし、「追加＞クラス」から<code>ViewModelBase.cs</code>クラスを追加し、中身を下記のように記述します。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">using</span> CommunityToolkit.Mvvm.ComponentModel;
+
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">MobileApp2.ViewModels</span>;
+
+[<span class="hljs-meta">ObservableObject</span>]
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">partial</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ViewModelBase</span>
+{
+    [<span class="hljs-meta">ObservableProperty</span>]
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">string</span> _title;
+}
+</div></code></pre>
+<h4 id="mainpageviewmodel%E3%81%AE%E8%BF%BD%E5%8A%A0">MainPageViewModelの追加</h4>
+<p>同じように<code>ViewModels</code>フォルダを右クリックし、「追加＞クラス」から<code>MainPageViewModel.cs</code>クラスを追加し、中身を下記のように記述します。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">namespace</span> <span class="hljs-title">MobileApp2.ViewModels</span>;
+
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">partial</span> <span class="hljs-keyword">class</span> <span class="hljs-title">MainPageViewModel</span> : <span class="hljs-title">ViewModelBase</span>
+{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">MainPageViewModel</span>(<span class="hljs-params"></span>)</span>
+    {
+        Title = <span class="hljs-string">"Main Page"</span>;
+    }
+}
+</div></code></pre>
+<h4 id="detailsviewmodel%E3%81%AE%E8%BF%BD%E5%8A%A0">DetailsViewModelの追加</h4>
+<p>同じように<code>ViewModels</code>フォルダを右クリックし、「追加＞クラス」から<code>DetailsViewModel.cs</code>クラスを追加し、中身を下記のように記述します。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">namespace</span> <span class="hljs-title">MobileApp2.ViewModels</span>;
+
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">partial</span> <span class="hljs-keyword">class</span> <span class="hljs-title">DetailsViewModel</span> : <span class="hljs-title">ViewModelBase</span>
+{
+}
+</div></code></pre>
+<h3 id="mainpage%E3%81%AE%E4%BF%AE%E6%AD%A3%E3%81%A8detailpage%E3%81%AE%E8%BF%BD%E5%8A%A0">MainPageの修正とDetailPageの追加</h3>
+<h4 id="mainpage%E3%81%AE%E4%BF%AE%E6%AD%A3">MainPageの修正</h4>
+<p>MainPage.xamlとMainPage.xaml.csファイルを下記のように修正します。</p>
+<pre class="hljs"><code><div><span class="hljs-meta">&lt;?xml version="1.0" encoding="utf-8" ?&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">ContentPage</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">"http://schemas.microsoft.com/dotnet/2021/maui"</span>
+             <span class="hljs-attr">xmlns:x</span>=<span class="hljs-string">"http://schemas.microsoft.com/winfx/2009/xaml"</span>
+             <span class="hljs-attr">x:Class</span>=<span class="hljs-string">"MobileApp2.Views.MainPage"</span>
+             <span class="hljs-attr">xmlns:viewModel</span>=<span class="hljs-string">"clr-namespace:MobileApp2.ViewModels"</span>
+             <span class="hljs-attr">xmlns:model</span>=<span class="hljs-string">"clr-namespace:MobileApp2.Models"</span>
+             <span class="hljs-attr">x:DataType</span>=<span class="hljs-string">"viewModel:MainPageViewModel"</span>
+             <span class="hljs-attr">Title</span>=<span class="hljs-string">"{Binding Title}"</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">StackLayout</span> <span class="hljs-attr">Padding</span>=<span class="hljs-string">"10"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Label</span> <span class="hljs-attr">Text</span>=<span class="hljs-string">"Welcome to .NET MAUI and CommunityToolkit MVVM!"</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">StackLayout</span>&gt;</span>
+
+<span class="hljs-tag">&lt;/<span class="hljs-name">ContentPage</span>&gt;</span>
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-keyword">using</span> MobileApp2.ViewModels;
+
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">MobileApp2.Views</span>;
+
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">partial</span> <span class="hljs-keyword">class</span> <span class="hljs-title">MainPage</span> : <span class="hljs-title">ContentPage</span>
+{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">MainPage</span>(<span class="hljs-params">MainPageViewModel vm</span>)</span>
+    {
+        InitializeComponent();
+        BindingContext = vm;
+    }
+}
+</div></code></pre>
+<h4 id="detailpage%E3%81%AE%E8%BF%BD%E5%8A%A0">DetailPageの追加</h4>
+<p>プロジェクトを右クリックし「追加＞新しい項目」をクリックします。</p>
+<img src="./images/toolkit-15.png" width="300" />
+<p>「.NET MAUI ＞ .NET MAUI ContentPage(XAML)」を選択し、名前を<code>DetailPage.cs</code>と入力します。xamlファイルとcsファイルがセットで追加されます。</p>
+<img src="./images/toolkit-16.png" width="300" />
+<p>xamlファイルとcsファイルをそれぞれ以下のように書き換えます。</p>
+<ul>
+<li>DetailPage.xaml</li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-meta">&lt;?xml version="1.0" encoding="utf-8" ?&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">ContentPage</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">"http://schemas.microsoft.com/dotnet/2021/maui"</span>
+             <span class="hljs-attr">xmlns:x</span>=<span class="hljs-string">"http://schemas.microsoft.com/winfx/2009/xaml"</span>
+             <span class="hljs-attr">xmlns:viewModel</span>=<span class="hljs-string">"clr-namespace:MobileApp2.ViewModels"</span>
+             <span class="hljs-attr">x:Class</span>=<span class="hljs-string">"MobileApp2.Views.DetailsPage"</span>
+             <span class="hljs-attr">x:DataType</span>=<span class="hljs-string">"viewModel:DetailsViewModel"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">ScrollView</span> <span class="hljs-attr">VerticalOptions</span>=<span class="hljs-string">"Center"</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;/<span class="hljs-name">ScrollView</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">ContentPage</span>&gt;</span>
+</div></code></pre>
+<ul>
+<li>DetailPage.xaml.cs</li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-keyword">using</span> MobileApp2.ViewModels;
+
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">MobileApp2.Views</span>;
+
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">partial</span> <span class="hljs-keyword">class</span> <span class="hljs-title">DetailsPage</span> : <span class="hljs-title">ContentPage</span>
+{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">DetailsPage</span>(<span class="hljs-params">DetailsViewModel vm</span>)</span>
+    {
+        InitializeComponent();
+        BindingContext = vm;
+    }
+}
+</div></code></pre>
+<h4 id="mauiprogramcs%E3%81%AB%E3%81%A6%E4%BD%9C%E6%88%90%E3%81%97%E3%81%9F%E3%82%AF%E3%83%A9%E3%82%B9%E3%81%9F%E3%81%A1%E3%82%92%E7%99%BB%E9%8C%B2">MauiProgram.csにて、作成したクラスたちを登録</h4>
+<p>下記のように記述しDIコンテナーに登録します。<br>
+これでViewのコンストラクタの引数としてViewModelを受け取ることができ、紐付けがなされます。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">using</span> MobileApp2.ViewModels;
+<span class="hljs-keyword">using</span> MobileApp2.Views;
+
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">MobileApp2</span>;
+
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title">MauiProgram</span>
+{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> MauiApp <span class="hljs-title">CreateMauiApp</span>(<span class="hljs-params"></span>)</span>
+    {
+        <span class="hljs-keyword">var</span> builder = MauiApp.CreateBuilder();
+        builder
+            .UseMauiApp&lt;App&gt;()
+            .ConfigureFonts(fonts =&gt;
+            {
+                fonts.AddFont(<span class="hljs-string">"OpenSans-Regular.ttf"</span>, <span class="hljs-string">"OpenSansRegular"</span>);
+                fonts.AddFont(<span class="hljs-string">"OpenSans-Semibold.ttf"</span>, <span class="hljs-string">"OpenSansSemibold"</span>);
+            });
+
+        builder.Services.AddSingleton&lt;MainPage&gt;();
+        builder.Services.AddSingleton&lt;MainPageViewModel&gt;();
+        builder.Services.AddTransient&lt;DetailsPage&gt;();
+        builder.Services.AddTransient&lt;DetailsViewModel&gt;();
+
+        <span class="hljs-keyword">return</span> builder.Build();
+    }
+}
+</div></code></pre>
+<h3 id="%E8%B5%B7%E5%8B%95%E7%A2%BA%E8%AA%8D">起動確認</h3>
+<p>ここまで記述できていれば、「Start_MVVM」プロジェクトと同じ状態になっているはずです。念のため問題なくアプリを起動できるか再度確認します。デバッグ実行のボタンを押し、下記の画面が表示されることを確認してください。</p>
+<img src="./images/toolkit-18.png" width="200">
+<p>.NET MAUI アプリへのCommunityToolkit.Mvvmの適用と動作確認は以上です。</p>
+<h2 id="communitytoolkitmvvm%E3%82%92%E4%BD%BF%E7%94%A8%E3%81%97%E3%81%9Fmvvm%E3%81%A8%E3%83%87%E3%83%BC%E3%82%BF%E3%83%90%E3%82%A4%E3%83%B3%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E8%A7%A3%E8%AA%AC">CommunityToolkit.Mvvmを使用したMVVMとデータバインディングの解説</h2>
+<h3 id="mvvm%E3%81%A8%E3%81%AF">MVVMとは</h3>
+<p>アプリのプログラムを、Model - View - ViewModelという3つの役割に分けて実装するアーキテクチャです。<a href="https://learn.microsoft.com/ja-jp/dotnet/architecture/maui/mvvm">こちらのドキュメント</a>に詳しく解説されています。</p>
+<h3 id="%E3%83%87%E3%83%BC%E3%82%BF%E3%83%90%E3%82%A4%E3%83%B3%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0">データバインディング</h3>
+<p>Model - View - ViewModelにプログラムを分けた場合、それぞれのプログラム間でデータのやりとりをする必要があります。例えばModelクラスでHTTPでデータを取得した場合、それをView側に反映させるには変更通知と呼ばれる仕組みを実装する必要があります。<br>
+CommunityToolkit.Mvvmを使用したViewとViewModelのデータバインディングを、MainPage.xamlとViewModelBase.csを例に見ていきましょう。</p>
+<pre class="hljs"><code><div><span class="hljs-meta">&lt;?xml version="1.0" encoding="utf-8" ?&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">ContentPage</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">"http://schemas.microsoft.com/dotnet/2021/maui"</span>
+             <span class="hljs-attr">xmlns:x</span>=<span class="hljs-string">"http://schemas.microsoft.com/winfx/2009/xaml"</span>
+             <span class="hljs-attr">x:Class</span>=<span class="hljs-string">"MobileApp.Views.MainPage"</span>
+             <span class="hljs-attr">xmlns:viewModel</span>=<span class="hljs-string">"clr-namespace:MobileApp.ViewModels"</span>
+             <span class="hljs-attr">xmlns:model</span>=<span class="hljs-string">"clr-namespace:MobileApp.Models"</span>
+             <span class="hljs-attr">x:DataType</span>=<span class="hljs-string">"viewModel:MainPageViewModel"</span>
+             <span class="hljs-attr">Title</span>=<span class="hljs-string">"{Binding Title}"</span>&gt;</span>
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-keyword">using</span> CommunityToolkit.Mvvm.ComponentModel;
+
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">MobileApp.ViewModels</span>;
+
+[<span class="hljs-meta">ObservableObject</span>]
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">partial</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ViewModelBase</span>
+{
+    [<span class="hljs-meta">ObservableProperty</span>]
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">string</span> _title;
+}
+</div></code></pre>
+<p>一見どこがどうバインディングされているかわからないかと思いますが、xaml側の<code>Title=&quot;{Binding Title}&quot;</code>とViewModel側の<code>private string _title;</code>はバインディングされています。<br>
+<code>[ObservableProperty]</code>というAttributeはCommunityToolkit.Mvvmをインストールすることで使用できるもので、裏側で面倒なバインディングのための記述を生成してくれます。<br>
+本来CommunityToolkit.Mvvmを導入しない場合は下記のようにViewModelを記述しないといけません。プロパティやViewModelのクラスを追加するたびに都度このような記述をしなければなりませんが、CommunityToolkit.Mvvmの機能によりAttributeを付けるだけ裏側でコード生成してくれるので、プログラマーの負担が減ります。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">using</span> System.ComponentModel;
+<span class="hljs-keyword">using</span> System.Runtime.CompilerServices;
+
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">MobileApp2.ViewModels</span>;
+
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ViewModelBase</span> : <span class="hljs-title">INotifyPropertyChanged</span>
+{
+    <span class="hljs-keyword">string</span> _title;
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">string</span> Title
+    {
+        <span class="hljs-keyword">get</span> =&gt; _title;
+        <span class="hljs-keyword">set</span>
+        {
+            <span class="hljs-keyword">if</span> (_title == <span class="hljs-keyword">value</span>)
+                <span class="hljs-keyword">return</span>;
+
+            _title = <span class="hljs-keyword">value</span>;
+            OnPropertyChanged();
+        }
+    }
+
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">event</span> PropertyChangedEventHandler PropertyChanged;
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnPropertyChanged</span>(<span class="hljs-params">[CallerMemberName]<span class="hljs-keyword">string</span> name = <span class="hljs-literal">null</span></span>)</span>
+    {
+        PropertyChanged?.Invoke(<span class="hljs-keyword">this</span>, <span class="hljs-keyword">new</span> PropertyChangedEventArgs(name));
+    }
+}
+
+</div></code></pre>
+<h3 id="%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%83%90%E3%82%A4%E3%83%B3%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0">コマンドバインディング</h3>
+<p>先ほどの章では、Viewのコードビハインドにイベントハンドラーを実装しました。<br>
+しかし、MVVMパターンではViewModelのメソッドをViewからコールする必要があります。そこで、C#ではICommandというinterfaceが用意されています。ただのイベントハンドラーに比べ、抽象化されUIのイベントの実行をしやいものになっています。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title">ICommand</span>
+{
+    <span class="hljs-keyword">event</span> EventHandler? CanExecuteChanged;
+    <span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">CanExecute</span>(<span class="hljs-params"><span class="hljs-keyword">object</span>? parameter</span>)</span>;
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Execute</span>(<span class="hljs-params"><span class="hljs-keyword">object</span>? parameter</span>)</span>;
+}
+</div></code></pre>
+<p>CommunityToolkit.Mvvmでは、<code>RelayCommand</code>というICommandの実装が提供されており、このハンズオンでもこれを使用します。Attributeを付加するだけでメソッドをコマンドとしてViewから実行することができます。</p>
+<pre class="hljs"><code><div>[<span class="hljs-meta">RelayCommand(CanExecute = nameof(CanClick))</span>]
+<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">async</span> Task <span class="hljs-title">GetWeathersAsync</span>(<span class="hljs-params"></span>)</span>
+{
+    ・
+    ・
+    ・
+}
+</div></code></pre>
+<p>Viewから使うときは下記のようにします。メソッド名(Async省略) + &quot;Command&quot;で指定します。これもCommunityToolkitが裏側でGetWeathersCommandというコマンドを生成しGetWeathersAsyncメソッドを紐付けてくれています。</p>
+<pre class="hljs"><code><div>&lt;Button Command=<span class="hljs-string">"{Binding GetWeathersCommand}"</span> Text=<span class="hljs-string">"Get Weathers"</span> /&gt;
+</div></code></pre>
+<p>CommunityToolkit.Mvvmを使用したMVVMとデータバインディングの解説は以上になります。</p>
+<h2 id="communitytoolkitmvvm%E3%82%92%E4%BD%BF%E7%94%A8%E3%81%97%E3%81%9F%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E4%BD%9C%E6%88%90">CommunityToolkit.Mvvmを使用したアプリの作成</h2>
+<p>ここからは「Start_MVVM」プロジェクトを使って、.NET MAUI + CommunityToolkit.Mvvmの構成で実装をします。
+まずはVisual Studioで「Start_MVVM」プロジェクトを開き、Web API への接続を追加しましょう。</p>
+<p>今回は Visual Studio の ASP.NET Core Web アプリケーションの API で作成されるテンプレートアプリをそのまま <a href="https://weatherforecastsampleforprism.azurewebsites.net/weatherforecast">https://weatherforecastsampleforprism.azurewebsites.net/weatherforecast</a> にアップロードしてあります。（時間があれば同じものをローカルホストで動かします。）URL にアクセスして表示される JSON を見てみましょう。</p>
+<pre class="hljs"><code><div>[
+  {
+    <span class="hljs-attr">"date"</span>: <span class="hljs-string">"2022-09-20T09:20:29.1731766+00:00"</span>,
+    <span class="hljs-attr">"temperature"</span>: <span class="hljs-number">-16</span>,
+    <span class="hljs-attr">"summary"</span>: <span class="hljs-string">"Snowy"</span>
+  },
+  {
+    <span class="hljs-attr">"date"</span>: <span class="hljs-string">"2022-09-21T09:20:29.1733714+00:00"</span>,
+    <span class="hljs-attr">"temperature"</span>: <span class="hljs-number">-3</span>,
+    <span class="hljs-attr">"summary"</span>: <span class="hljs-string">"Snowy"</span>
+  },
+  {
+    <span class="hljs-attr">"date"</span>: <span class="hljs-string">"2022-09-22T09:20:29.1733728+00:00"</span>,
+    <span class="hljs-attr">"temperature"</span>: <span class="hljs-number">35</span>,
+    <span class="hljs-attr">"summary"</span>: <span class="hljs-string">"Cloudy"</span>
+  },
+  {
+    <span class="hljs-attr">"date"</span>: <span class="hljs-string">"2022-09-23T09:20:29.1733826+00:00"</span>,
+    <span class="hljs-attr">"temperature"</span>: <span class="hljs-number">29</span>,
+    <span class="hljs-attr">"summary"</span>: <span class="hljs-string">"PartlyCloudy"</span>
+  },
+  {
+    <span class="hljs-attr">"date"</span>: <span class="hljs-string">"2022-09-24T09:20:29.1733829+00:00"</span>,
+    <span class="hljs-attr">"temperature"</span>: <span class="hljs-number">-17</span>,
+    <span class="hljs-attr">"summary"</span>: <span class="hljs-string">"Snowy"</span>
+  }
+]
+</div></code></pre>
+<h3 id="%E3%83%A2%E3%83%87%E3%83%ABweather%E3%82%AF%E3%83%A9%E3%82%B9%E3%81%AE%E4%BD%9C%E6%88%90">モデル（Weather）クラスの作成</h3>
+<p>まずはこの JSON をオブジェクトとして操作するための Model クラスを作成します。</p>
+<p>事前に Web API から表示されている JSON をクリップボードにコピーしておきます。</p>
+<p>MobileApp プロジェクトを右クリックして「新しいフォルダー」から <code>Models</code> フォルダを作成します。</p>
+<p><code>Models</code> フォルダを右クリックして「追加＞クラス」から <code>Weather</code> クラスを作成します。</p>
+<p>作成された Weather クラス全体を選択して、「編集＞形式を選択して貼り付け＞JSONをクラスとして貼り付ける」をクリックします。</p>
+<img src="./images/mvvm-03.png" width="600" />
+<p>以下のコードが得られます。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Rootobject</span>
+{
+    <span class="hljs-keyword">public</span> Class1[] Property1 { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+}
+
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Class1</span>
+{
+    <span class="hljs-keyword">public</span> DateTime date { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> temperature { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">string</span> summary { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+}
+</div></code></pre>
+<p>Rootobject クラスは削除、Class1 を Weather に修正、各プロパティの先頭を大文字にします。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Weather</span>
+{
+    <span class="hljs-keyword">public</span> DateTime Date { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> Temperature { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">string</span> Summary { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+}
+</div></code></pre>
+<h3 id="%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%BC%E3%83%95%E3%82%A7%E3%82%A4%E3%82%B9%E3%81%A8%E5%AE%9F%E8%A3%85%E3%82%AF%E3%83%A9%E3%82%B9%E3%81%AE%E4%BD%9C%E6%88%90">サービスのインターフェイスと実装クラスの作成</h3>
+<p>次に Web API からデータを取得するインターフェイスと実装を作成します。</p>
+<p><code>Services</code> フォルダを作成します。</p>
+<p><code>Services</code> フォルダを右クリックして「追加＞新しい項目」から「インターフェイス」を選択し、<code>IWeaterService</code> を作成します。</p>
+<img src="./images/mvvm-04.png" width="600" />
+<p><code>IWeatherService.cs</code> で、インターフェイスを <code>public</code> 属性にして、<code>Weather</code> のコレクションを戻り値に持つ <code>GetWeathersAsync</code> メソッドを追加します。次のようになります。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title">IWeatherService</span>
+{
+    Task&lt;List&lt;Weather&gt;&gt; GetWeathersAsync();
+}
+</div></code></pre>
+<p>インターフェイスはこれで完了です。続いてインターフェイスの実装を作成します。</p>
+<p><code>Services</code> フォルダを右クリックして「追加＞クラス」から <code>WeatherService</code> クラスを作成します。</p>
+<p><code>WeatherService.cs</code> クラスに <code>IWeatherService</code> の継承を追加し、内容を次のように書き換えます。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">class</span> <span class="hljs-title">WeatherService</span> : <span class="hljs-title">IWeatherService</span>
+{
+    <span class="hljs-keyword">static</span> <span class="hljs-keyword">readonly</span> HttpClient _httpClient = <span class="hljs-keyword">new</span>();
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">async</span> Task&lt;List&lt;Weather&gt;&gt; GetWeathersAsync()
+    {
+        <span class="hljs-keyword">try</span>
+        {
+            <span class="hljs-comment">// サイトからデータを取得</span>
+            <span class="hljs-keyword">var</span> response = <span class="hljs-keyword">await</span> _httpClient.GetAsync(<span class="hljs-string">"https://weatherforecastsampleforprism.azurewebsites.net/weatherforecast"</span>);
+
+            <span class="hljs-comment">// レスポンスコード（200 など）を確認</span>
+            response.EnsureSuccessStatusCode();
+
+            <span class="hljs-comment">// レスポンスからコンテンツ（JSON）を取得</span>
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> response.Content.ReadFromJsonAsync&lt;List&lt;Weather&gt;&gt;();
+        }
+        <span class="hljs-keyword">catch</span> (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+        }
+    }
+}
+</div></code></pre>
+<p>不足する using は IntelliSnese で追加できます。</p>
+<p><code>Debug</code> の上で Ctrl + .(ピリオド)を押す（または「考えられる修正内容を表示する」をクリックする）とクイックアクションという機能で候補が表示されます。</p>
+<p>ここでは <code>using System.Diagnostics;</code> を選択します。</p>
+<ul>
+<li>マウスを当てたとき</li>
+</ul>
+<img src="./images/mvvm-02.png" width="500">
+<ul>
+<li>Ctrl + .(ピリオド)を押した時</li>
+</ul>
+<img src="./images/mvvm-01.png" width="500">
+<p><code>WeatherService</code> はこれで完了です。</p>
+<h3 id="%E3%82%B3%E3%83%B3%E3%83%86%E3%83%8A%E3%83%BC%E3%81%B8%E3%81%AE%E7%99%BB%E9%8C%B2">コンテナーへの登録</h3>
+<p>インターフェイスと実装クラスを追加したので、<code>MauiAppBuilder</code> に教える必要があります。</p>
+<p><code>MauiProgram.cs</code> を開き、<code>CreateMauiApp</code> メソッド内に次のコードを追加します。</p>
+<pre class="hljs"><code><div>builder.Services.AddSingleton&lt;IWeatherService, WeatherService&gt;();
+</div></code></pre>
+<p>コンテナーへの登録はこれで完了です。</p>
+<h3 id="viewmodel-%E3%81%AE%E4%BD%9C%E6%88%90">ViewModel の作成</h3>
+<p>続いて ViewModel の実装を行います。<code>MainPageViewModel.cs</code> を開きます。</p>
+<p>コンストラクターの引数に <code>IWeatherService</code> を追加し、フィールドを追加します。次のようになります。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> IWeatherService _weatherService;
+
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">MainPageViewModel</span>(<span class="hljs-params">IWeatherService weatherService</span>)</span>
+{
+    Title = <span class="hljs-string">"Main Page"</span>;
+    _weatherService = weatherService;
+}
+</div></code></pre>
+<p>次に View から参照するプロパティをコンストラクターの上に 2つ追加します。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">public</span> ObservableCollection&lt;Weather&gt; Weathers { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">private</span> <span class="hljs-keyword">set</span>; } = <span class="hljs-keyword">new</span>();
+
+[<span class="hljs-meta">ObservableProperty</span>]
+[<span class="hljs-meta">NotifyCanExecuteChangedFor(nameof(GetWeathersCommand))</span>]
+<span class="hljs-keyword">private</span> <span class="hljs-keyword">bool</span> _canClick = <span class="hljs-literal">true</span>;
+</div></code></pre>
+<p>メソッド：</p>
+<pre class="hljs"><code><div>[<span class="hljs-meta">RelayCommand(CanExecute = nameof(CanClick))</span>]
+<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">async</span> Task <span class="hljs-title">GetWeathersAsync</span>(<span class="hljs-params"></span>)</span>
+{
+    CanClick = <span class="hljs-literal">false</span>;
+
+    Weathers.Clear();
+    <span class="hljs-comment">// サービスの GetWeathersAsync メソッドをコールし、一時的に保存</span>
+    <span class="hljs-keyword">var</span> tempWeathers = <span class="hljs-keyword">await</span> _weatherService.GetWeathersAsync();
+    <span class="hljs-comment">// View から参照できるようにプロパティに流し込み</span>
+    <span class="hljs-keyword">if</span> (tempWeathers != <span class="hljs-literal">null</span>)
+    {
+        <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> weather <span class="hljs-keyword">in</span> tempWeathers)
+        {
+            Weathers.Add(weather);
+        }
+    }
+
+    CanClick = <span class="hljs-literal">true</span>;
+}
+</div></code></pre>
+<p><strong>TBD</strong> RelayCommand の説明に書き換え<br>
+<code>DelegateCommand</code> の引数は <code>Action executeMethod, Func&lt;bool&gt; canExecuteMethod</code> のため、<code>GetWeathersAsync</code> 呼び出し、<code>CanClick</code> 参照を行っています。最後の <code>ObservesCanExecute(Expression&lt;Func&lt;bool&gt;&gt; canExecuteExpression)</code> は Prism 独自の機能で、影響を受けるプロパティを指定できるため、プロパティをプレーンに保つことができます。</p>
+<p><code>ObservesCanExecure</code> を使用しない場合は、プロパティのセッターにどのコマンドに実行可能の変更を伝えるか？を記述します。次のようになります。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">private</span> <span class="hljs-keyword">bool</span> canClick;
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">bool</span> CanClick
+{
+    <span class="hljs-keyword">get</span> { <span class="hljs-keyword">return</span> canClick; }
+    <span class="hljs-keyword">set</span>
+    {
+        SetProperty(<span class="hljs-keyword">ref</span> canClick, <span class="hljs-keyword">value</span>);
+        GetWeathersCommand.RaiseCanExecuteChanged();
+    }
+}
+</div></code></pre>
+<p><strong>TBD</strong> ここまで</p>
+<p>ViewModel は全体では次のようになっています。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">public</span> <span class="hljs-keyword">partial</span> <span class="hljs-keyword">class</span> <span class="hljs-title">MainPageViewModel</span> : <span class="hljs-title">ViewModelBase</span>
+{
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> IWeatherService _weatherService;
+
+    <span class="hljs-keyword">public</span> ObservableCollection&lt;Weather&gt; Weathers { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">private</span> <span class="hljs-keyword">set</span>; } = <span class="hljs-keyword">new</span>();
+
+    [<span class="hljs-meta">ObservableProperty</span>]
+    [<span class="hljs-meta">NotifyCanExecuteChangedFor(nameof(GetWeathersCommand))</span>]
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">bool</span> _canClick = <span class="hljs-literal">true</span>;
+
+    [<span class="hljs-meta">ObservableProperty</span>]
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">bool</span> _isRefreshing;
+
+    [<span class="hljs-meta">ObservableProperty</span>]
+    <span class="hljs-keyword">private</span> Weather _selectedWeather;
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">MainPageViewModel</span>(<span class="hljs-params">IWeatherService weatherService</span>)</span>
+    {
+        Title = <span class="hljs-string">"Main Page"</span>;
+        _weatherService = weatherService;
+    }
+
+    [<span class="hljs-meta">RelayCommand(CanExecute = nameof(CanClick))</span>]
+    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">async</span> Task <span class="hljs-title">GetWeathersAsync</span>(<span class="hljs-params"></span>)</span>
+    {
+        CanClick = <span class="hljs-literal">false</span>;
+
+        Weathers.Clear();
+        <span class="hljs-comment">// サービスの GetWeathersAsync メソッドをコールし、一時的に保存</span>
+        <span class="hljs-keyword">var</span> tempWeathers = <span class="hljs-keyword">await</span> _weatherService.GetWeathersAsync();
+        <span class="hljs-comment">// View から参照できるようにプロパティに流し込み</span>
+        <span class="hljs-keyword">if</span> (tempWeathers != <span class="hljs-literal">null</span>)
+        {
+            <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> weather <span class="hljs-keyword">in</span> tempWeathers)
+            {
+                Weathers.Add(weather);
+            }
+        }
+
+        CanClick = <span class="hljs-literal">true</span>;
+        IsRefreshing = <span class="hljs-literal">false</span>;
+    }
+
+    [<span class="hljs-meta">RelayCommand</span>]
+    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">void</span> <span class="hljs-title">SelectWeather</span>(<span class="hljs-params"></span>)</span>
+    {
+        <span class="hljs-keyword">if</span> (SelectedWeather == <span class="hljs-literal">null</span>)
+            <span class="hljs-keyword">return</span>;
+
+        <span class="hljs-comment">// 詳細画面に遷移するパターン</span>
+        <span class="hljs-keyword">await</span> Shell.Current.GoToAsync(<span class="hljs-keyword">nameof</span>(DetailsPage), <span class="hljs-literal">true</span>, <span class="hljs-keyword">new</span> Dictionary&lt;<span class="hljs-keyword">string</span>, <span class="hljs-keyword">object</span>&gt;
+        {
+            {<span class="hljs-string">"Weather"</span>, SelectedWeather}
+        });
+    }
+}
+</div></code></pre>
+<p>これで ViewModel は完成です。</p>
+<h3 id="view-%E3%81%AE%E4%BD%9C%E6%88%90">View の作成</h3>
+<p>最後に View を作成していきましょう。<code>MainPage.xaml</code> を開きます。</p>
+<p><code>StackLayout</code> の <code>HorizontalOptions</code>／<code>VerticalOptions</code> を削除し、<code>Padding=10</code> に置き換えます。<code>Label</code> の下に <code>Switch</code> と ViewModel で用意したコマンドを呼び出す <code>Button</code> を追加します。次のようになります。</p>
+<pre class="hljs"><code><div><span class="hljs-tag">&lt;<span class="hljs-name">StackLayout</span> <span class="hljs-attr">Padding</span>=<span class="hljs-string">"10"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Label</span> <span class="hljs-attr">Text</span>=<span class="hljs-string">"Welcome to Xamarin Forms and Prism!"</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">StackLayout</span> <span class="hljs-attr">Orientation</span>=<span class="hljs-string">"Horizontal"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Label</span> <span class="hljs-attr">Text</span>=<span class="hljs-string">"Can Click"</span> <span class="hljs-attr">VerticalTextAlignment</span>=<span class="hljs-string">"Center"</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Switch</span> <span class="hljs-attr">IsToggled</span>=<span class="hljs-string">"{Binding CanClick}"</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">StackLayout</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">Command</span>=<span class="hljs-string">"{Binding GetWeathersCommand}"</span> <span class="hljs-attr">Text</span>=<span class="hljs-string">"Get Weathers"</span> /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">StackLayout</span>&gt;</span>
+</div></code></pre>
+<p>エディタ下部の「&lt;&lt;」ボタンをクリックすると XAML プレビューアーが表示されますが、「XAML ホットリロード」の機能を使用した方が早いかもしれません。</p>
+<p><strong>TBD</strong> XAML ホットリロードの説明を追加する</p>
+<p>この時点でデバッグ実行してみましょう。View を表示した際とボタンをクリックした際にスイッチとボタンが連動して動作するのが分かるはずです。</p>
+<img src="./images/mvvm-05.png" width="300">
+<p><code>MainPageViewModel</code> や <code>WeatherService</code> にブレークポイントを貼ると処理の内容を確認できます。</p>
+<blockquote>
+<p>TIPS:<br>
+以下のエラーが出た場合は <code>MauiProgram</code> クラスで <code>WeatherService</code> クラスをインジェクションしていないことが原因です。 コンテナーへの登録 を参照</p>
+<p><code>System.InvalidOperationException: 'Unable to resolve service for type 'MobileApp.Services.IWeatherService' while attempting to activate 'MobileApp.ViewModels.MainPageViewModel'.' </code></p>
+</blockquote>
+<h4 id="collectionview-%E3%81%AE%E5%88%A9%E7%94%A8">CollectionView の利用</h4>
+<p>ブレークポイントで Web API からデータが取得できていることが確認できたら、取得したデータを表示する <code>CollectionView</code> を追加します。</p>
+<p><code>StackLayout</code> 内の一番下（<code>Button</code> の下）に次を追加します。</p>
+<pre class="hljs"><code><div><span class="hljs-tag">&lt;<span class="hljs-name">CollectionView</span> <span class="hljs-attr">ItemsLayout</span>=<span class="hljs-string">"VerticalList"</span> <span class="hljs-attr">ItemsSource</span>=<span class="hljs-string">"{Binding Weathers}"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">CollectionView.ItemTemplate</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">DataTemplate</span> <span class="hljs-attr">x:DataType</span>=<span class="hljs-string">"model:Weather"</span>&gt;</span>
+                    
+        <span class="hljs-tag">&lt;/<span class="hljs-name">DataTemplate</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">CollectionView.ItemTemplate</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">CollectionView</span>&gt;</span>
+</div></code></pre>
+<p><code>CollectionView</code> の詳細は <a href="https://docs.microsoft.com/ja-jp/xamarin/xamarin-forms/user-interface/collectionview/">Xamarin.Forms CollectionView - Xamarin | Microsoft Docs</a> を参照してください。</p>
+<p>特に <code>ItemsLayout</code> プロパティで以下の表示方法を利用できます。今回は縦方向のリストを使用します。</p>
+<ul>
+<li>縦方向のリスト</li>
+<li>横方向のリスト</li>
+<li>縦方向のグリッド</li>
+<li>横方向のグリッド</li>
+</ul>
+<p>Layout の詳細は <a href="https://learn.microsoft.com/ja-jp/dotnet/maui/user-interface/controls/collectionview/">.NET MAUI CollectionView 概要</a> を参照してください。</p>
+<p><code>CollectionView</code> の <code>DataTemplate</code> 内には自由にレイアウトを作成できます。次の XAML を追加してください。</p>
+<pre class="hljs"><code><div><span class="hljs-tag">&lt;<span class="hljs-name">StackLayout</span> <span class="hljs-attr">Padding</span>=<span class="hljs-string">"10"</span> <span class="hljs-attr">Orientation</span>=<span class="hljs-string">"Horizontal"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Label</span> <span class="hljs-attr">Grid.Row</span>=<span class="hljs-string">"0"</span>
+           <span class="hljs-attr">HorizontalTextAlignment</span>=<span class="hljs-string">"Center"</span>
+           <span class="hljs-attr">Text</span>=<span class="hljs-string">"{Binding Date, StringFormat='{}{0:yyyy/MM/dd}'}"</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Label</span> <span class="hljs-attr">Grid.Row</span>=<span class="hljs-string">"1"</span>
+           <span class="hljs-attr">HorizontalTextAlignment</span>=<span class="hljs-string">"Center"</span>
+           <span class="hljs-attr">Text</span>=<span class="hljs-string">"{Binding Temperature, StringFormat='{0}℃'}"</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Label</span> <span class="hljs-attr">Grid.Row</span>=<span class="hljs-string">"2"</span>
+           <span class="hljs-attr">HorizontalTextAlignment</span>=<span class="hljs-string">"Center"</span>
+           <span class="hljs-attr">Text</span>=<span class="hljs-string">"{Binding Summary}"</span> /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">StackLayout</span>&gt;</span>
+</div></code></pre>
+<p>次のような画面が表示されれば OK です。</p>
+<img src="./images/mvvm-06.png" width="300">
+<p>日付や温度の表示方法を変更するために、<code>StringFormat</code> を使用しています。<code>StringFormat</code> の詳細は <a href="https://learn.microsoft.com/ja-jp/dotnet/maui/fundamentals/data-binding/string-formatting">.NET MAUI 文字列の書式設定</a> を参照してください。</p>
+<h4 id="%E5%A4%A9%E6%B0%97%E3%82%A2%E3%82%A4%E3%82%B3%E3%83%B3%E3%81%AE%E8%A1%A8%E7%A4%BA">天気アイコンの表示</h4>
+<p>文字だけだと寂しいので、天気をアイコンで表示してみましょう。画像を表示するには <code>Image</code> クラスを利用します。</p>
+<p><code>Image</code> クラスの重要なプロパティに <a href="https://docs.microsoft.com/ja-jp/dotnet/api/xamarin.forms.image.source?view=xamarin-forms#Xamarin_Forms_Image_Source">Image | データの表示 | Views | コントロール | ユーザーインターフェイス | .NET MAUI</a> があります。</p>
+<p>ImageSource インスタンスは、イメージソースの種類ごとに静的メソッドを使用して取得できます。</p>
+<ul>
+<li>FromFile - 各プラットフォームで解決できるファイル名またはファイルパスが必要です。</li>
+<li>FromUri - Uri オブジェクトが必要です。例: <code>new Uri(&quot;http://server.com/image.jpg&quot;)</code></li>
+<li>FromResource - ビルドアクション EmbeddedResource を使用して、アプリケーションまたは .NET Standard ライブラリプロジェクトに埋め込まれているイメージファイルのリソース識別子が必要です。</li>
+<li>FromStream - イメージデータを提供するストリームが必要です。</li>
+</ul>
+<p>今回はファイル名をバインドするため、プロジェクトに画像を配置します。</p>
+<h5 id="%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%AB%E7%94%BB%E5%83%8F%E3%82%92%E8%BF%BD%E5%8A%A0">プロジェクトに画像を追加</h5>
+<p>「Resources/Images」にダウンロードした「Resources」フォルダ内の 5つの png ファイルをドラッグ＆ドロップして追加します。</p>
+<img src="./images/mvvm-07.png" width="300">
+<p>画像を選択し、プロパティウィンドウでビルドアクションが「MauiImage」になっていることを確認してください。</p>
+<img src="./images/mvvm-08.png" width="300">
+<h5 id="xaml-%E3%81%AE%E3%82%A2%E3%83%83%E3%83%97%E3%83%87%E3%83%BC%E3%83%88">XAML のアップデート</h5>
+<p>Xamarin.Forms プロジェクトに移動し、<code>MainPage.xaml</code> を開きます。</p>
+<p><code>CollectionView</code> の <code>ItemsLayout</code> を <code>VerticalGrid, 2</code> に書き換え、<code>Grid</code> に置き換えます。全体では次のようになります。</p>
+<pre class="hljs"><code><div><span class="hljs-tag">&lt;<span class="hljs-name">CollectionView</span> <span class="hljs-attr">ItemsLayout</span>=<span class="hljs-string">"VerticalGrid, 2"</span> <span class="hljs-attr">ItemsSource</span>=<span class="hljs-string">"{Binding Weathers}"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">CollectionView.ItemTemplate</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">DataTemplate</span> <span class="hljs-attr">x:DataType</span>=<span class="hljs-string">"model:Weather"</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">Grid</span> <span class="hljs-attr">Padding</span>=<span class="hljs-string">"10"</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">Grid.RowDefinitions</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">RowDefinition</span> <span class="hljs-attr">Height</span>=<span class="hljs-string">"Auto"</span> /&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">RowDefinition</span> <span class="hljs-attr">Height</span>=<span class="hljs-string">"Auto"</span> /&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">RowDefinition</span> <span class="hljs-attr">Height</span>=<span class="hljs-string">"Auto"</span> /&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-name">Grid.RowDefinitions</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">Image</span> <span class="hljs-attr">Grid.Row</span>=<span class="hljs-string">"0"</span>
+                        <span class="hljs-attr">Grid.RowSpan</span>=<span class="hljs-string">"3"</span>
+                        <span class="hljs-attr">WidthRequest</span>=<span class="hljs-string">"120"</span>
+                        <span class="hljs-attr">HeightRequest</span>=<span class="hljs-string">"120"</span>
+                        <span class="hljs-attr">Source</span>=<span class="hljs-string">"{Binding Summary, StringFormat='{0}.svg'}"</span> /&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">Label</span> <span class="hljs-attr">Grid.Row</span>=<span class="hljs-string">"0"</span>
+                        <span class="hljs-attr">HorizontalTextAlignment</span>=<span class="hljs-string">"Center"</span>
+                        <span class="hljs-attr">Text</span>=<span class="hljs-string">"{Binding Date, StringFormat='{}{0:yyyy/MM/dd}'}"</span> /&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">Label</span> <span class="hljs-attr">Grid.Row</span>=<span class="hljs-string">"1"</span>
+                        <span class="hljs-attr">HorizontalTextAlignment</span>=<span class="hljs-string">"Center"</span>
+                        <span class="hljs-attr">Text</span>=<span class="hljs-string">"{Binding Temperature, StringFormat='{0}℃'}"</span> /&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">Label</span> <span class="hljs-attr">Grid.Row</span>=<span class="hljs-string">"2"</span>
+                        <span class="hljs-attr">HorizontalTextAlignment</span>=<span class="hljs-string">"Center"</span>
+                        <span class="hljs-attr">Text</span>=<span class="hljs-string">"{Binding Summary}"</span> /&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">Grid</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">DataTemplate</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">CollectionView.ItemTemplate</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">CollectionView</span>&gt;</span>
+</div></code></pre>
+<p>再度ビルドしてデバッグ実行してみましょう。次のようになれば OK です。</p>
+<img src="./images/mvvm-09.png" width="300">
+<h4 id="pulltorefresh-%E3%81%AE%E8%BF%BD%E5%8A%A0">PullToRefresh の追加</h4>
+<p>スクロール可能なコントロールを下に引っ張って内容をリロードする Pull-to-Refresh の機能を追加します。Xamarin.Forms では <code>RefreshView</code> が用意されています。<code>RefreshView</code> の詳細は <a href="https://learn.microsoft.com/ja-jp/dotnet/maui/user-interface/controls/refreshview">RefreshView | コマンドの開始 | Views | コントロール | ユーザーインターフェイス | .NET MAUI</a> を参照してください。</p>
+<p><code>MainPage.xaml</code> を開き <code>CollectionView</code> の上に <code>RefreshView</code> を追加します。次のようになります。</p>
+<pre class="hljs"><code><div><span class="hljs-tag">&lt;<span class="hljs-name">RefreshView</span> <span class="hljs-attr">Command</span>=<span class="hljs-string">"{Binding GetWeathersCommand}"</span> <span class="hljs-attr">IsRefreshing</span>=<span class="hljs-string">"{Binding IsRefreshing}"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">CollectionView</span> <span class="hljs-attr">ItemsLayout</span>=<span class="hljs-string">"VerticalGrid, 2"</span> <span class="hljs-attr">ItemsSource</span>=<span class="hljs-string">"{Binding Weathers}"</span>&gt;</span>
+        ...略...
+    <span class="hljs-tag">&lt;/<span class="hljs-name">CollectionView</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">RefreshView</span>&gt;</span>
+</div></code></pre>
+<p>リフレッシュする時のコマンドはボタンと同じ <code>GetWeathersCommand</code> を割り当てます。リフレッシュ中にグルグルの表示やリフレッシュ終了を検知するために <code>IsRefreshing</code> プロパティに bool 値を割り当てます。</p>
+<p><code>MainPageViewModel.cs</code> を開き <code>CanClick</code> プロパティの下に <code>IsRefreshing</code> プロパティを追加します。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">public</span> <span class="hljs-keyword">bool</span> IsRefreshing =&gt; !CanClick;
+</div></code></pre>
+<p>再度デバッグ実行し、引っ張って更新できれば OK です。</p>
+<img src="./images/mvvm-10.png" width="300">
+<h4 id="%E3%83%80%E3%82%A4%E3%82%A2%E3%83%AD%E3%82%B0%E3%81%AE%E8%A1%A8%E7%A4%BA">ダイアログの表示</h4>
+<p>.NET MAUI では標準で <code>DisplayAlert</code>、<code>DisplayActionSheet</code>、<code>DisplayPromptAsync</code> の 3つの <code>Page</code> クラスのメソッドが用意されています。</p>
+<p>ここでは <code>DisplayAlert</code> を使用して、CollectionView のタップした項目をダイアログに表示してみましょう。</p>
+<p><code>MainPageViewModel.cs</code> を開き、バインド対象のプロパティとコマンドを追加します。</p>
+<p><code>_isRefreshing</code> プロパティの下に次を追加します。</p>
+<pre class="hljs"><code><div>[<span class="hljs-meta">ObservableProperty</span>]
+<span class="hljs-keyword">private</span> Weather _selectedWeather;
+</div></code></pre>
+<p><code>SelectWeather</code> メソッドを追加します。</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">void</span> <span class="hljs-title">SelectWeather</span>(<span class="hljs-params"></span>)</span>
+{
+    <span class="hljs-keyword">if</span> (SelectedWeather == <span class="hljs-literal">null</span>)
+        <span class="hljs-keyword">return</span>;
+
+    <span class="hljs-comment">// ダイアログを表示するパターン</span>
+    <span class="hljs-keyword">await</span> Shell.Current.DisplayAlert(<span class="hljs-string">"Dialog Title"</span>, <span class="hljs-string">$"<span class="hljs-subst">{SelectedWeather.Date:yyyy/MM/dd}</span> は <span class="hljs-subst">{SelectedWeather.Temperature}</span>℃ で <span class="hljs-subst">{SelectedWeather.Summary}</span> です。"</span>, <span class="hljs-string">"OK"</span>);
+}
+</div></code></pre>
+<p>最後に <code>MainPage.xaml</code> を開き、<code>CollectionView</code> に次の 3つの属性を追加し、1つをタップした際にコマンドを発行し、選択項目をバインドするようにします。</p>
+<pre class="hljs"><code><div>SelectedItem="{Binding SelectedWeather}"
+SelectionChangedCommand="{Binding SelectWeatherCommand}"
+SelectionMode="Single"
+</div></code></pre>
+<p>再度ビルドしてデバッグ実行してみましょう。次のようになれば OK です。</p>
+<img src="./images/mvvm-11.png" width="300">
+<p>次はタップした後に画面遷移をしてみます。別途 XAML でビューを定義します。</p>
+<pre class="hljs"><code><div><span class="hljs-tag">&lt;<span class="hljs-name">ContentPage</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">"http://schemas.microsoft.com/dotnet/2021/maui"</span>
+             <span class="hljs-attr">xmlns:x</span>=<span class="hljs-string">"http://schemas.microsoft.com/winfx/2009/xaml"</span>
+             <span class="hljs-attr">xmlns:viewModel</span>=<span class="hljs-string">"clr-namespace:MobileApp.ViewModels"</span>
+             <span class="hljs-attr">x:Class</span>=<span class="hljs-string">"MobileApp.Views.DetailsPage"</span>
+             <span class="hljs-attr">x:DataType</span>=<span class="hljs-string">"viewModel:DetailsViewModel"</span>
+             <span class="hljs-attr">Title</span>=<span class="hljs-string">"{Binding Weather.Date, StringFormat='{}{0:yyyy/MM/dd}'}"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">ScrollView</span> <span class="hljs-attr">VerticalOptions</span>=<span class="hljs-string">"Center"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">VerticalStackLayout</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">Image</span> <span class="hljs-attr">Grid.Row</span>=<span class="hljs-string">"1"</span>
+                <span class="hljs-attr">WidthRequest</span>=<span class="hljs-string">"120"</span>
+                <span class="hljs-attr">HeightRequest</span>=<span class="hljs-string">"120"</span>
+                <span class="hljs-attr">Source</span>=<span class="hljs-string">"{Binding Weather.Summary, StringFormat='{0}.svg'}"</span> /&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">Label</span> <span class="hljs-attr">Grid.Row</span>=<span class="hljs-string">"2"</span>
+                <span class="hljs-attr">HorizontalTextAlignment</span>=<span class="hljs-string">"Center"</span>
+                <span class="hljs-attr">Text</span>=<span class="hljs-string">"{Binding Weather.Temperature, StringFormat='{0}℃'}"</span> /&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">Label</span> <span class="hljs-attr">Grid.Row</span>=<span class="hljs-string">"3"</span>
+                <span class="hljs-attr">HorizontalTextAlignment</span>=<span class="hljs-string">"Center"</span>
+                <span class="hljs-attr">Text</span>=<span class="hljs-string">"{Binding Weather.Summary}"</span> /&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">VerticalStackLayout</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">ScrollView</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">ContentPage</span>&gt;</span>
+</div></code></pre>
+<p><code>SelectWater</code> メソッドにある <code>DisplayAlert</code> をコメントアウトして下記を追加します。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">await</span> Shell.Current.GoToAsync(<span class="hljs-keyword">nameof</span>(DetailsPage), <span class="hljs-literal">true</span>, <span class="hljs-keyword">new</span> Dictionary&lt;<span class="hljs-keyword">string</span>, <span class="hljs-keyword">object</span>&gt;
+{
+    {<span class="hljs-string">"Weather"</span>, SelectedWeather}
+});
+</div></code></pre>
+<p><code>DetailsViewModel</code> クラスを下記のように書き換えます。</p>
+<pre class="hljs"><code><div>[<span class="hljs-meta">QueryProperty(nameof(Weather), <span class="hljs-meta-string">"Weather"</span>)</span>]
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">partial</span> <span class="hljs-keyword">class</span> <span class="hljs-title">DetailsViewModel</span> : <span class="hljs-title">ViewModelBase</span>
+{
+    [<span class="hljs-meta">ObservableProperty</span>]
+    Weather _weather;
+}
+</div></code></pre>
+<p>次のように表示されます。</p>
+<img src="./images/mvvm-12.png" width="300">
+<h2 id="mock-%E3%81%AE%E8%BF%BD%E5%8A%A0">Mock の追加</h2>
+<p>まだ Web API が完成していない場合やテストをする場合を考慮して、ダミーデータを利用するようにしてみましょう。</p>
+<p><code>Services</code> フォルダを右クリックして「追加＞クラス」をクリックし、<code>MockWeatherService.cs</code> と名前を付けてクラスを作成します。</p>
+<p><code>IWeatherService</code> の継承を追加し、実装を追加します。次のようになります。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">class</span> <span class="hljs-title">MockWeatherService</span> : <span class="hljs-title">IWeatherService</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">async</span> Task&lt;ObservableCollection&lt;Weather&gt;&gt; GetWeathersAsync()
+    {
+        <span class="hljs-keyword">var</span> weathers = <span class="hljs-keyword">new</span> ObservableCollection&lt;Weather&gt;
+        {
+            <span class="hljs-keyword">new</span> Weather
+            {
+                Date = <span class="hljs-keyword">new</span> DateTime(<span class="hljs-number">2021</span>,<span class="hljs-number">11</span>,<span class="hljs-number">1</span>),
+                Summary = <span class="hljs-string">"Rainy"</span>,
+                Temperature = <span class="hljs-number">20</span>
+            },
+            <span class="hljs-keyword">new</span> Weather
+            {
+                Date = <span class="hljs-keyword">new</span> DateTime(<span class="hljs-number">2021</span>,<span class="hljs-number">11</span>,<span class="hljs-number">2</span>),
+                Summary = <span class="hljs-string">"Cloudy"</span>,
+                Temperature = <span class="hljs-number">25</span>
+            },
+            <span class="hljs-keyword">new</span> Weather
+            {
+                Date = <span class="hljs-keyword">new</span> DateTime(<span class="hljs-number">2021</span>,<span class="hljs-number">11</span>,<span class="hljs-number">3</span>),
+                Summary = <span class="hljs-string">"Sunny"</span>,
+                Temperature = <span class="hljs-number">30</span>
+            }
+        };
+
+        <span class="hljs-keyword">return</span> weathers;
+    }
+}
+</div></code></pre>
+<p>次に <code>App.xaml.cs</code> を開き、<code>WeatherService</code> を登録していた部分を次のように修正します。</p>
+<pre class="hljs"><code><div><span class="hljs-meta">#<span class="hljs-meta-keyword">if</span> DEBUG</span>
+    builder.Services.AddSingleton&lt;IWeatherService, MockWeatherService&gt;();
+<span class="hljs-meta">#<span class="hljs-meta-keyword">else</span></span>
+    builder.Services.AddSingleton&lt;IWeatherService, WeatherService&gt;();
+<span class="hljs-meta">#<span class="hljs-meta-keyword">endif</span></span>
+</div></code></pre>
+<p>これでデバッグ用に MockWeatherService を利用できるようになりました。</p>
+<p>デバッグ実行して、次のように 2021/11/1 から 2021/11/3 までのデータが表示されていれば OK です。</p>
+<img src="./images/mvvm-13.png" width="300">
+<h2 id="%E3%81%8A%E7%96%B2%E3%82%8C%E6%A7%98%E3%81%A7%E3%81%97%E3%81%9F">お疲れ様でした</h2>
+<p>これで本日のトレーニングはすべて終了です。.NET MAUI にはもっと色々な機能があります。是非使いこなして皆様のモバイルアプリ開発が楽しくなることを願っています！</p>
+<h2 id="appendix">Appendix</h2>
+<h3 id="web-api-%E3%82%92%E4%BD%9C%E6%88%90">Web API を作成</h3>
+<p>ローカルデバッグ用に .NET Core の Web API を作成します。</p>
+<ul>
+<li>API を選択します。</li>
+<li><code>HTTPS 用の構成</code> のチェックを外します。</li>
+<li>本ドキュメントでは「WebApi」と名前を付けました。</li>
+</ul>
+<img src="./images/webapi-01.png" width="600" />
+<blockquote>
+<p>通常 Web にデプロイする Web アプリケーションは HTTPS で動作するように設定すべきですが、Android Emulator から localhost の Web サービスにアクセスするには <code>10.0.2.2</code> を指定する必要があり、かつ、<a href="https://docs.microsoft.com/ja-jp/xamarin/cross-platform/deploy-test/connect-to-local-web-services">iOS シミュレーターと Android エミュレーターからローカル Web サービスに接続する - Xamarin | Microsoft Docs</a> に記載されているようにいくつかの処理を行う必要があるため、簡素化するために HTTP で通信できるようにしています。</p>
+<p>接続する Web アプリケーションが HTTPS に対応していない場合は、<a href="https://blog.ytabuchi.dev/entry/2019/08/26/180000">Android P で targetSdkVersion を 28 に指定した場合に HTTP 通信が失敗する - Xamarin 日本語情報</a> を参考に <code>network-security-config</code> を指定するか <code>usesCleartextTraffic</code> を指定してください。</p>
+</blockquote>
+<p>作成後、スタートアッププロジェクトが「WebApi」になっていること、デバッグプロパティが「WebApi」になっていることを確認し、デバッグボタン「▶」をクリックします。</p>
+<img src="./images/webapi-02.png" width="450" />
+<p>指定している Web ブラウザーでデバッグできることを確認してください。</p>
+<img src="./images/webapi-03.png" width="600" />
+<p>また、<code>WebApi/Controllers/WeatherForecastController.cs</code> の以下のコードでアクセスするたびにランダムに天気の予測を返していることが分かります。</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">public</span> IEnumerable&lt;WeatherForecast&gt; <span class="hljs-title">Get</span>(<span class="hljs-params"></span>)</span>
+{
+    <span class="hljs-keyword">var</span> rng = <span class="hljs-keyword">new</span> Random();
+    <span class="hljs-keyword">return</span> Enumerable.Range(<span class="hljs-number">1</span>, <span class="hljs-number">5</span>).Select(index =&gt; <span class="hljs-keyword">new</span> WeatherForecast
+    {
+        Date = DateTime.Now.AddDays(index),
+        TemperatureC = rng.Next(<span class="hljs-number">-20</span>, <span class="hljs-number">55</span>),
+        Summary = Summaries[rng.Next(Summaries.Length)]
+    })
+    .ToArray();
+}
+</div></code></pre>
+<p>デバッグ実行中のブラウザをリロードすると毎回気温の値が変化するのが分かります。</p>
+<h3 id="net-maui-%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6">.NET MAUI について</h3>
+<p>1つのプロジェクトからマルチプラットフォームにビルドできます。</p>
+<p>MVVM だけでなく、Swift UI や Flutter のような Model-View-Update (MVU) パターンをサポートします。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">readonly</span> State&lt;<span class="hljs-keyword">int</span>&gt; count = <span class="hljs-number">0</span>;
+
+[<span class="hljs-meta">Body</span>]
+<span class="hljs-function">View <span class="hljs-title">body</span>(<span class="hljs-params"></span>)</span> =&gt; <span class="hljs-keyword">new</span> StackLayout
+{
+    <span class="hljs-keyword">new</span> Label(<span class="hljs-string">"Welcome to .NET MAUI!"</span>),
+    <span class="hljs-keyword">new</span> Button(
+        () =&gt; <span class="hljs-string">$"You clicked <span class="hljs-subst">{count}</span> times."</span>,
+        () =&gt; count.Value ++)
+    )
+};
+</div></code></pre>
+<p>同じ内容を MVVM の XAML とコードで記述する場合は以下のようになります。</p>
+<pre class="hljs"><code><div><span class="hljs-tag">&lt;<span class="hljs-name">StackLayout</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Label</span> <span class="hljs-attr">Text</span>=<span class="hljs-string">"Welcome to .NET MAUI!"</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">Text</span>=<span class="hljs-string">"{Binding Text}"</span> 
+            <span class="hljs-attr">Command</span>=<span class="hljs-string">"{Binding ClickCommand}"</span> /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">StackLayout</span>&gt;</span>
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-keyword">public</span> Command ClickCommand { <span class="hljs-keyword">get</span>; }
+
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">string</span> Text { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; } = <span class="hljs-string">"Click me"</span>;
+
+<span class="hljs-keyword">int</span> count = <span class="hljs-number">0</span>;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">ExecuteClickCommand</span> (<span class="hljs-params"></span>)</span>
+{
+    count++;
+    Text = <span class="hljs-string">$"You clicked <span class="hljs-subst">{count}</span> times."</span>;
+}
+</div></code></pre>
+<p>詳細は以下を参照してください。</p>
+<ul>
+<li><a href="https://www.nuits.jp/entry/what-is-maui">.NET MAUIって何？ - nuits.jp blog</a></li>
+<li><a href="https://devblogs.microsoft.com/dotnet/introducing-net-multi-platform-app-ui/">Introducing .NET Multi-platform App UI | .NET Blog</a></li>
+</ul>
+
+</body>
+</html>
