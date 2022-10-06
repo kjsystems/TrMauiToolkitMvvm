@@ -23,17 +23,29 @@
     - [コードビハインドにコードを追加](#コードビハインドにコードを追加)
     - [デバッグ実行](#デバッグ実行-1)
     - [Web API への接続に書き換え](#web-api-への接続に書き換え)
-  - [Xamarin.Forms Prism アプリの作成と動作確認](#xamarinforms-prism-アプリの作成と動作確認)
+  - [.NET MAUI アプリへのComunityToolkit.Mvvmの適用と動作確認](#net-maui-アプリへのcomunitytoolkitmvvmの適用と動作確認)
     - [最初の起動](#最初の起動-1)
       - [Android エミュレーターの作成](#android-エミュレーターの作成-1)
       - [デバッグ実行](#デバッグ実行-2)
-    - [デフォルトプロジェクトの構成](#デフォルトプロジェクトの構成-1)
-      - [`App.xaml.cs`](#appxamlcs-1)
-      - [`ViewModelBase.cs`](#viewmodelbasecs)
-      - [`MainPageViewModel.cs`](#mainpageviewmodelcs)
-      - [`MainPage.xaml`](#mainpagexaml-1)
-      - [`MainPage.xaml.cs`](#mainpagexamlcs-1)
-  - [Web API への接続](#web-api-への接続-1)
+    - [CommunityToolkit.Mvvm NuGetパッケージのインストール](#communitytoolkitmvvm-nugetパッケージのインストール)
+    - [フォルダ構成の変更](#フォルダ構成の変更)
+      - [デフォルトプロジェクトの構成](#デフォルトプロジェクトの構成-1)
+      - [MVVMの各フォルダを作成](#mvvmの各フォルダを作成)
+      - [MainPageファイルの移動](#mainpageファイルの移動)
+    - [ViewModelの追加](#viewmodelの追加)
+      - [ViewModelBase.csの追加](#viewmodelbasecsの追加)
+      - [MainPageViewModelの追加](#mainpageviewmodelの追加)
+      - [DetailsViewModelの追加](#detailsviewmodelの追加)
+    - [MainPageの修正とDetailPageの追加](#mainpageの修正とdetailpageの追加)
+      - [MainPageの修正](#mainpageの修正)
+      - [DetailPageの追加](#detailpageの追加)
+      - [MauiProgram.csにて、作成したクラスたちを登録](#mauiprogramcsにて作成したクラスたちを登録)
+    - [起動確認](#起動確認)
+  - [CommunityToolkit.Mvvmを使用したMVVMとデータバインディングの解説](#communitytoolkitmvvmを使用したmvvmとデータバインディングの解説)
+    - [MVVMとは](#mvvmとは)
+    - [データバインディング](#データバインディング)
+    - [コマンドバインディング](#コマンドバインディング)
+  - [CommunityToolkit.Mvvmを使用したアプリの作成](#communitytoolkitmvvmを使用したアプリの作成)
     - [モデル（Weather）クラスの作成](#モデルweatherクラスの作成)
     - [サービスのインターフェイスと実装クラスの作成](#サービスのインターフェイスと実装クラスの作成)
     - [コンテナーへの登録](#コンテナーへの登録)
@@ -591,23 +603,29 @@ Web からのデータ取得やファイル IO など時間の掛かる処理を
 
 
 
-## Xamarin.Forms Prism アプリの作成と動作確認
+## .NET MAUI アプリへのComunityToolkit.Mvvmの適用と動作確認
+
+今回のハンズオンでは手順簡略化のため、あらかじめCommunityToolkit.MvvmのNuGetパッケージを適用しフォルダ構成やソースファイルをある程度準備した「Start_MVVM」プロジェクトを用意してありますので、そこからスタートして実装していきます。
+この章ではさらに知見を深めたい方向けに、最初のMAUIプロジェクト作成からCommunityToolkit.Mvvmを適用し、「Start_MVVM」プロジェクトの状態にするまでを記します。
 
 Visual Studio を起動して「新しいプロジェクト」をクリックします。
 
-<img src="./images/prism-02.png" width="600" />
+<img src="./images/maui-01.png" width="600" />
 
-ダイアログで検索窓に `prism` と入力し、「Prism Blank App (Xamarin.Forms)」をクリックして Prism での Xamarin.Forms プロジェクトを作成します。
+ダイアログで検索窓に `maui` と入力し、「.NET MAUI アプリ」をクリックして .NET MAUI プロジェクトを作成します。
 
-<img src="./images/prism-03.png" width="600" />
+<img src="./images/maui-02.png" width="600" />
 
-任意の名前でプロジェクトを作成します。（本ドキュメントでは `MobileApp` という名前空間ですので合わせても良いでしょう。）
+任意の名前とフォルダにプロジェクトを構成します。（本ドキュメントでは`MobileApp2`という名前で作成します。）
 
-<img src="./images/prism-04.png" width="600" />
+<img src="./images/toolkit-17.png" width="600" />
 
-今回は UWP はチェックせずに、Container は「Unity」を使用します。
+フレームワークは「.NET 6.0（長期的なサポート）」を選択してプロジェクトを作成します。
 
-<img src="./images/prism-05.png" width="450" />
+<img src="./images/maui-04.png" width="600" />
+
+
+
 
 
 ### 最初の起動
@@ -625,26 +643,29 @@ Visual Studio を起動して「新しいプロジェクト」をクリックし
 
 ドロップダウンから「Android デバイスマネージャー」をクリックします。
 
-表示されるダイアログで「新規」ボタンをクリックします。
+表示されるダイアログで「新規」ボタンをクリックします。表示されない場合は、「ツール＞Android＞Android デバイスマネージャー」をクリックします。
 
-表示されるダイアログで適切な設定で Android エミュレーターを作成してください。
+「新規」ボタンをクリックします。
 
-- 基本デバイス：デバイスのテンプレートでデバイスに応じた画面サイズやメモリ量が決まります。`Pixel 3` や `Pixel 3a` などを選んでおくと良いでしょう。
+<img src="./images/maui-06.png" width="600" />
+
+
+- 基本デバイス：デバイスのテンプレートでデバイスに応じた画面サイズやメモリ量が決まります。`Pixel 5` などを選んでおくと良いでしょう。
 - プロセッサ：`x86` か `x86_64` を選択します。（Intel CPU の仮想化に Hyper-V または Intel HAXM が必要です。）
 - OS：エミュレーターの OS を指定します。
 - Google APIs／Google Play Store：Google Play Store にチェックを付けると Emulator でマップやストアが利用できます。
 
-<img src="./images/prism-12.png" width="600" />
+<img src="./images/maui-07.png" width="600" />
 
 各種選択した状態で「新しいデバイスイメージがダウンロードされます。」という注意書きがある場合は、Android SDK のダウンロードサイトから条件に見合った OS イメージを自動でダウンロードしてエミュレーターを作成します。
 
-OS イメージは Visual Studio のメニューから「ツール＞Android＞Android SDK マネージャー」をクリックし、
+<!-- OS イメージは Visual Studio のメニューから「ツール＞Android＞Android SDK マネージャー」をクリックして、
 
-<img src="./images/prism-13.png" width="600" />
+<img src="./images/maui-09.png" width="600" />
 
 表示されるダイアログで `Google APIs Intel x86 Atom System Image` や `Google Play Intel x86 Atom System Image` が該当します。少し大きいサイズなので、PC の空き容量が少ない場合は選択してインストールしてください。
 
-<img src="./images/prism-14.png" width="600" />
+<img src="./images/maui-08.png" width="600" /> -->
 
 
 #### デバッグ実行
@@ -653,91 +674,365 @@ OS イメージは Visual Studio のメニューから「ツール＞Android＞A
 
 Android エミュレーターが起動して、次のような画面が表示されれば OK です。
 
-<img src="./images/prism-15.png" width="300" />
+<img src="./images/maui-10.png" width="300" />
 
 
-### デフォルトプロジェクトの構成
 
-<pre>
-+ MobileApp
-  + ViewModels
-    - MainPageViewModel.cs
-    - ViewModelBase.cs
-  + Views
-    - MainPage.xaml / MainPage.xaml.cs
-  - App.xaml / App.xaml.cs
-</pre>
 
-#### `App.xaml.cs`
+### CommunityToolkit.Mvvm NuGetパッケージのインストール
 
-エントリーポイントです。`RegisterTypes` メソッド内で、アプリでのナビゲーションに使用する View と ViewModel の紐づけ登録などを行います。
+プロジェクトが作成されたら、ソリューションエクスプローラーのプロジェクト名を右クリックし、「NuGetパッケージの管理」をクリックします。
 
-```csharp
-protected override void RegisterTypes(IContainerRegistry containerRegistry)
+<img src="./images/toolkit-01.png" width="250">
+
+<img src="./images/toolkit-02.png" width="250">
+
+NuGetパッケージマネージャーの「参照」をクリックし、検索ボックスに「CommunityToolkit.Mvvm」と入力します。検索結果のCommunityToolkit.Mvvmをクリック選択し「インストール」をクリックします。  
+※似た名前のパッケージがあるので間違えないように注意してください。  
+ライセンス規約同意などのダイアログが表示されるので、同意して進めていきます。
+
+<img src="./images/toolkit-03.png" width="600">
+
+<img src="./images/toolkit-04.png" width="300">
+
+<img src="./images/toolkit-05.png" width="300">
+
+
+
+
+### フォルダ構成の変更
+#### デフォルトプロジェクトの構成
+[デフォルトプロジェクトの構成](#デフォルトプロジェクトの構成)の章でも説明した通り、デフォルトでは下記の状態となっています。(各ファイルの内容も同様のため説明は省略します)
+
+<img src="./images/toolkit-08.png" width="250">
+
+
+#### MVVMの各フォルダを作成
+MobileApp プロジェクトを右クリックして「追加＞新しいフォルダー」から `Models`、`ViewModels`、`Views`の3つのフォルダを作成します。
+
+<img src="./images/toolkit-06.png" width="250">
+
+この時点ではまだ3つのフォルダは空の状態です。
+
+<img src="./images/toolkit-07.png" width="250">
+
+
+#### MainPageファイルの移動
+MainPage.xamlファイルを、`Views`フォルダにドラッグします。
+実際には`Views`フォルダに移動しなくても、後述のViewとViewModelの紐づけを正しく行えば動作はしますが、プロジェクトの構成を見通しやすくするために移動してまとめておいたほうが良いでしょう。
+
+<img src="./images/toolkit-09.png" width="250">
+
+<img src="./images/toolkit-10.png" width="250">
+
+<img src="./images/toolkit-11.png" width="250">
+
+namespaceも適宜フォルダ構成に合わせて変更しておくとよりわかりやすいでしょう。変更点は下記3か所です。(赤線部分を追加)
+
+- MainPage.xaml
+
+<img src="./images/toolkit-12.png" width="500">
+
+- MainPage.xaml.cs
+
+<img src="./images/toolkit-13.png" width="500">
+
+- AppShell.xaml
+
+<img src="./images/toolkit-14.png" width="500">
+
+
+
+
+### ViewModelの追加
+#### ViewModelBase.csの追加
+先ほど作成した`ViewModels`フォルダを右クリックし、「追加＞クラス」から`ViewModelBase.cs`クラスを追加し、中身を下記のように記述します。
+
+
+```cs
+using CommunityToolkit.Mvvm.ComponentModel;
+
+namespace MobileApp2.ViewModels;
+
+[ObservableObject]
+public partial class ViewModelBase
 {
-    containerRegistry.RegisterSingleton<IAppInfo, AppInfoImplementation>();
-
-    containerRegistry.RegisterForNavigation<NavigationPage>();
-    containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
+    [ObservableProperty]
+    private string _title;
 }
 ```
 
-ここで View の `MainPage` クラスと ViewModel の `MainPageViewModel` クラスが紐づいていることが分かります。
+#### MainPageViewModelの追加
+同じように`ViewModels`フォルダを右クリックし、「追加＞クラス」から`MainPageViewModel.cs`クラスを追加し、中身を下記のように記述します。
 
-#### `ViewModelBase.cs`
+```cs
+namespace MobileApp2.ViewModels;
 
-ViewModel の基礎クラスです。ViewModel の基本となるイベントの通知機構（バインディング）を提供する `System.ComponentModel.INotifyPropertyChanged` を継承した `BindableBase` を継承しています。
-
-`PropertyChangedEventHandler` イベントや `OnPropertyChanged` メソッドに加え、`Title` プロパティ、ナビゲーションを担う `INavigationService` や View が遷移してきたときに発火する `OnNavigatedTo` メソッドなどが用意されています。
-
-#### `MainPageViewModel.cs`
-
-`MainPage` と紐づいている ViewModel です。`ViewModelBase` で用意している `INavigationService` をそのまま利用するためコンストラクターは以下のような記述になっています。
-
-```csharp
-public MainPageViewModel(INavigationService navigationService)
-    : base(navigationService)
+public partial class MainPageViewModel : ViewModelBase
+{
+    public MainPageViewModel()
+    {
+        Title = "Main Page";
+    }
+}
 ```
 
-#### `MainPage.xaml`
+#### DetailsViewModelの追加
+同じように`ViewModels`フォルダを右クリックし、「追加＞クラス」から`DetailsViewModel.cs`クラスを追加し、中身を下記のように記述します。
 
-View のクラスです。XML ベースのクラスを表す言語 XAML で記述します。要素（Element）がインスタンスを表し、属性（Attribute）がプロパティなどを表します。
+```cs
+namespace MobileApp2.ViewModels;
+
+public partial class DetailsViewModel : ViewModelBase
+{
+}
+```
+
+
+
+### MainPageの修正とDetailPageの追加
+#### MainPageの修正
+MainPage.xamlとMainPage.xaml.csファイルを下記のように修正します。
 
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MobileApp.Views.MainPage"
+             x:Class="MobileApp2.Views.MainPage"
+             xmlns:viewModel="clr-namespace:MobileApp2.ViewModels"
+             xmlns:model="clr-namespace:MobileApp2.Models"
+             x:DataType="viewModel:MainPageViewModel"
              Title="{Binding Title}">
 
-    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-        <Label Text="Welcome to Xamarin Forms and Prism!" />
+    <StackLayout Padding="10">
+        <Label Text="Welcome to .NET MAUI and CommunityToolkit MVVM!" />
     </StackLayout>
 
 </ContentPage>
 ```
 
-#### `MainPage.xaml.cs`
+```cs
+using MobileApp2.ViewModels;
 
-MainPage のパーシャルクラスです。`InitializeComponent` メソッドだけが記述されているケースが多いです。
+namespace MobileApp2.Views;
 
-
-起動確認は以上です。
-
-
-
-
-
-
-
-
-
-
+public partial class MainPage : ContentPage
+{
+    public MainPage(MainPageViewModel vm)
+    {
+        InitializeComponent();
+        BindingContext = vm;
+    }
+}
+```
 
 
-## Web API への接続
+#### DetailPageの追加
+プロジェクトを右クリックし「追加＞新しい項目」をクリックします。
 
-起動を確認したら、Web API への接続を追加しましょう。
+<img src="./images/toolkit-15.png" width="300" />
+
+「.NET MAUI ＞ .NET MAUI ContentPage(XAML)」を選択し、名前を`DetailPage.cs`と入力します。xamlファイルとcsファイルがセットで追加されます。
+
+<img src="./images/toolkit-16.png" width="300" />
+
+xamlファイルとcsファイルをそれぞれ以下のように書き換えます。
+
+- DetailPage.xaml
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModel="clr-namespace:MobileApp2.ViewModels"
+             x:Class="MobileApp2.Views.DetailsPage"
+             x:DataType="viewModel:DetailsViewModel">
+    <ScrollView VerticalOptions="Center">
+
+    </ScrollView>
+</ContentPage>
+```
+
+- DetailPage.xaml.cs
+```cs
+using MobileApp2.ViewModels;
+
+namespace MobileApp2.Views;
+
+public partial class DetailsPage : ContentPage
+{
+    public DetailsPage(DetailsViewModel vm)
+    {
+        InitializeComponent();
+        BindingContext = vm;
+    }
+}
+```
+
+
+#### MauiProgram.csにて、作成したクラスたちを登録
+
+下記のように記述しDIコンテナーに登録します。  
+これでViewのコンストラクタの引数としてViewModelを受け取ることができ、紐付けがなされます。
+
+
+```cs
+using MobileApp2.ViewModels;
+using MobileApp2.Views;
+
+namespace MobileApp2;
+
+public static class MauiProgram
+{
+    public static MauiApp CreateMauiApp()
+    {
+        var builder = MauiApp.CreateBuilder();
+        builder
+            .UseMauiApp<App>()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+            });
+
+        builder.Services.AddSingleton<MainPage>();
+        builder.Services.AddSingleton<MainPageViewModel>();
+        builder.Services.AddTransient<DetailsPage>();
+        builder.Services.AddTransient<DetailsViewModel>();
+
+        return builder.Build();
+    }
+}
+```
+
+
+
+### 起動確認
+ここまで記述できていれば、「Start_MVVM」プロジェクトと同じ状態になっているはずです。念のため問題なくアプリを起動できるか再度確認します。デバッグ実行のボタンを押し、下記の画面が表示されることを確認してください。
+
+<img src="./images/toolkit-18.png" width="200">
+
+.NET MAUI アプリへのCommunityToolkit.Mvvmの適用と動作確認は以上です。
+
+
+
+
+## CommunityToolkit.Mvvmを使用したMVVMとデータバインディングの解説
+### MVVMとは
+アプリのプログラムを、Model - View - ViewModelという3つの役割に分けて実装するアーキテクチャです。[こちらのドキュメント](https://learn.microsoft.com/ja-jp/dotnet/architecture/maui/mvvm)に詳しく解説されています。
+
+### データバインディング
+Model - View - ViewModelにプログラムを分けた場合、それぞれのプログラム間でデータのやりとりをする必要があります。例えばModelクラスでHTTPでデータを取得した場合、それをView側に反映させるには変更通知と呼ばれる仕組みを実装する必要があります。  
+CommunityToolkit.Mvvmを使用したViewとViewModelのデータバインディングを、MainPage.xamlとViewModelBase.csを例に見ていきましょう。
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MobileApp.Views.MainPage"
+             xmlns:viewModel="clr-namespace:MobileApp.ViewModels"
+             xmlns:model="clr-namespace:MobileApp.Models"
+             x:DataType="viewModel:MainPageViewModel"
+             Title="{Binding Title}">
+```
+
+```cs
+using CommunityToolkit.Mvvm.ComponentModel;
+
+namespace MobileApp.ViewModels;
+
+[ObservableObject]
+public partial class ViewModelBase
+{
+    [ObservableProperty]
+    private string _title;
+}
+```
+
+一見どこがどうバインディングされているかわからないかと思いますが、xaml側の`Title="{Binding Title}"`とViewModel側の`private string _title;`はバインディングされています。  
+`[ObservableProperty]`というAttributeはCommunityToolkit.Mvvmをインストールすることで使用できるもので、裏側で面倒なバインディングのための記述を生成してくれます。  
+本来CommunityToolkit.Mvvmを導入しない場合は下記のようにViewModelを記述しないといけません。プロパティやViewModelのクラスを追加するたびに都度このような記述をしなければなりませんが、CommunityToolkit.Mvvmの機能によりAttributeを付けるだけ裏側でコード生成してくれるので、プログラマーの負担が減ります。
+
+```cs
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+namespace MobileApp2.ViewModels;
+
+public class ViewModelBase : INotifyPropertyChanged
+{
+    string _title;
+
+    public string Title
+    {
+        get => _title;
+        set
+        {
+            if (_title == value)
+                return;
+
+            _title = value;
+            OnPropertyChanged();
+        }
+    }
+
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    public void OnPropertyChanged([CallerMemberName]string name = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
+}
+
+```
+
+
+
+### コマンドバインディング
+先ほどの章では、Viewのコードビハインドにイベントハンドラーを実装しました。  
+しかし、MVVMパターンではViewModelのメソッドをViewからコールする必要があります。そこで、C#ではICommandというinterfaceが用意されています。ただのイベントハンドラーに比べ、抽象化されUIのイベントの実行をしやいものになっています。
+```cs
+public interface ICommand
+{
+    event EventHandler? CanExecuteChanged;
+    bool CanExecute(object? parameter);
+    void Execute(object? parameter);
+}
+```
+
+CommunityToolkit.Mvvmでは、`RelayCommand`というICommandの実装が提供されており、このハンズオンでもこれを使用します。Attributeを付加するだけでメソッドをコマンドとしてViewから実行することができます。
+```cs
+[RelayCommand(CanExecute = nameof(CanClick))]
+private async Task GetWeathersAsync()
+{
+    ・
+    ・
+    ・
+}
+```
+
+Viewから使うときは下記のようにします。メソッド名(Async省略) + "Command"で指定します。これもCommunityToolkitが裏側でGetWeathersCommandというコマンドを生成しGetWeathersAsyncメソッドを紐付けてくれています。
+```cs
+<Button Command="{Binding GetWeathersCommand}" Text="Get Weathers" />
+```
+
+
+CommunityToolkit.Mvvmを使用したMVVMとデータバインディングの解説は以上になります。
+
+
+
+
+
+
+
+
+
+
+
+## CommunityToolkit.Mvvmを使用したアプリの作成
+
+ここからは「Start_MVVM」プロジェクトを使って、.NET MAUI + CommunityToolkit.Mvvmの構成で実装をします。
+まずはVisual Studioで「Start_MVVM」プロジェクトを開き、Web API への接続を追加しましょう。
 
 今回は Visual Studio の ASP.NET Core Web アプリケーションの API で作成されるテンプレートアプリをそのまま [https://weatherforecastsampleforprism.azurewebsites.net/weatherforecast](https://weatherforecastsampleforprism.azurewebsites.net/weatherforecast) にアップロードしてあります。（時間があれば同じものをローカルホストで動かします。）URL にアクセスして表示される JSON を見てみましょう。
 
