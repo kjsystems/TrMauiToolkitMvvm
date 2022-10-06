@@ -1329,9 +1329,15 @@ public partial class MainPageViewModel : ViewModelBase
 `
 
 
+
 #### CollectionView の利用
 
-ブレークポイントで Web API からデータが取得できていることが確認できたら、取得したデータを表示する `CollectionView` を追加します。
+`MainPageViewModel` クラスの `GetWeathersAsync` メソッドにブレークポイントで Web API からデータが取得できていることを確認します。
+
+<img src="./images/mvvm-05b.png" width="600">
+
+
+確認ができたら、取得したデータを表示する `CollectionView` を追加します。
 
 `StackLayout` 内の一番下（`Button` の下）に次を追加します。
 
@@ -1345,7 +1351,7 @@ public partial class MainPageViewModel : ViewModelBase
 </CollectionView>
 ```
 
-`CollectionView` の詳細は [Xamarin\.Forms CollectionView \- Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/xamarin/xamarin-forms/user-interface/collectionview/) を参照してください。
+`CollectionView` の詳細は [CollectionView 概要](https://learn.microsoft.com/ja-jp/dotnet/maui/user-interface/controls/collectionview/) を参照してください。
 
 特に `ItemsLayout` プロパティで以下の表示方法を利用できます。今回は縦方向のリストを使用します。
 
@@ -1375,6 +1381,13 @@ Layout の詳細は [.NET MAUI CollectionView 概要](https://learn.microsoft.co
 次のような画面が表示されれば OK です。
 
 <img src="./images/mvvm-06.png" width="300">
+
+> Tips
+> デバッグした際に、次のようなエラーが表示された場合は Weather クラスのプロパティを大文字にしていないことが原因です。  
+> XFC0045	Binding: Property "Date" not found on "MobileApp.Models.Weather".	MobileApp	...\Start_MVVM\MobileApp\Views\MainPage.xaml 24	
+
+
+
 
 日付や温度の表示方法を変更するために、`StringFormat` を使用しています。`StringFormat` の詳細は [.NET MAUI 文字列の書式設定](https://learn.microsoft.com/ja-jp/dotnet/maui/fundamentals/data-binding/string-formatting) を参照してください。
 
@@ -1408,7 +1421,7 @@ ImageSource インスタンスは、イメージソースの種類ごとに静�
 
 ##### XAML のアップデート
 
-Xamarin.Forms プロジェクトに移動し、`MainPage.xaml` を開きます。
+`MainPage.xaml` を開きます。
 
 `CollectionView` の `ItemsLayout` を `VerticalGrid, 2` に書き換え、`Grid` に置き換えます。全体では次のようになります。
 
@@ -1455,6 +1468,8 @@ Xamarin.Forms プロジェクトに移動し、`MainPage.xaml` を開きます�
 
 `MainPage.xaml` を開き `CollectionView` の上に `RefreshView` を追加します。次のようになります。
 
+`RefreshView` が `CollectionView` 全体を包む形になります。
+
 ```xml
 <RefreshView Command="{Binding GetWeathersCommand}" IsRefreshing="{Binding IsRefreshing}">
     <CollectionView ItemsLayout="VerticalGrid, 2" ItemsSource="{Binding Weathers}">
@@ -1468,8 +1483,24 @@ Xamarin.Forms プロジェクトに移動し、`MainPage.xaml` を開きます�
 `MainPageViewModel.cs` を開き `CanClick` プロパティの下に `IsRefreshing` プロパティを追加します。
 
 ```csharp
-public bool IsRefreshing => !CanClick;
+[ObservableProperty]
+private bool _isRefreshing;
 ```
+
+`GetWeathersAsync` メソッドの `CanClick = true;` の下に `IsRefreshing = false;` を追加します。
+
+```csharp
+[RelayCommand(CanExecute = nameof(CanClick))]
+private async Task GetWeathersAsync()
+{
+    ...略...
+
+    CanClick = true;
+    IsRefreshing = false;
+}
+```
+
+
 
 再度デバッグ実行し、引っ張って更新できれば OK です。
 
@@ -1494,6 +1525,7 @@ private Weather _selectedWeather;
 `SelectWeather` メソッドを追加します。
 
 ```csharp
+[RelayCommand]
 private async void SelectWeather()
 {
     if (SelectedWeather == null)
@@ -1512,12 +1544,24 @@ SelectionChangedCommand="{Binding SelectWeatherCommand}"
 SelectionMode="Single"
 ```
 
+下記のようになれば OK です。
+
+```csharp
+<CollectionView ItemsLayout="VerticalGrid, 2" ItemsSource="{Binding Weathers}"
+                SelectedItem="{Binding SelectedWeather}"
+                SelectionChangedCommand="{Binding SelectWeatherCommand}"
+                SelectionMode="Single">
+    ...略...                
+</CollectionView>
+```
+
+
 再度ビルドしてデバッグ実行してみましょう。次のようになれば OK です。
 
 <img src="./images/mvvm-11.png" width="300">
 
 
-次はタップした後に画面遷移をしてみます。別途 XAML でビューを定義します。
+次はタップした後に画面遷移をしてみます。別途 `DetailsPage.xaml` でビューを定義します。
 
 ```xml
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -1590,9 +1634,9 @@ public partial class DetailsViewModel : ViewModelBase
 ```csharp
 class MockWeatherService : IWeatherService
 {
-    public async Task<ObservableCollection<Weather>> GetWeathersAsync()
+    public async Task<List<Weather>> GetWeathersAsync()
     {
-        var weathers = new ObservableCollection<Weather>
+        var weathers = new List<Weather>
         {
             new Weather
             {
@@ -1619,7 +1663,7 @@ class MockWeatherService : IWeatherService
 }
 ```
 
-次に `App.xaml.cs` を開き、`WeatherService` を登録していた部分を次のように修正します。
+次に `MauiProgram.cs` を開き、`WeatherService` を登録していた部分を次のように修正します。
 
 ```csharp
 #if DEBUG
