@@ -1,4 +1,57 @@
-# Prism hands on lab
+# 目次
+
+- [目次](#目次)
+- [.NET MAUI hands on lab](#net-maui-hands-on-lab)
+  - [システム要件](#システム要件)
+  - [Visual Studio 2022 のインストール](#visual-studio-2022-のインストール)
+  - [ワークロードのインストール](#ワークロードのインストール)
+  - [.NET MAUI アプリの作成と動作確認](#net-maui-アプリの作成と動作確認)
+    - [最初の起動](#最初の起動)
+      - [Android エミュレーターの作成](#android-エミュレーターの作成)
+      - [デバッグ実行](#デバッグ実行)
+    - [デフォルトプロジェクトの構成](#デフォルトプロジェクトの構成)
+      - [`Platforms` フォルダ](#platforms-フォルダ)
+      - [`MauiProgram.cs`](#mauiprogramcs)
+      - [`App.xaml.cs`](#appxamlcs)
+      - [`AppShell.xaml`](#appshellxaml)
+      - [`AppShell.xaml.cs`](#appshellxamlcs)
+      - [`MainPage.xaml`](#mainpagexaml)
+      - [`MainPage.xaml.cs`](#mainpagexamlcs)
+  - [Web API への接続](#web-api-への接続)
+    - [モデルクラスの作成](#モデルクラスの作成)
+    - [View の作成](#view-の作成)
+    - [コードビハインドにコードを追加](#コードビハインドにコードを追加)
+    - [デバッグ実行](#デバッグ実行-1)
+    - [Web API への接続に書き換え](#web-api-への接続に書き換え)
+  - [Xamarin.Forms Prism アプリの作成と動作確認](#xamarinforms-prism-アプリの作成と動作確認)
+    - [最初の起動](#最初の起動-1)
+      - [Android エミュレーターの作成](#android-エミュレーターの作成-1)
+      - [デバッグ実行](#デバッグ実行-2)
+    - [デフォルトプロジェクトの構成](#デフォルトプロジェクトの構成-1)
+      - [`App.xaml.cs`](#appxamlcs-1)
+      - [`ViewModelBase.cs`](#viewmodelbasecs)
+      - [`MainPageViewModel.cs`](#mainpageviewmodelcs)
+      - [`MainPage.xaml`](#mainpagexaml-1)
+      - [`MainPage.xaml.cs`](#mainpagexamlcs-1)
+  - [Web API への接続](#web-api-への接続-1)
+    - [モデル（Weather）クラスの作成](#モデルweatherクラスの作成)
+    - [サービスのインターフェイスと実装クラスの作成](#サービスのインターフェイスと実装クラスの作成)
+    - [コンテナーへの登録](#コンテナーへの登録)
+    - [ViewModel の作成](#viewmodel-の作成)
+    - [View の作成](#view-の作成-1)
+      - [CollectionView の利用](#collectionview-の利用)
+      - [天気アイコンの表示](#天気アイコンの表示)
+        - [プロジェクトに画像を追加](#プロジェクトに画像を追加)
+        - [XAML のアップデート](#xaml-のアップデート)
+      - [PullToRefresh の追加](#pulltorefresh-の追加)
+      - [ダイアログの表示](#ダイアログの表示)
+  - [Mock の追加](#mock-の追加)
+  - [お疲れ様でした](#お疲れ様でした)
+  - [Appendix](#appendix)
+    - [Web API を作成](#web-api-を作成)
+    - [.NET MAUI について](#net-maui-について)
+
+# .NET MAUI hands on lab
 
 このドキュメントでは .NET MAUI と Microsoft.Toolkit.Mvvm を利用した MVVM によるモバイルアプリ開発をハンズオンで学習します。
 
@@ -9,9 +62,15 @@
 - 最新の Windows または macOS
 - 最新の Visual Studio 2022 または Visual Studio 2022 for Mac
     - Microsoft.Toolkit.Mvvm パッケージ
-    - ※ Mac では .NET MAUI はPreviewです（2022.9.3 現在）
+    - ※ Mac では .NET MAUI はPreviewです（2022.10.1 現在）
 - Android SDK
     - Android Emulator
+
+## Visual Studio 2022 のインストール
+
+Visual Studio 2022 の[ダウンロードページ](https://visualstudio.microsoft.com/ja/downloads/)からダウンロードします。
+
+ダウンロードした `VisualStudioSetup.exe` を実行すると、Visual Studio Installer が起動します。
 
 ## ワークロードのインストール
 
@@ -51,7 +110,7 @@ Visual Studio を起動して「新しいプロジェクト」をクリックし
 
 Android エミュレーターをドロップダウンから選択してデバッグ実行ができます。
 
-「Android Emulator」としか表示されていない場合は、新規にエミュレーターを作成する必要があります。
+「Android Emulators」が表示されていない場合は、新規にエミュレーターを作成する必要があります。
 
 <img src="./images/maui-05.png" width="600" />
 
@@ -76,13 +135,13 @@ Android エミュレーターをドロップダウンから選択してデバッ
 
 各種選択した状態で「新しいデバイスイメージがダウンロードされます。」という注意書きがある場合は、Android SDK のダウンロードサイトから条件に見合った OS イメージを自動でダウンロードしてエミュレーターを作成します。
 
-OS イメージは Visual Studio のメニューから「ツール＞Android＞Android SDK マネージャー」をクリックし、
+<!-- OS イメージは Visual Studio のメニューから「ツール＞Android＞Android SDK マネージャー」をクリックして、
 
 <img src="./images/maui-09.png" width="600" />
 
 表示されるダイアログで `Google APIs Intel x86 Atom System Image` や `Google Play Intel x86 Atom System Image` が該当します。少し大きいサイズなので、PC の空き容量が少ない場合は選択してインストールしてください。
 
-<img src="./images/maui-08.png" width="600" />
+<img src="./images/maui-08.png" width="600" /> -->
 
 
 #### デバッグ実行
@@ -100,12 +159,21 @@ Android エミュレーターが起動して、次のような画面が表示さ
 
 <pre>
 + MobileApp
+  - Platforms フォルダ
+    - Android, iOS, MacCatalyst, Tizen, Windows フォルダ
+  - Resources フォルダ
   - App.xaml / App.xaml.cs
   - AppShell.xaml.cs / AppShell.xaml
   - AssemblyInfo.cs
   - MauiProgram.cs
   - MainPage.xaml / MainPage.xaml.cs
 </pre>
+
+#### `Platforms` フォルダ
+各ターゲット プラットフォームのフォルダーには、各プラットフォームでアプリを起動するプラットフォーム固有のコードと、追加するプラットフォーム コードが含まれています。
+
+各子フォルダーは、.NET MAUI がターゲットにできるプラットフォームを表します。
+
 
 #### `MauiProgram.cs`
 
@@ -151,17 +219,17 @@ public class App : Application
 }
 ```
 
-.NET MAUI Shell アプリでは、アプリのビジュアル階層は、クラスをサブクラスを Shell 化するクラスで記述されます。
+.NET MAUI Shell アプリでは、アプリのビジュアル階層は、クラスをサブクラス化する Shell クラスで記述されます。
 
 このクラスは、次の 3 つの主要な階層オブジェクトのいずれかで構成されます。
 
-1. FlyoutItem または TabBar。
-1. Tab。
+1. FlyoutItem または TabBar
+1. Tab
 1. ShellContent 
 
 #### `AppShell.xaml`
 
-MaupApp1 では `ShellContent` で構成されていることが確認できます。
+MobileApp では `ShellContent` で構成されていることが確認できます。
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -236,9 +304,9 @@ View のクラスです。XML ベースのクラスを表す言語 XAML で記�
 
 MainPage のパーシャルクラスで、コードビハインドと呼ばれます。
 
-`OnCounterClicked` は `CounterBtn` の `Clicked` にバウンディングされています。
+`OnCounterClicked` は `CounterBtn` の `Clicked` にバインディングされています。
 
-ボタンをクリックすると数字が1つ増えていきます。
+ボタンをクリックすると数字が１つずつ増えていきます。
 
 
 ```cs
@@ -280,6 +348,20 @@ public partial class MainPage : ContentPage
 プロジェクトを右クリックして「追加＞クラス」から `Weather` クラスを作成します。次のようになります。
 
 ```csharp
+namespace MobileApp
+{
+    public class Weather
+    {
+        public DateTime Date { get; set; }
+        public int Temperature { get; set; }
+        public string Summary { get; set; }
+    }
+}
+```
+
+C# 10.0 から {} なしの以下のような書き方で名前空間を指定できるようになりました。
+
+```csharp
 namespace MobileApp;
 public class Weather
 {
@@ -288,6 +370,8 @@ public class Weather
     public string Summary { get; set; }
 }
 ```
+
+
 
 ### View の作成
 
@@ -834,17 +918,10 @@ public ObservableCollection<Weather> Weathers { get; private set; } = new();
 private bool _canClick = true;
 ```
 
-次にコンストラクターの上に `DelegateCommand` を追加し、コマンドから呼び出されるメソッドをコンストラクターの下に追加します。
-
-コマンド：
-
-```csharp
-public DelegateCommand GetWeathersCommand { get; private set; }
-```
-
 メソッド：
 
 ```csharp
+[RelayCommand(CanExecute = nameof(CanClick))]
 private async Task GetWeathersAsync()
 {
     CanClick = false;
@@ -862,26 +939,11 @@ private async Task GetWeathersAsync()
     }
 
     CanClick = true;
+    IsRefreshing = false;
 }
 ```
 
-次にコンストラクター内でコマンドにメソッドを割り当てます。コンストラクター全体は次のようになります。
-
-```csharp
-public MainPageViewModel(INavigationService navigationService,
-                         IWeatherService weatherService)
-    : base(navigationService)
-{
-    Title = "Main Page";
-    _weatherService = weatherService;
-
-    GetWeathersCommand = new DelegateCommand(
-        async () => await GetWeathersAsync(),
-        () => CanClick)
-        .ObservesCanExecute(() => CanClick);
-}
-```
-
+**TBD** RelayCommand の説明に書き換え  
 `DelegateCommand` の引数は `Action executeMethod, Func<bool> canExecuteMethod` のため、`GetWeathersAsync` 呼び出し、`CanClick` 参照を行っています。最後の `ObservesCanExecute(Expression<Func<bool>> canExecuteExpression)` は Prism 独自の機能で、影響を受けるプロパティを指定できるため、プロパティをプレーンに保つことができます。
 
 `ObservesCanExecure` を使用しない場合は、プロパティのセッターにどのコマンドに実行可能の変更を伝えるか？を記述します。次のようになります。
@@ -898,54 +960,34 @@ public bool CanClick
     }
 }
 ```
-
-最後にこの View を表示した際にメソッドを実行できるように `OnNavigatedTo` の `override` を追加します。
-
-```csharp
-public override async void OnNavigatedTo(INavigationParameters parameters)
-{
-    base.OnNavigatedTo(parameters);
-    await GetWeathersAsync();
-}
-```
+**TBD** ここまで
 
 ViewModel は全体では次のようになっています。
 
 ```csharp
-public class MainPageViewModel : ViewModelBase
+public partial class MainPageViewModel : ViewModelBase
 {
     private readonly IWeatherService _weatherService;
 
-    public ObservableCollection<Weather> Weathers { get; set; } = new ObservableCollection<Weather>();
+    public ObservableCollection<Weather> Weathers { get; private set; } = new();
 
-    private bool canClick = true;
-    public bool CanClick
-    {
-        get { return canClick; }
-        set { SetProperty(ref canClick, value); }
-    }
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(GetWeathersCommand))]
+    private bool _canClick = true;
 
-    public DelegateCommand GetWeathersCommand { get; private set; }
+    [ObservableProperty]
+    private bool _isRefreshing;
 
-    public MainPageViewModel(INavigationService navigationService,
-                                IWeatherService weatherService)
-        : base(navigationService)
+    [ObservableProperty]
+    private Weather _selectedWeather;
+
+    public MainPageViewModel(IWeatherService weatherService)
     {
         Title = "Main Page";
         _weatherService = weatherService;
-
-        GetWeathersCommand = new DelegateCommand(
-            async () => await GetWeathersAsync(),
-            () => CanClick)
-            .ObservesCanExecute(() => CanClick);
     }
 
-    public override async void OnNavigatedTo(INavigationParameters parameters)
-    {
-        base.OnNavigatedTo(parameters);
-        await GetWeathersAsync();
-    }
-
+    [RelayCommand(CanExecute = nameof(CanClick))]
     private async Task GetWeathersAsync()
     {
         CanClick = false;
@@ -963,6 +1005,20 @@ public class MainPageViewModel : ViewModelBase
         }
 
         CanClick = true;
+        IsRefreshing = false;
+    }
+
+    [RelayCommand]
+    private async void SelectWeather()
+    {
+        if (SelectedWeather == null)
+            return;
+
+        // 詳細画面に遷移するパターン
+        await Shell.Current.GoToAsync(nameof(DetailsPage), true, new Dictionary<string, object>
+        {
+            {"Weather", SelectedWeather}
+        });
     }
 }
 ```
@@ -991,19 +1047,20 @@ public class MainPageViewModel : ViewModelBase
 
 エディタ下部の「<<」ボタンをクリックすると XAML プレビューアーが表示されますが、「XAML ホットリロード」の機能を使用した方が早いかもしれません。
 
-<img src="./images/prism-31.png" width="600">
 
-プレビューアーについての詳細は [XAML プレビューアー Xamarin\.Forms \- Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/xamarin/xamarin-forms/xaml/xaml-previewer/?pivots=windows) を参照してください。
-
-XAML ホットリロードについての詳細は [XAML ホットリロード Xamarin\.Forms \- Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/xamarin/xamarin-forms/xaml/hot-reload)
-
+**TBD** XAML ホットリロードの説明を追加する
 
 この時点でデバッグ実行してみましょう。View を表示した際とボタンをクリックした際にスイッチとボタンが連動して動作するのが分かるはずです。
 
-<img src="./images/prism-32.png" width="300">
+<img src="./images/mvvm-05.png" width="300">
 
 `MainPageViewModel` や `WeatherService` にブレークポイントを貼ると処理の内容を確認できます。
 
+> TIPS:  
+> 以下のエラーが出た場合は `MauiProgram` クラスで `WeatherService` クラスをインジェクションしていないことが原因です。 コンテナーへの登録 を参照
+> 
+> `System.InvalidOperationException: 'Unable to resolve service for type 'MobileApp.Services.IWeatherService' while attempting to activate 'MobileApp.ViewModels.MainPageViewModel'.'
+`
 
 
 #### CollectionView の利用
@@ -1015,7 +1072,7 @@ XAML ホットリロードについての詳細は [XAML ホットリロード X
 ```xml
 <CollectionView ItemsLayout="VerticalList" ItemsSource="{Binding Weathers}">
     <CollectionView.ItemTemplate>
-        <DataTemplate>
+        <DataTemplate x:DataType="model:Weather">
                     
         </DataTemplate>
     </CollectionView.ItemTemplate>
@@ -1031,7 +1088,7 @@ XAML ホットリロードについての詳細は [XAML ホットリロード X
 - 縦方向のグリッド
 - 横方向のグリッド
 
-Layout の詳細は [Xamarin\.Forms CollectionView レイアウト \- Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/xamarin/xamarin-forms/user-interface/collectionview/layout) を参照してください。
+Layout の詳細は [.NET MAUI CollectionView 概要](https://learn.microsoft.com/ja-jp/dotnet/maui/user-interface/controls/collectionview/) を参照してください。
 
 `CollectionView` の `DataTemplate` 内には自由にレイアウトを作成できます。次の XAML を追加してください。
 
@@ -1051,9 +1108,9 @@ Layout の詳細は [Xamarin\.Forms CollectionView レイアウト \- Xamarin \|
 
 次のような画面が表示されれば OK です。
 
-<img src="./images/prism-33.png" width="300">
+<img src="./images/mvvm-06.png" width="300">
 
-日付や温度の表示方法を変更するために、`StringFormat` を使用しています。`StringFormat` の詳細は [Xamarin\.Forms の文字列の書式設定 \- Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/xamarin/xamarin-forms/app-fundamentals/data-binding/string-formatting) を参照してください。
+日付や温度の表示方法を変更するために、`StringFormat` を使用しています。`StringFormat` の詳細は [.NET MAUI 文字列の書式設定](https://learn.microsoft.com/ja-jp/dotnet/maui/fundamentals/data-binding/string-formatting) を参照してください。
 
 
 
@@ -1061,7 +1118,7 @@ Layout の詳細は [Xamarin\.Forms CollectionView レイアウト \- Xamarin \|
 
 文字だけだと寂しいので、天気をアイコンで表示してみましょう。画像を表示するには `Image` クラスを利用します。
 
-`Image` クラスの重要なプロパティに [Image\.Source プロパティ \(Xamarin\.Forms\) \| Microsoft Docs](https://docs.microsoft.com/ja-jp/dotnet/api/xamarin.forms.image.source?view=xamarin-forms#Xamarin_Forms_Image_Source) があります。
+`Image` クラスの重要なプロパティに [Image | データの表示 | Views | コントロール | ユーザーインターフェイス | .NET MAUI](https://docs.microsoft.com/ja-jp/dotnet/api/xamarin.forms.image.source?view=xamarin-forms#Xamarin_Forms_Image_Source) があります。
 
 ImageSource インスタンスは、イメージソースの種類ごとに静的メソッドを使用して取得できます。
 
@@ -1070,29 +1127,18 @@ ImageSource インスタンスは、イメージソースの種類ごとに静�
 - FromResource - ビルドアクション EmbeddedResource を使用して、アプリケーションまたは .NET Standard ライブラリプロジェクトに埋め込まれているイメージファイルのリソース識別子が必要です。
 - FromStream - イメージデータを提供するストリームが必要です。
 
-詳細は [Image in Xamarin\.Forms \- Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/xamarin/xamarin-forms/user-interface/images?tabs=windows) を参照してください。
-
-`FromResource` は .NET Standard プロジェクトに 1つだけ画像ファイルを用意すれば良いため、アプリケーションで固定のアイコンなどを利用する場合に便利です。
-
-今回はファイル名をバインドするため、各 OS プロジェクトに画像を配置します。
+今回はファイル名をバインドするため、プロジェクトに画像を配置します。
 
 
-##### Android プロジェクトに画像を追加
+##### プロジェクトに画像を追加
 
+「Resources/Images」にダウンロードした「Resources」フォルダ内の 5つの png ファイルをドラッグ＆ドロップして追加します。
 
-Android プロジェクトを開き、「Resources/drawable」にダウンロードした「Resources」フォルダ内の 5つの png ファイルをドラッグ＆ドロップして追加します。
+<img src="./images/mvvm-07.png" width="300">
 
-<img src="./images/prism-34.png" width="300">
+画像を選択し、プロパティウィンドウでビルドアクションが「MauiImage」になっていることを確認してください。
 
-画像を選択し、プロパティウィンドウでビルドアクションが「AndroidResource」になっていることを確認してください。
-
-<img src="./images/prism-35.png" width="300">
-
-
-##### iOS プロジェクトに画像を追加
-
-イメージアセットに追加しますが、今回は割愛します。
-
+<img src="./images/mvvm-08.png" width="300">
 
 ##### XAML のアップデート
 
@@ -1100,10 +1146,10 @@ Xamarin.Forms プロジェクトに移動し、`MainPage.xaml` を開きます�
 
 `CollectionView` の `ItemsLayout` を `VerticalGrid, 2` に書き換え、`Grid` に置き換えます。全体では次のようになります。
 
-```xml
+```xml 
 <CollectionView ItemsLayout="VerticalGrid, 2" ItemsSource="{Binding Weathers}">
     <CollectionView.ItemTemplate>
-        <DataTemplate>
+        <DataTemplate x:DataType="model:Weather">
             <Grid Padding="10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -1111,19 +1157,19 @@ Xamarin.Forms プロジェクトに移動し、`MainPage.xaml` を開きます�
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Image Grid.Row="0"
-                       Grid.RowSpan="3"
-                       WidthRequest="120"
-                       HeightRequest="120"
-                       Source="{Binding Summary, StringFormat='{0}.png'}" />
+                        Grid.RowSpan="3"
+                        WidthRequest="120"
+                        HeightRequest="120"
+                        Source="{Binding Summary, StringFormat='{0}.svg'}" />
                 <Label Grid.Row="0"
-                       HorizontalTextAlignment="Center"
-                       Text="{Binding Date, StringFormat='{}{0:yyyy/MM/dd}'}" />
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding Date, StringFormat='{}{0:yyyy/MM/dd}'}" />
                 <Label Grid.Row="1"
-                       HorizontalTextAlignment="Center"
-                       Text="{Binding Temperature, StringFormat='{0}℃'}" />
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding Temperature, StringFormat='{0}℃'}" />
                 <Label Grid.Row="2"
-                       HorizontalTextAlignment="Center"
-                       Text="{Binding Summary}" />
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding Summary}" />
             </Grid>
         </DataTemplate>
     </CollectionView.ItemTemplate>
@@ -1132,16 +1178,16 @@ Xamarin.Forms プロジェクトに移動し、`MainPage.xaml` を開きます�
 
 再度ビルドしてデバッグ実行してみましょう。次のようになれば OK です。
 
-<img src="./images/prism-36.png" width="300">
+<img src="./images/mvvm-09.png" width="300">
 
 
 
 #### PullToRefresh の追加
 
-スクロール可能なコントロールを下に引っ張って内容をリロードする Pull-to-Refresh の機能を追加します。Xamarin.Forms では `RefreshView` が用意されています。`RefreshView` の詳細は [Xamarin\.Forms RefreshView \- Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/xamarin/xamarin-forms/user-interface/refreshview) を参照してください。
+スクロール可能なコントロールを下に引っ張って内容をリロードする Pull-to-Refresh の機能を追加します。Xamarin.Forms では `RefreshView` が用意されています。`RefreshView` の詳細は [RefreshView | コマンドの開始 | Views | コントロール | ユーザーインターフェイス | .NET MAUI](https://learn.microsoft.com/ja-jp/dotnet/maui/user-interface/controls/refreshview) を参照してください。
 
 
-`MainPage.xaml` を開き、`CollectionView` の上に `RefreshView` を追加します。次のようになります。
+`MainPage.xaml` を開き `CollectionView` の上に `RefreshView` を追加します。次のようになります。
 
 ```xml
 <RefreshView Command="{Binding GetWeathersCommand}" IsRefreshing="{Binding IsRefreshing}">
@@ -1153,7 +1199,7 @@ Xamarin.Forms プロジェクトに移動し、`MainPage.xaml` を開きます�
 
 リフレッシュする時のコマンドはボタンと同じ `GetWeathersCommand` を割り当てます。リフレッシュ中にグルグルの表示やリフレッシュ終了を検知するために `IsRefreshing` プロパティに bool 値を割り当てます。
 
-`MainPageViewModel.cs` を開き、`CanClick` プロパティの下に `IsRefreshing` プロパティを追加します。
+`MainPageViewModel.cs` を開き `CanClick` プロパティの下に `IsRefreshing` プロパティを追加します。
 
 ```csharp
 public bool IsRefreshing => !CanClick;
@@ -1161,80 +1207,36 @@ public bool IsRefreshing => !CanClick;
 
 再度デバッグ実行し、引っ張って更新できれば OK です。
 
+<img src="./images/mvvm-10.png" width="300">
 
 
 #### ダイアログの表示
 
-Xamarin.Forms では標準で `DisplayAlert`、`DisplayActionSheet`、`DisplayPromptAsync` の 3つの `Page` クラスのメソッドが用意されています。これらのメソッドは ViewModel では直接は呼び出せないため、Prism ではこれをラップした `IPageDialogService` と、独自のビューを利用できる `IDialogService` を用意しています。Prism のダイアログについての詳細は [Application Dialogs \| Prism](https://prismlibrary.com/docs/xamarin-forms/dialogs/index.html) をご覧ください。
+.NET MAUI では標準で `DisplayAlert`、`DisplayActionSheet`、`DisplayPromptAsync` の 3つの `Page` クラスのメソッドが用意されています。
 
-これらを使用して、CollectionView のタップした項目をダイアログに表示してみましょう。
+ここでは `DisplayAlert` を使用して、CollectionView のタップした項目をダイアログに表示してみましょう。
 
 `MainPageViewModel.cs` を開き、バインド対象のプロパティとコマンドを追加します。
 
-`IsRefreshing` プロパティの下に次を追加します。
+`_isRefreshing` プロパティの下に次を追加します。
 
 ```csharp
-private Weather selectedWeather;
-public Weather SelectedWeather
+[ObservableProperty]
+private Weather _selectedWeather;
+```
+
+`SelectWeather` メソッドを追加します。
+
+```csharp
+private async void SelectWeather()
 {
-    get { return selectedWeather; }
-    set { SetProperty(ref selectedWeather, value); }
+    if (SelectedWeather == null)
+        return;
+
+    // ダイアログを表示するパターン
+    await Shell.Current.DisplayAlert("Dialog Title", $"{SelectedWeather.Date:yyyy/MM/dd} は {SelectedWeather.Temperature}℃ で {SelectedWeather.Summary} です。", "OK");
 }
 ```
-
-そのまま `GetWeathersCommand` の下に次を追加します。
-
-```csharp
-public DelegateCommand SelectWeatherCommand { get; private set; }
-```
-
-コンストラクター内にコマンドの実装を追加します。
-
-```csharp
-SelectWeatherCommand = new DelegateCommand(
-    async () => await _pageDialogService.DisplayAlertAsync(
-        "Dialog Title",
-        $"{SelectedWeather.Date:yyyy/MM/dd} は {SelectedWeather.Temperature}℃ で {SelectedWeather.Summary} です。",
-        "OK")
-    );
-```
-
-ここで利用している Prism の `IPageDialogService` を使用するには、依存を追加します。
-
-クラスの先頭に次を追加します。
-
-```csharp
-private readonly IPageDialogService _pageDialogService;
-```
-
-コンストラクターの引数に `IPageDialogService pageDialogService` を追加し、コンストラクター内でフィールドに割り当てます。
-
-この時点でコンストラクターは次のようになります。
-
-```csharp
-public MainPageViewModel(INavigationService navigationService,
-                         IPageDialogService pageDialogService,
-                         IWeatherService weatherService)
-    : base(navigationService)
-{
-    Title = "Main Page";
-    _pageDialogService = pageDialogService;
-    _weatherService = weatherService;
-
-    GetWeathersCommand = new DelegateCommand(
-        async () => await GetWeathersAsync(),
-        () => CanClick)
-        .ObservesCanExecute(() => CanClick);
-
-    SelectWeatherCommand = new DelegateCommand(
-        async () => await _pageDialogService.DisplayAlertAsync(
-            "Dialog Title",
-            $"{SelectedWeather.Date:yyyy/MM/dd} は {SelectedWeather.Temperature}℃ で {SelectedWeather.Summary} です。",
-            "OK")
-        );
-}
-```
-
 
 最後に `MainPage.xaml` を開き、`CollectionView` に次の 3つの属性を追加し、1つをタップした際にコマンドを発行し、選択項目をバインドするようにします。
 
@@ -1246,45 +1248,59 @@ SelectionMode="Single"
 
 再度ビルドしてデバッグ実行してみましょう。次のようになれば OK です。
 
-<img src="./images/prism-37.png" width="300">
+<img src="./images/mvvm-11.png" width="300">
 
 
-独自ダイアログは少し処理が多いので今回は割愛しますが、XAML でビューを定義します。
-
+次はタップした後に画面遷移をしてみます。別途 XAML でビューを定義します。
 
 ```xml
-<Grid x:Class="MobileApp.Dialogs.DemoDialog"
-      xmlns="http://xamarin.com/schemas/2014/forms"
-      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-      BackgroundColor="White">
-    <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
-    </Grid.RowDefinitions>
-
-    <BoxView Color="Black" />
-    <Label Margin="20,5"
-           Style="{DynamicResource TitleStyle}"
-           Text="{Binding Title}"
-           TextColor="White" />
-    <Label Grid.Row="1"
-           Margin="20,0,20,10"
-           Text="{Binding Message}" />
-    <Button Grid.Row="2"
-            Margin="0,0,0,10"
-            HorizontalOptions="Center"
-            Command="{Binding CloseCommand}"
-            Text="Ok" />
-</Grid>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModel="clr-namespace:MobileApp.ViewModels"
+             x:Class="MobileApp.Views.DetailsPage"
+             x:DataType="viewModel:DetailsViewModel"
+             Title="{Binding Weather.Date, StringFormat='{}{0:yyyy/MM/dd}'}">
+    <ScrollView VerticalOptions="Center">
+        <VerticalStackLayout>
+            <Image Grid.Row="1"
+                WidthRequest="120"
+                HeightRequest="120"
+                Source="{Binding Weather.Summary, StringFormat='{0}.svg'}" />
+            <Label Grid.Row="2"
+                HorizontalTextAlignment="Center"
+                Text="{Binding Weather.Temperature, StringFormat='{0}℃'}" />
+            <Label Grid.Row="3"
+                HorizontalTextAlignment="Center"
+                Text="{Binding Weather.Summary}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
 ```
+
+`SelectWater` メソッドにある `DisplayAlert` をコメントアウトして下記を追加します。
+
+```csharp
+await Shell.Current.GoToAsync(nameof(DetailsPage), true, new Dictionary<string, object>
+{
+    {"Weather", SelectedWeather}
+});
+```
+
+`DetailsViewModel` クラスを下記のように書き換えます。
+
+```csharp
+[QueryProperty(nameof(Weather), "Weather")]
+public partial class DetailsViewModel : ViewModelBase
+{
+    [ObservableProperty]
+    Weather _weather;
+}
+```
+
 
 次のように表示されます。
 
-<img src="./images/prism-38.png" width="300">
-
-
-
+<img src="./images/mvvm-12.png" width="300">
 
 
 
@@ -1341,9 +1357,9 @@ class MockWeatherService : IWeatherService
 
 ```csharp
 #if DEBUG
-            containerRegistry.RegisterSingleton<IWeatherService, MockWeatherService>();
+    builder.Services.AddSingleton<IWeatherService, MockWeatherService>();
 #else
-            containerRegistry.RegisterSingleton<IWeatherService, WeatherService>();
+    builder.Services.AddSingleton<IWeatherService, WeatherService>();
 #endif
 ```
 
@@ -1351,13 +1367,13 @@ class MockWeatherService : IWeatherService
 
 デバッグ実行して、次のように 2021/11/1 から 2021/11/3 までのデータが表示されていれば OK です。
 
-<img src="./images/prism-41.png" width="300">
+<img src="./images/mvvm-13.png" width="300">
 
 
 
 ## お疲れ様でした
 
-これで本日のトレーニングはすべて終了です。Xamarin.Forms、Prism にはもっと色々な機能があります。是非使いこなして皆様のモバイルアプリ開発が楽しくなることを願っています！
+これで本日のトレーニングはすべて終了です。.NET MAUI にはもっと色々な機能があります。是非使いこなして皆様のモバイルアプリ開発が楽しくなることを願っています！
 
 
 
