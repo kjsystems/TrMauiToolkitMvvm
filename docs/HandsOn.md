@@ -1711,6 +1711,8 @@ class MockWeatherService : IWeatherService
 - 本ドキュメントでは「WebApi」と名前を付けました。
 
 <img src="./images/webapi-01.png" width="600" />
+<img src="./images/webapi-02.png" width="600" />
+<img src="./images/webapi-03.png" width="600" />
 
 > 通常 Web にデプロイする Web アプリケーションは HTTPS で動作するように設定すべきですが、Android Emulator から localhost の Web サービスにアクセスするには `10.0.2.2` を指定する必要があり、かつ、[Android エミュレーターと iOS シミュレーターからローカル Web サービスに接続する | Microsoft Docs](https://learn.microsoft.com/ja-jp/dotnet/maui/data-cloud/local-web-services) に記載されているようにいくつかの処理を行う必要があるため、簡素化するために HTTP で通信できるようにしています。
 > 
@@ -1718,11 +1720,12 @@ class MockWeatherService : IWeatherService
 
 作成後、スタートアッププロジェクトが「WebApi」になっていること、デバッグプロパティが「WebApi」になっていることを確認し、デバッグボタン「▶」をクリックします。
 
-<img src="./images/webapi-02.png" width="450" />
+<img src="./images/webapi-04.png" width="450" />
 
 指定している Web ブラウザーでデバッグできることを確認してください。
+(この画像の環境ではJsonを整形してくれる[拡張機能 | chrome ウェブストア](https://chrome.google.com/webstore/detail/jsonview/gmegofmjomhknnokphhckolhcffdaihd?hl=ja)を使用しています。皆さんの環境では整形されず1行で表示されてしまうかもしれません。適宜インストールしてください。)
 
-<img src="./images/webapi-03.png" width="600" />
+<img src="./images/webapi-05.png" width="600" />
 
 
 また、`WebApi/Controllers/WeatherForecastController.cs` の以下のコードでアクセスするたびにランダムに天気の予測を返していることが分かります。
