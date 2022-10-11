@@ -915,7 +915,7 @@ public static class MauiProgram
 
 ## CommunityToolkit.Mvvmを使用したMVVMとデータバインディングの解説
 ### MVVMとは
-アプリのプログラムを、Model - View - ViewModelという3つの役割に分けて実装するアーキテクチャです。[こちらのドキュメント](https://learn.microsoft.com/ja-jp/dotnet/architecture/maui/mvvm)に詳しく解説されています。
+アプリのプログラムを、Model - View - ViewModelという3つの役割に分けて実装するアーキテクチャです。[Model-View-ViewModel (MVVM) | .NET アプリケーション アーキテクチャ ガイド ](https://learn.microsoft.com/ja-jp/dotnet/architecture/maui/mvvm)に詳しく解説されています。
 
 ### データバインディング
 Model - View - ViewModelにプログラムを分けた場合、それぞれのプログラム間でデータのやりとりをする必要があります。例えばModelクラスにおいてHTTPでデータを取得した場合、それをView側に反映させるには変更通知と呼ばれる仕組みを実装する必要があります。  
@@ -1351,7 +1351,7 @@ public partial class MainPageViewModel : ViewModelBase
 </CollectionView>
 ```
 
-`CollectionView` の詳細は [CollectionView 概要](https://learn.microsoft.com/ja-jp/dotnet/maui/user-interface/controls/collectionview/) を参照してください。
+`CollectionView` の詳細は [CollectionView | Microsoft Docs](https://learn.microsoft.com/ja-jp/dotnet/maui/user-interface/controls/collectionview/) を参照してください。
 
 特に `ItemsLayout` プロパティで以下の表示方法を利用できます。今回は縦方向のリストを使用します。
 
@@ -1360,7 +1360,7 @@ public partial class MainPageViewModel : ViewModelBase
 - 縦方向のグリッド
 - 横方向のグリッド
 
-Layout の詳細は [.NET MAUI CollectionView 概要](https://learn.microsoft.com/ja-jp/dotnet/maui/user-interface/controls/collectionview/) を参照してください。
+Layout の詳細は [CollectionView レイアウトの指定 | Microsoft Docs](https://learn.microsoft.com/ja-jp/dotnet/maui/user-interface/controls/collectionview/layout) を参照してください。
 
 `CollectionView` の `DataTemplate` 内には自由にレイアウトを作成できます。次の XAML を追加してください。
 
@@ -1389,7 +1389,7 @@ Layout の詳細は [.NET MAUI CollectionView 概要](https://learn.microsoft.co
 
 
 
-日付や温度の表示方法を変更するために、`StringFormat` を使用しています。`StringFormat` の詳細は [.NET MAUI 文字列の書式設定](https://learn.microsoft.com/ja-jp/dotnet/maui/fundamentals/data-binding/string-formatting) を参照してください。
+日付や温度の表示方法を変更するために、`StringFormat` を使用しています。`StringFormat` の詳細は [文字列の書式設定 | Microsoft Docs](https://learn.microsoft.com/ja-jp/dotnet/maui/fundamentals/data-binding/string-formatting) を参照してください。
 
 
 
@@ -1397,7 +1397,7 @@ Layout の詳細は [.NET MAUI CollectionView 概要](https://learn.microsoft.co
 
 文字だけだと寂しいので、天気をアイコンで表示してみましょう。画像を表示するには `Image` クラスを利用します。
 
-`Image` クラスの重要なプロパティに [Image | データの表示 | Views | コントロール | ユーザーインターフェイス | .NET MAUI](https://docs.microsoft.com/ja-jp/dotnet/api/xamarin.forms.image.source?view=xamarin-forms#Xamarin_Forms_Image_Source) があります。
+`Image` クラスの重要なプロパティに [Image.Source プロパティ | Microsoft Docs](https://learn.microsoft.com/ja-jp/dotnet/maui/user-interface/controls/image) があります。
 
 ImageSource インスタンスは、イメージソースの種類ごとに静的メソッドを使用して取得できます。
 
@@ -1463,7 +1463,7 @@ ImageSource インスタンスは、イメージソースの種類ごとに静�
 
 #### PullToRefresh の追加
 
-スクロール可能なコントロールを下に引っ張って内容をリロードする Pull-to-Refresh の機能を追加します。.NET MAUI では `RefreshView` が用意されています。`RefreshView` の詳細は [RefreshView | コマンドの開始 | Views | コントロール | ユーザーインターフェイス | .NET MAUI](https://learn.microsoft.com/ja-jp/dotnet/maui/user-interface/controls/refreshview) を参照してください。
+スクロール可能なコントロールを下に引っ張って内容をリロードする Pull-to-Refresh の機能を追加します。.NET MAUI では `RefreshView` が用意されています。`RefreshView` の詳細は [RefreshView | Microsoft Docs](https://learn.microsoft.com/ja-jp/dotnet/maui/user-interface/controls/refreshview) を参照してください。
 
 
 `MainPage.xaml` を開き `CollectionView` の上に `RefreshView` を追加します。次のようになります。
@@ -1712,9 +1712,9 @@ class MockWeatherService : IWeatherService
 
 <img src="./images/webapi-01.png" width="600" />
 
-> 通常 Web にデプロイする Web アプリケーションは HTTPS で動作するように設定すべきですが、Android Emulator から localhost の Web サービスにアクセスするには `10.0.2.2` を指定する必要があり、かつ、[iOS シミュレーターと Android エミュレーターからローカル Web サービスに接続する \- Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/xamarin/cross-platform/deploy-test/connect-to-local-web-services) に記載されているようにいくつかの処理を行う必要があるため、簡素化するために HTTP で通信できるようにしています。
+> 通常 Web にデプロイする Web アプリケーションは HTTPS で動作するように設定すべきですが、Android Emulator から localhost の Web サービスにアクセスするには `10.0.2.2` を指定する必要があり、かつ、[Android エミュレーターと iOS シミュレーターからローカル Web サービスに接続する | Microsoft Docs](https://learn.microsoft.com/ja-jp/dotnet/maui/data-cloud/local-web-services) に記載されているようにいくつかの処理を行う必要があるため、簡素化するために HTTP で通信できるようにしています。
 > 
-> 接続する Web アプリケーションが HTTPS に対応していない場合は、[Android P で targetSdkVersion を 28 に指定した場合に HTTP 通信が失敗する \- Xamarin 日本語情報](https://blog.ytabuchi.dev/entry/2019/08/26/180000) を参考に `network-security-config` を指定するか `usesCleartextTraffic` を指定してください。
+> 接続する Web アプリケーションが HTTPS に対応していない場合は、[Android P で targetSdkVersion を 28 に指定した場合に HTTP 通信が失敗する | Xamarin 日本語情報](https://blog.ytabuchi.dev/entry/2019/08/26/180000) を参考に `network-security-config` を指定するか `usesCleartextTraffic` を指定してください。
 
 作成後、スタートアッププロジェクトが「WebApi」になっていること、デバッグプロパティが「WebApi」になっていることを確認し、デバッグボタン「▶」をクリックします。
 
@@ -1793,7 +1793,7 @@ void ExecuteClickCommand ()
 
 詳細は以下を参照してください。
 
-- [\.NET MAUIって何？ \- nuits\.jp blog](https://www.nuits.jp/entry/what-is-maui)
+- [\.NET MAUIって何？ | nuits\.jp blog](https://www.nuits.jp/entry/what-is-maui)
 - [Introducing \.NET Multi\-platform App UI \| \.NET Blog](https://devblogs.microsoft.com/dotnet/introducing-net-multi-platform-app-ui/)
 
 
