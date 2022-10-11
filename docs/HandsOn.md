@@ -918,7 +918,7 @@ public static class MauiProgram
 アプリのプログラムを、Model - View - ViewModelという3つの役割に分けて実装するアーキテクチャです。[こちらのドキュメント](https://learn.microsoft.com/ja-jp/dotnet/architecture/maui/mvvm)に詳しく解説されています。
 
 ### データバインディング
-Model - View - ViewModelにプログラムを分けた場合、それぞれのプログラム間でデータのやりとりをする必要があります。例えばModelクラスでHTTPでデータを取得した場合、それをView側に反映させるには変更通知と呼ばれる仕組みを実装する必要があります。  
+Model - View - ViewModelにプログラムを分けた場合、それぞれのプログラム間でデータのやりとりをする必要があります。例えばModelクラスにおいてHTTPでデータを取得した場合、それをView側に反映させるには変更通知と呼ばれる仕組みを実装する必要があります。  
 CommunityToolkit.Mvvmを使用したViewとViewModelのデータバインディングを、MainPage.xamlとViewModelBase.csを例に見ていきましょう。
 
 ```xml
@@ -987,7 +987,7 @@ public class ViewModelBase : INotifyPropertyChanged
 
 ### コマンドバインディング
 先ほどの章では、Viewのコードビハインドにイベントハンドラーを実装しました。  
-しかし、MVVMパターンではViewModelのメソッドをViewからコールする必要があります。そこで、C#ではICommandというinterfaceが用意されています。ただのイベントハンドラーに比べ、抽象化されUIのイベントの実行をしやいものになっています。
+しかし、MVVMパターンではViewModelのメソッドをViewからコールする必要があります。そこで、C#ではICommandというinterfaceが用意されています。ただのイベントハンドラーに比べ、抽象化されUIのイベントの実行をしやすいものになっています。
 ```cs
 public interface ICommand
 {
@@ -997,7 +997,7 @@ public interface ICommand
 }
 ```
 
-CommunityToolkit.Mvvmでは、`RelayCommand`というICommandの実装が提供されており、このハンズオンでもこれを使用します。Attributeを付加するだけでメソッドをコマンドとしてViewから実行することができます。
+CommunityToolkit.Mvvmでは、`RelayCommand`というICommandの実装が提供されており、このハンズオンでもこれを使用します。Attributeを付加するだけでメソッドをコマンドとしてViewから実行できます。
 ```cs
 [RelayCommand(CanExecute = nameof(CanClick))]
 private async Task GetWeathersAsync()
@@ -1301,7 +1301,7 @@ public partial class MainPageViewModel : ViewModelBase
 
 ```xml
 <StackLayout Padding="10">
-    <Label Text="Welcome to Xamarin Forms and Prism!" />
+    <Label Text="Welcome to .NET MAUI and CommunityToolkit MVVM!" />
     <StackLayout Orientation="Horizontal">
         <Label Text="Can Click" VerticalTextAlignment="Center" />
         <Switch IsToggled="{Binding CanClick}" />
@@ -1463,7 +1463,7 @@ ImageSource インスタンスは、イメージソースの種類ごとに静�
 
 #### PullToRefresh の追加
 
-スクロール可能なコントロールを下に引っ張って内容をリロードする Pull-to-Refresh の機能を追加します。Xamarin.Forms では `RefreshView` が用意されています。`RefreshView` の詳細は [RefreshView | コマンドの開始 | Views | コントロール | ユーザーインターフェイス | .NET MAUI](https://learn.microsoft.com/ja-jp/dotnet/maui/user-interface/controls/refreshview) を参照してください。
+スクロール可能なコントロールを下に引っ張って内容をリロードする Pull-to-Refresh の機能を追加します。.NET MAUI では `RefreshView` が用意されています。`RefreshView` の詳細は [RefreshView | コマンドの開始 | Views | コントロール | ユーザーインターフェイス | .NET MAUI](https://learn.microsoft.com/ja-jp/dotnet/maui/user-interface/controls/refreshview) を参照してください。
 
 
 `MainPage.xaml` を開き `CollectionView` の上に `RefreshView` を追加します。次のようになります。
