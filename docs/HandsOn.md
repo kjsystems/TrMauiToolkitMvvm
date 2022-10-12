@@ -1750,57 +1750,5 @@ public IEnumerable<WeatherForecast> Get()
 
 
 
-### .NET MAUI について
-
-1つのプロジェクトからマルチプラットフォームにビルドできます。
-
-MVVM だけでなく、Swift UI や Flutter のような Model-View-Update (MVU) パターンをサポートします。
-
-```csharp
-readonly State<int> count = 0;
-
-[Body]
-View body() => new StackLayout
-{
-    new Label("Welcome to .NET MAUI!"),
-    new Button(
-        () => $"You clicked {count} times.",
-        () => count.Value ++)
-    )
-};
-```
-
-同じ内容を MVVM の XAML とコードで記述する場合は以下のようになります。
-
-```xml
-<StackLayout>
-    <Label Text="Welcome to .NET MAUI!" />
-    <Button Text="{Binding Text}" 
-            Command="{Binding ClickCommand}" />
-</StackLayout>
-```
-
-```csharp
-public Command ClickCommand { get; }
-
-public string Text { get; set; } = "Click me";
-
-int count = 0;
-
-void ExecuteClickCommand ()
-{
-    count++;
-    Text = $"You clicked {count} times.";
-}
-```
-
-詳細は以下を参照してください。
-
-- [\.NET MAUIって何？ | nuits\.jp blog](https://www.nuits.jp/entry/what-is-maui)
-- [Introducing \.NET Multi\-platform App UI \| \.NET Blog](https://devblogs.microsoft.com/dotnet/introducing-net-multi-platform-app-ui/)
-
-
-
-
 
 
