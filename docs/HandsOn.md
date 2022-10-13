@@ -60,6 +60,8 @@
   - [Appendix](#appendix)
     - [Web API を作成](#web-api-を作成)
 
+<div style="page-break-before:always"></div>
+
 # このドキュメントの場所
 `https://github.com/kjsystems/TrMauiToolkitMvvm/`
 
