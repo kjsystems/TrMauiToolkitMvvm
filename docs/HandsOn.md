@@ -1,3 +1,4 @@
+- [このドキュメントの場所](#このドキュメントの場所)
 - [.NET MAUI hands on lab](#net-maui-hands-on-lab)
   - [システム要件](#システム要件)
   - [Visual Studio 2022 のインストール](#visual-studio-2022-のインストール)
@@ -58,7 +59,9 @@
   - [お疲れ様でした](#お疲れ様でした)
   - [Appendix](#appendix)
     - [Web API を作成](#web-api-を作成)
-    - [.NET MAUI について](#net-maui-について)
+
+# このドキュメントの場所
+`https://github.com/kjsystems/TrMauiToolkitMvvm/`
 
 # .NET MAUI hands on lab
 
@@ -531,7 +534,7 @@ void GetWeathersAsync()
 
 ### Web API への接続に書き換え
 
-`GetWeathersAsync` メソッドを実際の Web API [https://weatherforecastsampleforprism.azurewebsites.net/weatherforecast](https://weatherforecastsampleforprism.azurewebsites.net/weatherforecast) からデータを取得する以下のコードで置き換えます。
+`GetWeathersAsync` メソッドを実際の Web API [https://sampleapiformauitraining.azurewebsites.net//weatherforecast](https://weatherforecastsampleforprism.azurewebsites.net/weatherforecast) からデータを取得する以下のコードで置き換えます。
 
 
 ```csharp
