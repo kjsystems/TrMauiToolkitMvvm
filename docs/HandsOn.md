@@ -534,7 +534,7 @@ void GetWeathersAsync()
 
 ### Web API への接続に書き換え
 
-`GetWeathersAsync` メソッドを実際の Web API [https://weatherforecastsampleforprism.azurewebsites.net/weatherforecast](https://weatherforecastsampleforprism.azurewebsites.net/weatherforecast) からデータを取得する以下のコードで置き換えます。
+`GetWeathersAsync` メソッドを実際の Web API [https://sampleapiformauitraining.azurewebsites.net//weatherforecast](https://weatherforecastsampleforprism.azurewebsites.net/weatherforecast) からデータを取得する以下のコードで置き換えます。
 
 
 ```csharp
